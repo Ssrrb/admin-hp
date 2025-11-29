@@ -459,9 +459,15 @@
                 }
 
                 statusEl.classList.add('show', 'success');
-                statusEl.textContent = mode === 'login'
-                    ? `Bienvenido, ${payload.username || username}.`
-                    : `Cuenta creada. ID: ${payload.id}`;
+
+                if (mode === 'login') {
+                    const displayName = payload.user?.username || username;
+                    const redirectTo = payload.redirectTo || '/protected';
+                    window.location.href = `${redirectTo}?username=${encodeURIComponent(displayName)}`;
+                    return;
+                }
+
+                statusEl.textContent = `Cuenta creada. ID: ${payload.id}`;
             } catch (error) {
                 statusEl.classList.add('show', 'error');
                 statusEl.textContent = error.message;

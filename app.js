@@ -12,10 +12,11 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body
+    const { username, password } = req.body ?? {}
     try {
         const user = await UserRepository.login({ username, password })
-        res.json(user)
+        // For now respond with a JSON payload so the client JS can decide where to go
+        res.json({ redirectTo: '/protected', user })
     } catch (error) {
         res.status(401).json({ error: error.message })
     }
@@ -37,31 +38,36 @@ app.post('/logout', (req, res) => {
 
 app.get('/protected', (req, res) => {
     // TODO: if sesion del usuario
-    res.render('protected', { section: 'dashboard', name: 'Admin' })
+    const name = req.query.username ?? 'Admin'
+    res.render('protected', { section: 'dashboard', name })
     // TODO: else 401
 })
 
 app.get('/admin/pacientes', (req, res) => {
     // TODO: if sesion del usuario
-    res.render('protected', { section: 'pacientes', name: 'Admin' })
+    const name = req.query.username ?? 'Admin'
+    res.render('protected', { section: 'pacientes', name })
     // TODO: else 401
 })
 
 app.get('/admin/medicos', (req, res) => {
     // TODO: if sesion del usuario
-    res.render('protected', { section: 'medicos', name: 'Admin' })
+    const name = req.query.username ?? 'Admin'
+    res.render('protected', { section: 'medicos', name })
     // TODO: else 401
 })
 
 app.get('/admin/especialidades', (req, res) => {
     // TODO: if sesion del usuario
-    res.render('protected', { section: 'especialidades', name: 'Admin' })
+    const name = req.query.username ?? 'Admin'
+    res.render('protected', { section: 'especialidades', name })
     // TODO: else 401
 })
 
 app.get('/admin/consultorios', (req, res) => {
     // TODO: if sesion del usuario
-    res.render('protected', { section: 'consultorios', name: 'Admin' })
+    const name = req.query.username ?? 'Admin'
+    res.render('protected', { section: 'consultorios', name })
     // TODO: else 401
 })
 

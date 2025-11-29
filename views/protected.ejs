@@ -247,10 +247,11 @@
 </head>
 
 <body>
+    <% const usernameQuery = name ? `?username=${encodeURIComponent(name)}` : '' ; %>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/protected">
+            <a class="navbar-brand" href="/protected<%= usernameQuery %>">
                 HEKO <span class="brand-accent">PORA</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -259,29 +260,29 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>" href="/protected">
+                        <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>" href="/protected<%= usernameQuery %>">
                             <i class="bi bi-speedometer2 me-1"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>" href="/admin/pacientes">
+                        <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>" href="/admin/pacientes<%= usernameQuery %>">
                             <i class="bi bi-people me-1"></i> Pacientes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>" href="/admin/medicos">
+                        <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>" href="/admin/medicos<%= usernameQuery %>">
                             <i class="bi bi-person-badge me-1"></i> Médicos
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <%= section === 'especialidades' ? 'active' : '' %>"
-                            href="/admin/especialidades">
+                            href="/admin/especialidades<%= usernameQuery %>">
                             <i class="bi bi-heart-pulse me-1"></i> Especialidades
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <%= section === 'consultorios' ? 'active' : '' %>"
-                            href="/admin/consultorios">
+                            href="/admin/consultorios<%= usernameQuery %>">
                             <i class="bi bi-building me-1"></i> Consultorios
                         </a>
                     </li>
@@ -308,7 +309,7 @@
 
                 <div class="row g-4">
                     <div class="col-md-6 col-lg-3">
-                        <a href="/admin/pacientes" class="management-card fade-in">
+                        <a href="/admin/pacientes<%= usernameQuery %>" class="management-card fade-in">
                             <div class="icon">
                                 <i class="bi bi-people"></i>
                             </div>
@@ -321,7 +322,7 @@
                     </div>
 
                     <div class="col-md-6 col-lg-3">
-                        <a href="/admin/medicos" class="management-card fade-in">
+                        <a href="/admin/medicos<%= usernameQuery %>" class="management-card fade-in">
                             <div class="icon">
                                 <i class="bi bi-person-badge"></i>
                             </div>
@@ -334,7 +335,7 @@
                     </div>
 
                     <div class="col-md-6 col-lg-3">
-                        <a href="/admin/especialidades" class="management-card fade-in">
+                        <a href="/admin/especialidades<%= usernameQuery %>" class="management-card fade-in">
                             <div class="icon">
                                 <i class="bi bi-heart-pulse"></i>
                             </div>
@@ -347,7 +348,7 @@
                     </div>
 
                     <div class="col-md-6 col-lg-3">
-                        <a href="/admin/consultorios" class="management-card fade-in">
+                        <a href="/admin/consultorios<%= usernameQuery %>" class="management-card fade-in">
                             <div class="icon">
                                 <i class="bi bi-building"></i>
                             </div>
