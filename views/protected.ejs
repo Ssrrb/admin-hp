@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEKO Pora | Panel de Administración</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #0f0b05;
+            --paper: #fff9e6;
+            --primary: #ffd02e;
+            --primary-strong: #ffc700;
+            --surface: #f4e8c5;
+            --panel: #2b241a;
+            --muted: rgba(15, 11, 5, 0.72);
+            --border: rgba(15, 11, 5, 0.14);
+            --success: #1c8c4a;
+            --danger: #a02b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Manrope', sans-serif;
+            background: linear-gradient(155deg, #fff9e6 0%, #fff3c4 42%, #ffe38d 100%);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* Navbar customization */
+        .navbar {
+            background: linear-gradient(135deg, rgba(255, 208, 46, 0.95), rgba(255, 199, 0, 0.92)) !important;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(255, 208, 46, 0.25);
+        }
+
+        .navbar-brand {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--panel) !important;
+            letter-spacing: -0.02em;
+        }
+
+        .navbar-brand .brand-accent {
+            color: var(--ink);
+            font-weight: 400;
+        }
+
+        .nav-link {
+            color: var(--panel) !important;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: rgba(43, 36, 26, 0.15) !important;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            background: var(--panel);
+            color: var(--primary);
+            border: none;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            background: var(--ink);
+            color: var(--primary-strong);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 11, 5, 0.3);
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 76px);
+        }
+
+        .welcome-card {
+            background: linear-gradient(160deg, rgba(244, 232, 197, 0.92), rgba(255, 249, 230, 0.94));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(15, 11, 5, 0.12);
+        }
+
+        .welcome-card h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            color: var(--panel);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            color: var(--muted);
+            margin-bottom: 0;
+        }
+
+        /* Management cards */
+        .management-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .management-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 208, 46, 0.25);
+            border-color: var(--primary-strong);
+        }
+
+        .management-card .icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: var(--ink);
+            margin-bottom: 1rem;
+        }
+
+        .management-card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--panel);
+            margin-bottom: 0.5rem;
+        }
+
+        .management-card p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .management-card .arrow {
+            margin-top: 1rem;
+            color: var(--primary-strong);
+            font-size: 1.25rem;
+            transition: transform 0.2s ease;
+        }
+
+        .management-card:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* Section content */
+        .section-header {
+            background: linear-gradient(160deg, rgba(244, 232, 197, 0.92), rgba(255, 249, 230, 0.94));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.75rem;
+            color: var(--panel);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--muted);
+            margin-bottom: 0;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 24px rgba(15, 11, 5, 0.08);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: rgba(255, 249, 230, 0.98);
+                border-radius: 12px;
+                padding: 1rem;
+                margin-top: 1rem;
+                border: 1px solid var(--border);
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/protected">
+                HEKO <span class="brand-accent">PORA</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>" href="/protected">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>" href="/admin/pacientes">
+                            <i class="bi bi-people me-1"></i> Pacientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>" href="/admin/medicos">
+                            <i class="bi bi-person-badge me-1"></i> Médicos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= section === 'especialidades' ? 'active' : '' %>"
+                            href="/admin/especialidades">
+                            <i class="bi bi-heart-pulse me-1"></i> Especialidades
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= section === 'consultorios' ? 'active' : '' %>"
+                            href="/admin/consultorios">
+                            <i class="bi bi-building me-1"></i> Consultorios
+                        </a>
+                    </li>
+                </ul>
+                <form action="/logout" method="POST" class="d-flex">
+                    <button class="btn btn-logout" type="submit">
+                        <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <% if (section==='dashboard' ) { %>
+                <!-- Dashboard View -->
+                <div class="welcome-card fade-in">
+                    <h1>Bienvenido, <%= name %>
+                    </h1>
+                    <p>Sistema Web de Gestión de Consultorio centralizado</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/admin/pacientes" class="management-card fade-in">
+                            <div class="icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <h3>Pacientes</h3>
+                            <p>Gestiona el registro y datos de pacientes</p>
+                            <div class="arrow">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/admin/medicos" class="management-card fade-in">
+                            <div class="icon">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <h3>Médicos</h3>
+                            <p>Administra profesionales y especialistas</p>
+                            <div class="arrow">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/admin/especialidades" class="management-card fade-in">
+                            <div class="icon">
+                                <i class="bi bi-heart-pulse"></i>
+                            </div>
+                            <h3>Especialidades</h3>
+                            <p>Configura especialidades médicas</p>
+                            <div class="arrow">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/admin/consultorios" class="management-card fade-in">
+                            <div class="icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <h3>Consultorios</h3>
+                            <p>Gestiona salas y espacios médicos</p>
+                            <div class="arrow">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <% } else if (section==='pacientes' ) { %>
+                    <!-- Pacientes Section -->
+                    <div class="section-header fade-in">
+                        <h2><i class="bi bi-people me-2"></i> Gestión de Pacientes</h2>
+                        <p>Administra el registro y datos de pacientes del centro médico</p>
+                    </div>
+                    <div class="content-card fade-in">
+                        <p class="text-muted">Aquí podrás gestionar toda la información de los pacientes.</p>
+                        <!-- TODO: Add patient management table/forms here -->
+                    </div>
+
+                    <% } else if (section==='medicos' ) { %>
+                        <!-- Médicos Section -->
+                        <div class="section-header fade-in">
+                            <h2><i class="bi bi-person-badge me-2"></i> Gestión de Médicos</h2>
+                            <p>Administra profesionales médicos y especialistas</p>
+                        </div>
+                        <div class="content-card fade-in">
+                            <p class="text-muted">Aquí podrás gestionar toda la información de los médicos.</p>
+                            <!-- TODO: Add doctor management table/forms here -->
+                        </div>
+
+                        <% } else if (section==='especialidades' ) { %>
+                            <!-- Especialidades Section -->
+                            <div class="section-header fade-in">
+                                <h2><i class="bi bi-heart-pulse me-2"></i> Gestión de Especialidades</h2>
+                                <p>Configura y administra especialidades médicas</p>
+                            </div>
+                            <div class="content-card fade-in">
+                                <p class="text-muted">Aquí podrás gestionar las especialidades médicas disponibles.</p>
+                                <!-- TODO: Add specialty management table/forms here -->
+                            </div>
+
+                            <% } else if (section==='consultorios' ) { %>
+                                <!-- Consultorios Section -->
+                                <div class="section-header fade-in">
+                                    <h2><i class="bi bi-building me-2"></i> Gestión de Consultorios</h2>
+                                    <p>Administra salas y espacios de consulta médica</p>
+                                </div>
+                                <div class="content-card fade-in">
+                                    <p class="text-muted">Aquí podrás gestionar los consultorios y salas disponibles.
+                                    </p>
+                                    <!-- TODO: Add consultation room management table/forms here -->
+                                </div>
+
+                                <% } %>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

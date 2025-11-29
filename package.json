@@ -1,5 +1,5 @@
 {
-  "name": "auth-node",
+  "name": "admin-heko",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -12,8 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.8",
     "db-local": "^3.1.0",
+    "ejs": "^3.1.10",
     "express": "^5.1.0"
   },
   "devDependencies": {

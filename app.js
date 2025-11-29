@@ -1,39 +1,70 @@
-import express from "express";
-import { PORT } from "./config.js";
-import { UserRepository } from "./user-repository.js";
+import express from 'express'
+import { PORT } from './config.js'
+import { UserRepository } from './user-repository.js'
 
-const app = express();
-
+const app = express()
+app.set('view engine', 'ejs')
 // Parse JSON bodies so req.body is populated
-app.use(express.json());
+app.use(express.json())
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-});
+app.get('/', (req, res) => {
+    res.render('index')
+})
 
-app.post("/login", (req, res) => {
-    res.json("user");
-});
-
-app.post("/register", (req, res) => {
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body
     try {
-        const { username, password } = req.body ?? {};
-        const id = UserRepository.create({ username, password });
-        res.send({ id });
-        res.status(201).json({ id });
+        const user = await UserRepository.login({ username, password })
+        res.json(user)
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(401).json({ error: error.message })
     }
-});
+})
 
-app.post("/logout", (req, res) => {
-    res.send("Logout");
-});
+app.post('/register', async (req, res) => {
+    try {
+        const { username, password } = req.body ?? {}
+        const id = await UserRepository.create({ username, password })
+        res.status(201).json({ id })
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+})
 
-app.get("/protected", (req, res) => {
-    res.send("Protected");
-});
+app.post('/logout', (req, res) => {
+    res.send('Logout')
+})
+
+app.get('/protected', (req, res) => {
+    // TODO: if sesion del usuario
+    res.render('protected', { section: 'dashboard', name: 'Admin' })
+    // TODO: else 401
+})
+
+app.get('/admin/pacientes', (req, res) => {
+    // TODO: if sesion del usuario
+    res.render('protected', { section: 'pacientes', name: 'Admin' })
+    // TODO: else 401
+})
+
+app.get('/admin/medicos', (req, res) => {
+    // TODO: if sesion del usuario
+    res.render('protected', { section: 'medicos', name: 'Admin' })
+    // TODO: else 401
+})
+
+app.get('/admin/especialidades', (req, res) => {
+    // TODO: if sesion del usuario
+    res.render('protected', { section: 'especialidades', name: 'Admin' })
+    // TODO: else 401
+})
+
+app.get('/admin/consultorios', (req, res) => {
+    // TODO: if sesion del usuario
+    res.render('protected', { section: 'consultorios', name: 'Admin' })
+    // TODO: else 401
+})
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+    console.log(`Server is running on port ${PORT}`)
+})

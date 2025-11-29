@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEKO Pora | Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f0b05;
+            --paper: #fff9e6;
+            --primary: #ffd02e;
+            --primary-strong: #ffc700;
+            --surface: #f4e8c5;
+            --panel: #2b241a;
+            --muted: rgba(15, 11, 5, 0.72);
+            --border: rgba(15, 11, 5, 0.14);
+            --success: #1c8c4a;
+            --danger: #a02b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Manrope', 'Sora', sans-serif;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255, 208, 46, 0.28), transparent 24%),
+                radial-gradient(circle at 82% 10%, rgba(255, 199, 0, 0.25), transparent 26%),
+                linear-gradient(155deg, #fff9e6 0%, #fff3c4 42%, #ffe38d 100%);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, rgba(255, 208, 46, 0.18) 1px, transparent 0),
+                linear-gradient(120deg, rgba(255, 199, 0, 0.08), rgba(255, 255, 230, 0.24));
+            background-size: 48px 48px, 100% 100%;
+            mix-blend-mode: multiply;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .layout {
+            position: relative;
+            width: min(1100px, 100%);
+            background: rgba(255, 249, 230, 0.86);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+            box-shadow:
+                0 26px 60px rgba(15, 11, 5, 0.22),
+                0 0 0 1px rgba(255, 255, 255, 0.35);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 36px;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+                padding: 28px;
+            }
+        }
+
+        .layout::after {
+            content: '';
+            position: absolute;
+            inset: -10%;
+            background: radial-gradient(circle at 74% 42%, rgba(255, 199, 0, 0.14), transparent 42%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 208, 46, 0.65), rgba(255, 199, 0, 0.4));
+            filter: blur(70px);
+            opacity: 0.75;
+            animation: float 9s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        .floating.b {
+            right: -60px;
+            bottom: -60px;
+            animation-duration: 12s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(-10px) translateX(-6px);
+            }
+
+            100% {
+                transform: translateY(12px) translateX(12px);
+            }
+        }
+
+        .hero {
+            display: grid;
+            gap: 18px;
+            position: relative;
+            z-index: 1;
+            color: var(--ink);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 199, 0, 0.16);
+            color: var(--panel);
+            letter-spacing: 0.04em;
+            font-size: 12px;
+            text-transform: uppercase;
+            width: fit-content;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(255, 208, 46, 0.18);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(32px, 3vw, 44px);
+            line-height: 1.1;
+            letter-spacing: -0.015em;
+            font-family: 'Sora', 'Manrope', sans-serif;
+            color: var(--panel);
+        }
+
+        .lede {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            max-width: 520px;
+            line-height: 1.6;
+        }
+
+        .pillars {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .pill {
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            color: var(--panel);
+            font-size: 13px;
+            background: linear-gradient(120deg, rgba(255, 208, 46, 0.16), rgba(43, 36, 26, 0.05));
+            box-shadow: 0 10px 28px rgba(255, 208, 46, 0.18);
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: linear-gradient(160deg, rgba(244, 232, 197, 0.92), rgba(255, 249, 230, 0.94));
+            padding: 28px;
+            box-shadow: 0 22px 60px rgba(15, 11, 5, 0.18);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: inline-flex;
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(255, 249, 230, 0.8);
+            margin-bottom: 18px;
+            gap: 6px;
+        }
+
+        .tab {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            background: linear-gradient(120deg, rgba(255, 208, 46, 0.32), rgba(255, 199, 0, 0.18));
+            color: var(--panel);
+            box-shadow: 0 10px 30px rgba(255, 199, 0, 0.26);
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        label {
+            display: block;
+            color: var(--panel);
+            font-size: 13px;
+            letter-spacing: 0.01em;
+            margin-bottom: 6px;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 11, 5, 0.1);
+            background: rgba(255, 255, 255, 0.72);
+            color: var(--ink);
+            font-size: 15px;
+            transition: border-color 0.2s ease, transform 0.15s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-strong);
+            transform: translateY(-1px);
+            box-shadow: 0 0 0 4px rgba(255, 199, 0, 0.18);
+        }
+
+        button[type="submit"] {
+            margin-top: 6px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+            color: var(--ink);
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 14px 30px rgba(255, 199, 0, 0.32);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 18px 34px rgba(255, 208, 46, 0.32);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .status {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 208, 46, 0.08);
+            color: var(--panel);
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            border-color: rgba(28, 140, 74, 0.35);
+            color: var(--success);
+        }
+
+        .status.error {
+            border-color: rgba(160, 43, 43, 0.4);
+            color: var(--danger);
+        }
+
+        .footnote {
+            font-family: 'Sora', 'Manrope', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            color: var(--panel);
+            margin-top: 6px;
+        }
+
+        .animate-in {
+            opacity: 0;
+            transform: translateY(8px);
+            animation: rise 0.6s ease forwards;
+        }
+
+        .animate-in.delay-1 {
+            animation-delay: 0.12s;
+        }
+
+        .animate-in.delay-2 {
+            animation-delay: 0.24s;
+        }
+
+        .animate-in.delay-3 {
+            animation-delay: 0.36s;
+        }
+
+        @keyframes rise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <span class="floating"></span>
+        <span class="floating b"></span>
+
+        <section class="hero">
+            <span class="eyebrow animate-in">HEKO PORA • Portal seguro</span>
+            <h1 class="animate-in delay-1">Sistema Web de Gestión de Consultorio centralizado que automatiza el flujo
+                operativo del centro médico.</h1>
+            <p class="lede animate-in delay-2">Coordina agendas, pacientes y cobros desde un panel unificado. Automatiza
+                tareas repetitivas y mantén a tu equipo en sincronía con alertas claras.</p>
+            <div class="pillars animate-in delay-3">
+                <span class="pill">Agenda unificada</span>
+                <span class="pill">Alertas automáticas</span>
+                <span class="pill">Roles y trazabilidad</span>
+            </div>
+        </section>
+
+        <section class="card animate-in delay-3" aria-live="polite">
+            <div class="tabs" role="tablist">
+                <button class="tab active" data-mode="login" role="tab" aria-selected="true">Ingresar</button>
+                <button class="tab" data-mode="register" role="tab" aria-selected="false">Crear cuenta</button>
+            </div>
+
+            <form id="auth-form" novalidate>
+                <div class="field">
+                    <label for="username">Usuario</label>
+                    <input id="username" name="username" autocomplete="username" placeholder="ej. heko.admin" required>
+                </div>
+                <div class="field">
+                    <label for="password">Contraseña</label>
+                    <input id="password" type="password" name="password" autocomplete="current-password"
+                        placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" id="submit-btn">Ingresar</button>
+                <div class="meta">
+                    <span id="mode-hint">Ingresa para continuar.</span>
+                    <span class="footnote">/login • /register</span>
+                </div>
+                <div class="status" id="status"></div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const tabs = Array.from(document.querySelectorAll('.tab'));
+        const form = document.getElementById('auth-form');
+        const statusEl = document.getElementById('status');
+        const submitBtn = document.getElementById('submit-btn');
+        const modeHint = document.getElementById('mode-hint');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+
+        let mode = 'login';
+
+        const copy = {
+            login: {
+                button: 'Ingresar',
+                hint: 'Ingresa para continuar.'
+            },
+            register: {
+                button: 'Crear cuenta',
+                hint: 'Configura un nuevo acceso.'
+            }
+        };
+
+        function setMode(nextMode) {
+            mode = nextMode;
+            tabs.forEach((tab) => {
+                const isActive = tab.dataset.mode === mode;
+                tab.classList.toggle('active', isActive);
+                tab.setAttribute('aria-selected', isActive);
+            });
+            submitBtn.textContent = copy[mode].button;
+            modeHint.textContent = copy[mode].hint;
+            statusEl.className = 'status';
+            statusEl.textContent = '';
+        }
+
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => setMode(tab.dataset.mode));
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            statusEl.className = 'status';
+            statusEl.textContent = '';
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!username || !password) {
+                statusEl.classList.add('show', 'error');
+                statusEl.textContent = 'Completa usuario y contraseña.';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = mode === 'login' ? 'Ingresando...' : 'Creando...';
+
+            try {
+                const response = await fetch(`/${mode}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const payload = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(payload.error || 'Error inesperado');
+                }
+
+                statusEl.classList.add('show', 'success');
+                statusEl.textContent = mode === 'login'
+                    ? `Bienvenido, ${payload.username || username}.`
+                    : `Cuenta creada. ID: ${payload.id}`;
+            } catch (error) {
+                statusEl.classList.add('show', 'error');
+                statusEl.textContent = error.message;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = copy[mode].button;
+            }
+        });
+    </script>
+</body>
+
+</html>
