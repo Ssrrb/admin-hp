@@ -1,7 +1,11 @@
 import express from "express";
 import { PORT } from "./config.js";
+import { UserRepository } from "./user-repository.js";
 
 const app = express();
+
+// Parse JSON bodies so req.body is populated
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
@@ -12,9 +16,14 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    const { username, password } = req.body; // El body es el objeto que viene en la petición
-    const id = UserRepository.create({ username, password });
-    res.json({ id });
+    try {
+        const { username, password } = req.body ?? {};
+        const id = UserRepository.create({ username, password });
+        res.send({ id });
+        res.status(201).json({ id });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
 app.post("/logout", (req, res) => {

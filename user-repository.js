@@ -23,7 +23,7 @@ export class UserRepository {
         const _id = crypto.randomUUID()
 
         User.create({ _id, username, password }).save()
-        return id
+        return _id
     }
     static login({ username, password }) { }
 }
