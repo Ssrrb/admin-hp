@@ -6,6 +6,8 @@ const app = express()
 app.set('view engine', 'ejs')
 // Parse JSON bodies so req.body is populated
 app.use(express.json())
+// Serve static files from the 'public' directory
+app.use(express.static('public'))
 
 app.get('/', (req, res) => {
     res.render('index')
