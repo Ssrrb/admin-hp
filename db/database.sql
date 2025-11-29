@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Sybase SQL Anywhere 11                       */
-/* Created on:     16/11/2025 17:35:52                          */
+/* Created on:     29/11/2025 19:04:53                          */
 /*==============================================================*/
 
 
@@ -47,6 +47,16 @@ end if;
 if exists(select 1 from sys.sysforeignkey where role='FK_HOSPITAL_REFERENCE_SUCURSAL') then
     alter table HOSPITALES
        delete foreign key FK_HOSPITAL_REFERENCE_SUCURSAL
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_DOCUMENT') then
+    alter table MEDICOS
+       delete foreign key FK_MEDICOS_REFERENCE_DOCUMENT
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_ESPECIAL') then
+    alter table MEDICOS
+       delete foreign key FK_MEDICOS_REFERENCE_ESPECIAL
 end if;
 
 if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_HOSPITAL') then
@@ -114,6 +124,16 @@ if exists(select 1 from sys.sysforeignkey where role='FK_TURNOS_REFERENCE_USUARI
        delete foreign key FK_TURNOS_REFERENCE_USUARIOS
 end if;
 
+if exists(select 1 from sys.sysforeignkey where role='FK_TURNOS_REFERENCE_HORARIOS') then
+    alter table TURNOS
+       delete foreign key FK_TURNOS_REFERENCE_HORARIOS
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_TURNOS_REFERENCE_CALENDAR') then
+    alter table TURNOS
+       delete foreign key FK_TURNOS_REFERENCE_CALENDAR
+end if;
+
 if exists(select 1 from sys.sysforeignkey where role='FK_USUARIOS_REFERENCE_CORREOS') then
     alter table USUARIOS
        delete foreign key FK_USUARIOS_REFERENCE_CORREOS
@@ -125,6 +145,14 @@ if exists(
      and table_type in ('BASE', 'GBL TEMP')
 ) then
     drop table AGENDAS
+end if;
+
+if exists(
+   select 1 from sys.systable 
+   where table_name='CALENDARIOS'
+     and table_type in ('BASE', 'GBL TEMP')
+) then
+    drop table CALENDARIOS
 end if;
 
 if exists(
@@ -173,6 +201,14 @@ if exists(
      and table_type in ('BASE', 'GBL TEMP')
 ) then
     drop table HISTORIALES
+end if;
+
+if exists(
+   select 1 from sys.systable 
+   where table_name='HORARIOS'
+     and table_type in ('BASE', 'GBL TEMP')
+) then
+    drop table HORARIOS
 end if;
 
 if exists(
@@ -342,6 +378,16 @@ create table AGENDAS
 );
 
 /*==============================================================*/
+/* Table: CALENDARIOS                                           */
+/*==============================================================*/
+create table CALENDARIOS 
+(
+   ID_CALENDARIO        DOM_ID                         not null default autoincrement,
+   FECHA                DOM_FECHA                      not null,
+   constraint PK_CALENDARIOS primary key clustered (ID_CALENDARIO)
+);
+
+/*==============================================================*/
 /* Table: CANCELACIONES                                         */
 /*==============================================================*/
 create table CANCELACIONES 
@@ -384,8 +430,6 @@ create table DOCUMENTOS
 (
    ID_DOCUMENTO         DOM_ID                         not null default autoincrement,
    TIPO                 DOM_TEXTO_CORTO                not null,
-   FECHA_VENCIMIENTO    DOM_FECHA                      not null,
-   NUMERO               DOM_ENTERO                     not null,
    constraint PK_DOCUMENTOS primary key clustered (ID_DOCUMENTO)
 );
 
@@ -420,6 +464,20 @@ create table HISTORIALES
 );
 
 /*==============================================================*/
+/* Table: HORARIOS                                              */
+/*==============================================================*/
+create table HORARIOS 
+(
+   ID_HORARIO           DOM_ID                         not null default autoincrement,
+   FECHA                DOM_FECHA                      not null,
+   HORA_INICIO          DOM_HORA                       not null,
+   HORA_FIN             DOM_HORA                       not null,
+   ESTADO               DOM_TEXTO_CORTO                not null default 'Dis'
+      constraint CKC_ESTADO_HORARIOS check (ESTADO in ('Dis','Res','Can')),
+   constraint PK_HORARIOS primary key clustered (ID_HORARIO)
+);
+
+/*==============================================================*/
 /* Table: HOSPITALES                                            */
 /*==============================================================*/
 create table HOSPITALES 
@@ -434,18 +492,17 @@ create table HOSPITALES
 /*==============================================================*/
 /* Table: MEDICOS                                               */
 /*==============================================================*/
-create table MEDICOS
+create table MEDICOS 
 (
    ID_MEDICO            DOM_ID                         not null default autoincrement,
    ID_HOSPITAL          int                            null,
+   ID_DOCUMENTO         int                            null,
+   ID_ESPECIALIDAD      int                            null,
    NOMBRE               DOM_TEXTO_CORTO                not null,
    APELLIDO             DOM_TEXTO_CORTO                not null,
-   CEDULA               DOM_TEXTO_CORTO                null,
    MATRICULA            DOM_ENTERO                     not null,
-   ESPECIALIDAD         DOM_TEXTO_MEDIO                null,
-   CONSULTORIO          DOM_TEXTO_LARGO                null,
-   ESTADO               DOM_TEXTO_CORTO                not null default 'Dis'
-      constraint CKC_ESTADO_MEDICOS check (ESTADO in ('Dis','Lic','Ret')),
+   DOCUMENTO            DOM_ENTERO                     not null,
+   FECHA_NACIMIENTO     DOM_FECHA                      not null,
    constraint PK_MEDICOS primary key clustered (ID_MEDICO)
 );
 
@@ -532,8 +589,8 @@ create table TURNOS
    ID_CANCELACION       int                            null,
    ID_SUSPENSION        int                            null,
    ID_USUARIO           int                            null,
-   FECHA                DOM_FECHA                      not null,
-   HORA                 DOM_HORA                       not null,
+   ID_HORARIO           int                            null,
+   ID_CALENDARIO        int                            null,
    MODALIDAD            DOM_TEXTO_CORTO                not null
       constraint CKC_MODALIDAD_TURNOS check (MODALIDAD in ('P','V')),
    ESTADO               DOM_TEXTO_CORTO                not null default 'Dis',
@@ -607,6 +664,18 @@ alter table ESPECIALIDADES
 alter table HOSPITALES
    add constraint FK_HOSPITAL_REFERENCE_SUCURSAL foreign key (ID_SUCURSAL)
       references SUCURSALES (ID_SUCURSAL)
+      on update restrict
+      on delete restrict;
+
+alter table MEDICOS
+   add constraint FK_MEDICOS_REFERENCE_DOCUMENT foreign key (ID_DOCUMENTO)
+      references DOCUMENTOS (ID_DOCUMENTO)
+      on update restrict
+      on delete restrict;
+
+alter table MEDICOS
+   add constraint FK_MEDICOS_REFERENCE_ESPECIAL foreign key (ID_ESPECIALIDAD)
+      references ESPECIALIDADES (ID_ESPECIALIDAD)
       on update restrict
       on delete restrict;
 
@@ -688,8 +757,21 @@ alter table TURNOS
       on update restrict
       on delete restrict;
 
+alter table TURNOS
+   add constraint FK_TURNOS_REFERENCE_HORARIOS foreign key (ID_HORARIO)
+      references HORARIOS (ID_HORARIO)
+      on update restrict
+      on delete restrict;
+
+alter table TURNOS
+   add constraint FK_TURNOS_REFERENCE_CALENDAR foreign key (ID_CALENDARIO)
+      references CALENDARIOS (ID_CALENDARIO)
+      on update restrict
+      on delete restrict;
+
 alter table USUARIOS
    add constraint FK_USUARIOS_REFERENCE_CORREOS foreign key (ID_CORREO)
       references CORREOS (ID_CORREO)
       on update restrict
       on delete restrict;
+
