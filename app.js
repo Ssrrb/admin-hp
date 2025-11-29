@@ -12,7 +12,9 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    res.send("Register");
+    const { username, password } = req.body; // El body es el objeto que viene en la petición
+    const id = UserRepository.create({ username, password });
+    res.json({ id });
 });
 
 app.post("/logout", (req, res) => {
