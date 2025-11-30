@@ -42,6 +42,19 @@ export class EspecialidadRepository {
   }
 
   static async delete (id) {
+    // Verificar si hay médicos asociados a esta especialidad
+    const checkSql = `
+      SELECT COUNT(*) as count
+      FROM MEDICOS
+      WHERE ID_ESPECIALIDAD = ${id}
+    `
+    const checkResult = await query(checkSql)
+    const medicosCount = checkResult[0].count
+
+    if (medicosCount > 0) {
+      throw new Error(`No se puede eliminar la especialidad porque tiene ${medicosCount} médico(s) asociado(s)`)
+    }
+
     const sql = `DELETE FROM ESPECIALIDADES WHERE ID_ESPECIALIDAD = ${id}`
     const result = await query(sql)
     return result

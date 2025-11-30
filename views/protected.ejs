@@ -624,6 +624,8 @@
                                 </div>
 
                                 <form id="registroMedicoForm" class="registro-medico-form">
+                                    <!-- Hidden field for edit mode -->
+                                    <input type="hidden" id="medicoId" name="medicoId" value="">
                                     <!-- Personal Information Section -->
                                     <div class="form-section">
                                         <div class="section-title">
@@ -865,6 +867,9 @@
                                         </div>
 
                                         <form id="especialidadForm" class="specialty-form">
+                                            <!-- Hidden field for edit mode -->
+                                            <input type="hidden" id="especialidadId" name="especialidadId" value="">
+
                                             <div class="form-floating-custom">
                                                 <input type="text" id="nombreEspecialidad" name="nombre" required
                                                        class="form-control-custom" placeholder=" " maxlength="100">
@@ -878,7 +883,7 @@
                                                     <i class="bi bi-check-circle me-2"></i>
                                                     <span>Agregar Especialidad</span>
                                                 </button>
-                                                <button type="button" class="btn-secondary-custom" onclick="document.getElementById('especialidadForm').reset()">
+                                                <button type="button" class="btn-secondary-custom" onclick="resetEspecialidadForm()">
                                                     <i class="bi bi-arrow-clockwise me-2"></i>
                                                     <span>Limpiar</span>
                                                 </button>
@@ -957,16 +962,22 @@
                     e.preventDefault();
 
                     const nombre = document.getElementById('nombreEspecialidad').value.trim();
+                    const especialidadId = document.getElementById('especialidadId').value;
+                    const isEditMode = especialidadId && especialidadId !== '';
 
                     // Add loading state
                     const submitBtn = especialidadForm.querySelector('.btn-primary-custom');
                     const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<span style="opacity: 0.6;">Agregando...</span>';
+                    submitBtn.innerHTML = `<span style="opacity: 0.6;">${isEditMode ? 'Actualizando...' : 'Agregando...'}</span>`;
                     submitBtn.disabled = true;
 
                     try {
-                        const response = await fetch('/api/especialidades', {
-                            method: 'POST',
+                        // Choose endpoint and method based on mode
+                        const url = isEditMode ? `/api/especialidades/${especialidadId}` : '/api/especialidades';
+                        const method = isEditMode ? 'PUT' : 'POST';
+
+                        const response = await fetch(url, {
+                            method: method,
                             headers: {
                                 'Content-Type': 'application/json'
                             },
@@ -978,12 +989,23 @@
                         if (response.ok) {
                             await loadEspecialidades();
                             especialidadForm.reset();
-                            showSpecialtyMessage('✓ Especialidad agregada exitosamente', 'success');
+                            document.getElementById('especialidadId').value = '';
+
+                            // Reset form title
+                            const formTitle = especialidadForm.closest('.specialty-form-panel').querySelector('h4');
+                            if (formTitle) {
+                                formTitle.textContent = 'Nueva Especialidad';
+                            }
+
+                            // Reset button text
+                            submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i><span>Agregar Especialidad</span>';
+
+                            showSpecialtyMessage(isEditMode ? '✓ Especialidad actualizada exitosamente' : '✓ Especialidad agregada exitosamente', 'success');
                         } else {
                             showSpecialtyMessage('Error: ' + data.error, 'error');
                         }
                     } catch (error) {
-                        showSpecialtyMessage('Error al agregar especialidad: ' + error.message, 'error');
+                        showSpecialtyMessage(`Error al ${isEditMode ? 'actualizar' : 'agregar'} especialidad: ` + error.message, 'error');
                     } finally {
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
@@ -1067,10 +1089,49 @@
             `).join('');
         }
 
+        function resetEspecialidadForm() {
+            const form = document.getElementById('especialidadForm');
+            if (form) {
+                form.reset();
+                document.getElementById('especialidadId').value = '';
+
+                // Reset form title
+                const formTitle = document.querySelector('.specialty-form-panel h4');
+                if (formTitle) {
+                    formTitle.textContent = 'Nueva Especialidad';
+                }
+
+                // Reset submit button text
+                const submitBtn = form.querySelector('.btn-primary-custom');
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i><span>Agregar Especialidad</span>';
+                }
+            }
+        }
+
         function editSpecialty(id) {
             const specialty = especialidadesDB.find(e => e.id === id);
             if (specialty) {
+                // Set the specialty ID for edit mode
+                document.getElementById('especialidadId').value = specialty.id;
+
+                // Fill the form
                 document.getElementById('nombreEspecialidad').value = specialty.nombre;
+
+                // Update form title
+                const formTitle = document.querySelector('.specialty-form-panel h4');
+                if (formTitle) {
+                    formTitle.textContent = 'Editar Especialidad';
+                }
+
+                // Update submit button text
+                const submitBtn = document.querySelector('#especialidadForm .btn-primary-custom');
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<i class="bi bi-pencil me-2"></i><span>Actualizar Especialidad</span>';
+                }
+
+                // Focus on the input
+                document.getElementById('nombreEspecialidad').focus();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
@@ -1169,6 +1230,29 @@
 
             if (btnAgregarMedico) {
                 btnAgregarMedico.addEventListener('click', function() {
+                    // Reset form for new medico
+                    const form = document.getElementById('registroMedicoForm');
+                    if (form) {
+                        form.reset();
+                        document.getElementById('medicoId').value = '';
+
+                        // Reset all checkboxes
+                        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                        checkboxes.forEach(cb => cb.checked = false);
+
+                        // Reset form title
+                        const formHeader = document.querySelector('.form-header h3');
+                        if (formHeader) {
+                            formHeader.textContent = 'Registrar Nuevo Médico';
+                        }
+
+                        // Reset submit button text
+                        const submitBtn = form.querySelector('.btn-primary-custom');
+                        if (submitBtn) {
+                            submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i><span>Registrar Médico</span>';
+                        }
+                    }
+
                     medicosListView.style.display = 'none';
                     medicosFormView.style.display = 'block';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1177,6 +1261,29 @@
 
             if (btnVolverLista) {
                 btnVolverLista.addEventListener('click', function() {
+                    // Reset form when going back
+                    const form = document.getElementById('registroMedicoForm');
+                    if (form) {
+                        form.reset();
+                        document.getElementById('medicoId').value = '';
+
+                        // Reset all checkboxes
+                        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                        checkboxes.forEach(cb => cb.checked = false);
+
+                        // Reset form title
+                        const formHeader = document.querySelector('.form-header h3');
+                        if (formHeader) {
+                            formHeader.textContent = 'Registrar Nuevo Médico';
+                        }
+
+                        // Reset submit button text
+                        const submitBtn = form.querySelector('.btn-primary-custom');
+                        if (submitBtn) {
+                            submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i><span>Registrar Médico</span>';
+                        }
+                    }
+
                     medicosFormView.style.display = 'none';
                     medicosListView.style.display = 'block';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1420,6 +1527,21 @@ ${medico.edad ? '• Edad: ' + medico.edad : ''}
                 document.getElementById('medicosListView').style.display = 'none';
                 document.getElementById('medicosFormView').style.display = 'block';
 
+                // Set the medico ID for edit mode
+                document.getElementById('medicoId').value = medico.id;
+
+                // Update form title
+                const formHeader = document.querySelector('.form-header h3');
+                if (formHeader) {
+                    formHeader.textContent = 'Editar Médico';
+                }
+
+                // Update submit button text
+                const submitBtn = document.querySelector('#registroMedicoForm .btn-primary-custom');
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i><span>Actualizar Médico</span>';
+                }
+
                 // Fill form with data
                 document.getElementById('nombre').value = medico.nombre;
                 document.getElementById('apellido').value = medico.apellido;
@@ -1596,11 +1718,15 @@ ${medico.edad ? '• Edad: ' + medico.edad : ''}
                 registroForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
 
+                    // Check if we're in edit mode
+                    const medicoId = document.getElementById('medicoId').value;
+                    const isEditMode = medicoId && medicoId !== '';
+
                     // Add loading state
                     registroForm.classList.add('form-loading');
                     const submitBtn = registroForm.querySelector('.btn-primary-custom');
                     const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<span style="opacity: 0.6;">Registrando...</span>';
+                    submitBtn.innerHTML = `<span style="opacity: 0.6;">${isEditMode ? 'Actualizando...' : 'Registrando...'}</span>`;
 
                     // Validate at least one day is selected
                     const diasSeleccionados = registroForm.querySelectorAll('input[name="dias[]"]:checked');
@@ -1666,9 +1792,14 @@ ${medico.edad ? '• Edad: ' + medico.edad : ''}
                         };
 
                         console.log('Datos a enviar:', medicoData);
+                        console.log('Modo edición:', isEditMode);
 
-                        const response = await fetch('/api/medicos', {
-                            method: 'POST',
+                        // Choose endpoint and method based on mode
+                        const url = isEditMode ? `/api/medicos/${medicoId}` : '/api/medicos';
+                        const method = isEditMode ? 'PUT' : 'POST';
+
+                        const response = await fetch(url, {
+                            method: method,
                             headers: {
                                 'Content-Type': 'application/json'
                             },
@@ -1679,12 +1810,13 @@ ${medico.edad ? '• Edad: ' + medico.edad : ''}
 
                         if (response.ok) {
                             // Show success message
-                            showMessage('¡Médico registrado exitosamente!', 'success');
+                            showMessage(isEditMode ? '¡Médico actualizado exitosamente!' : '¡Médico registrado exitosamente!', 'success');
 
                             // Reset form and go back to list after success
                             setTimeout(() => {
                                 registroForm.reset();
                                 checkboxes.forEach(cb => cb.checked = false);
+                                document.getElementById('medicoId').value = '';
 
                                 // Go back to list view and reload data
                                 document.getElementById('medicosFormView').style.display = 'none';
@@ -1696,7 +1828,7 @@ ${medico.edad ? '• Edad: ' + medico.edad : ''}
                             showMessage('Error: ' + result.error, 'error');
                         }
                     } catch (error) {
-                        showMessage('Error al registrar médico: ' + error.message, 'error');
+                        showMessage(`Error al ${isEditMode ? 'actualizar' : 'registrar'} médico: ` + error.message, 'error');
                     } finally {
                         registroForm.classList.remove('form-loading');
                         submitBtn.innerHTML = originalText;

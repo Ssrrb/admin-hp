@@ -186,7 +186,10 @@ export class MedicoRepository {
     idEspecialidad,
     email,
     telefono,
-    idSucursal = null
+    idSucursal = null,
+    horaInicio = null,
+    horaFin = null,
+    diasAtencion = null
   }) {
     // Validar tipo de documento
     const tiposPermitidos = ['cedula', 'pasaporte', 'dni']
@@ -249,6 +252,29 @@ export class MedicoRepository {
           VALUES (${id}, '${telefono}')
         `
         await query(sqlInsertTelefono)
+      }
+    }
+
+    // Actualizar o insertar horario
+    if (horaInicio && horaFin) {
+      const sqlCheckHorario = `SELECT ID_HORARIO FROM HORARIOS WHERE ID_MEDICO = ${id} AND ESTADO = 'Act'`
+      const horarioResult = await query(sqlCheckHorario)
+
+      if (horarioResult && horarioResult.length > 0) {
+        const sqlUpdateHorario = `
+          UPDATE HORARIOS
+          SET HORA_INICIO = '${horaInicio}',
+              HORA_FIN = '${horaFin}',
+              DIAS_ATENCION = ${diasAtencion ? `'${diasAtencion}'` : 'NULL'}
+          WHERE ID_MEDICO = ${id} AND ESTADO = 'Act'
+        `
+        await query(sqlUpdateHorario)
+      } else {
+        const sqlInsertHorario = `
+          INSERT INTO HORARIOS (ID_MEDICO, HORA_INICIO, HORA_FIN, DIAS_ATENCION, ESTADO)
+          VALUES (${id}, '${horaInicio}', '${horaFin}', ${diasAtencion ? `'${diasAtencion}'` : 'NULL'}, 'Act')
+        `
+        await query(sqlInsertHorario)
       }
     }
 

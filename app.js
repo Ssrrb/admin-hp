@@ -251,7 +251,10 @@ app.put('/api/medicos/:id', async (req, res) => {
       idEspecialidad,
       email,
       telefono,
-      idSucursal
+      idSucursal,
+      horaInicio,
+      horaFin,
+      diasAtencion
     } = req.body
 
     // Validaciones básicas
@@ -284,7 +287,10 @@ app.put('/api/medicos/:id', async (req, res) => {
       idEspecialidad,
       email,
       telefono,
-      idSucursal
+      idSucursal,
+      horaInicio,
+      horaFin,
+      diasAtencion
     })
 
     res.json({ success: true })
