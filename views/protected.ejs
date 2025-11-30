@@ -677,9 +677,11 @@
                                             <div class="col-md-4">
                                                 <div class="form-floating-custom">
                                                     <input type="date" id="fechaNacimiento" name="fechaNacimiento"
-                                                           required class="form-control-custom" placeholder=" ">
+                                                           required class="form-control-custom" placeholder=" "
+                                                           max="<%= new Date().toISOString().split('T')[0] %>">
                                                     <label for="fechaNacimiento">Fecha de Nacimiento</label>
                                                     <div class="input-border"></div>
+                                                    <small class="field-hint">No puede ser mayor a hoy</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -871,36 +873,6 @@
                                                 <small class="field-hint">Ej: Cardiología, Pediatría, Neurología</small>
                                             </div>
 
-                                            <div class="form-floating-custom mt-3">
-                                                <textarea id="descripcionEspecialidad" name="descripcion"
-                                                          class="form-control-custom textarea-custom"
-                                                          placeholder=" " rows="4" maxlength="500"></textarea>
-                                                <label for="descripcionEspecialidad">Descripción (opcional)</label>
-                                                <div class="input-border"></div>
-                                                <small class="field-hint">Descripción breve del área médica</small>
-                                            </div>
-
-                                            <div class="form-floating-custom mt-3">
-                                                <select id="iconoEspecialidad" name="icono" class="form-control-custom">
-                                                    <option value="" disabled selected></option>
-                                                    <option value="heart-pulse">💓 Cardiología / Corazón</option>
-                                                    <option value="bandaid">🩹 Medicina General</option>
-                                                    <option value="brain">🧠 Neurología</option>
-                                                    <option value="lungs">🫁 Neumología</option>
-                                                    <option value="eye">👁️ Oftalmología</option>
-                                                    <option value="ear">👂 Otorrinolaringología</option>
-                                                    <option value="bone">🦴 Traumatología</option>
-                                                    <option value="baby">👶 Pediatría</option>
-                                                    <option value="gender-female">🤰 Ginecología</option>
-                                                    <option value="tooth">🦷 Odontología</option>
-                                                    <option value="skin">🔬 Dermatología</option>
-                                                    <option value="kidney">🫘 Nefrología</option>
-                                                    <option value="stomach">🫃 Gastroenterología</option>
-                                                </select>
-                                                <label for="iconoEspecialidad">Icono Representativo</label>
-                                                <div class="input-border"></div>
-                                            </div>
-
                                             <div class="form-actions-inline mt-4">
                                                 <button type="submit" class="btn-primary-custom">
                                                     <i class="bi bi-check-circle me-2"></i>
@@ -985,8 +957,6 @@
                     e.preventDefault();
 
                     const nombre = document.getElementById('nombreEspecialidad').value.trim();
-                    const descripcion = document.getElementById('descripcionEspecialidad').value.trim();
-                    const icono = document.getElementById('iconoEspecialidad').value;
 
                     // Add loading state
                     const submitBtn = especialidadForm.querySelector('.btn-primary-custom');
@@ -1000,7 +970,7 @@
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ nombre, descripcion, icono })
+                            body: JSON.stringify({ nombre })
                         });
 
                         const data = await response.json();
@@ -1041,8 +1011,6 @@
                 especialidadesDB.push(...data.map(esp => ({
                     id: esp.ID_ESPECIALIDAD,
                     nombre: esp.NOMBRE,
-                    descripcion: esp.DESCRIPCION || 'Sin descripción',
-                    icono: esp.ICONO || 'heart-pulse',
                     fechaCreacion: new Date().toLocaleDateString('es-AR')
                 })));
 
@@ -1059,8 +1027,7 @@
             if (!listContainer) return;
 
             const filtered = especialidadesDB.filter(esp =>
-                esp.nombre.toLowerCase().includes(searchTerm) ||
-                esp.descripcion.toLowerCase().includes(searchTerm)
+                esp.nombre.toLowerCase().includes(searchTerm)
             );
 
             if (countElement) {
@@ -1080,30 +1047,10 @@
                 return;
             }
 
-            const iconMap = {
-                'heart-pulse': '💓',
-                'bandaid': '🩹',
-                'brain': '🧠',
-                'lungs': '🫁',
-                'eye': '👁️',
-                'ear': '👂',
-                'bone': '🦴',
-                'baby': '👶',
-                'gender-female': '🤰',
-                'tooth': '🦷',
-                'skin': '🔬',
-                'kidney': '🫘',
-                'stomach': '🫃'
-            };
-
             listContainer.innerHTML = filtered.map((esp, index) => `
                 <div class="specialty-card" style="animation-delay: ${index * 0.05}s">
-                    <div class="specialty-icon-badge">
-                        ${iconMap[esp.icono] || '💓'}
-                    </div>
                     <div class="specialty-info">
                         <h5>${esp.nombre}</h5>
-                        <p>${esp.descripcion}</p>
                         <small class="specialty-meta">
                             <i class="bi bi-calendar3"></i> Registrada el ${esp.fechaCreacion}
                         </small>
@@ -1124,8 +1071,6 @@
             const specialty = especialidadesDB.find(e => e.id === id);
             if (specialty) {
                 document.getElementById('nombreEspecialidad').value = specialty.nombre;
-                document.getElementById('descripcionEspecialidad').value = specialty.descripcion;
-                document.getElementById('iconoEspecialidad').value = specialty.icono;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
@@ -1264,18 +1209,60 @@
                 const data = await response.json();
 
                 medicosDB.length = 0;
-                medicosDB.push(...data.map(medico => ({
-                    id: medico.ID_MEDICO,
-                    nombre: medico.NOMBRE,
-                    apellido: medico.APELLIDO,
-                    dni: medico.DOCUMENTO,
-                    especialidad: medico.ID_ESPECIALIDAD,
-                    especialidadNombre: medico.ESPECIALIDAD_NOMBRE || 'Sin especialidad',
-                    matricula: medico.MATRICULA,
-                    email: medico.EMAIL || 'Sin email',
-                    telefono: medico.TELEFONO || 'Sin teléfono',
-                    horario: 'Por definir'
-                })));
+                medicosDB.push(...data.map(medico => {
+                    // Formatear fecha de nacimiento
+                    let fechaNacimiento = 'No disponible';
+                    if (medico.FECHA_NACIMIENTO) {
+                        const fecha = new Date(medico.FECHA_NACIMIENTO);
+                        fechaNacimiento = fecha.toLocaleDateString('es-AR');
+                    }
+
+                    // Calcular edad
+                    let edad = '';
+                    if (medico.FECHA_NACIMIENTO) {
+                        const hoy = new Date();
+                        const nacimiento = new Date(medico.FECHA_NACIMIENTO);
+                        let edadCalculada = hoy.getFullYear() - nacimiento.getFullYear();
+                        const mes = hoy.getMonth() - nacimiento.getMonth();
+                        if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+                            edadCalculada--;
+                        }
+                        edad = `${edadCalculada} años`;
+                    }
+
+                    // Formatear horario de atención
+                    let horario = 'Horario no configurado';
+                    let diasAtencion = [];
+                    if (medico.HORA_INICIO && medico.HORA_FIN) {
+                        // Formatear las horas (eliminar segundos si existen)
+                        const horaInicio = medico.HORA_INICIO.substring(0, 5);
+                        const horaFin = medico.HORA_FIN.substring(0, 5);
+                        horario = `${horaInicio} - ${horaFin}`;
+
+                        if (medico.DIAS_ATENCION) {
+                            diasAtencion = medico.DIAS_ATENCION.split(',');
+                        }
+                    }
+
+                    return {
+                        id: medico.ID_MEDICO,
+                        nombre: medico.NOMBRE,
+                        apellido: medico.APELLIDO,
+                        dni: medico.NRO_DOCUMENTO,
+                        tipoDocumento: medico.TIPO_DOCUMENTO,
+                        fechaNacimiento: fechaNacimiento,
+                        edad: edad,
+                        especialidad: medico.ID_ESPECIALIDAD,
+                        especialidadNombre: medico.ESPECIALIDAD_NOMBRE || 'Sin especialidad',
+                        matricula: medico.MATRICULA,
+                        email: medico.EMAIL || 'Sin email',
+                        telefono: medico.TELEFONO || 'Sin teléfono',
+                        horario: horario,
+                        diasAtencion: diasAtencion,
+                        horaInicio: medico.HORA_INICIO ? medico.HORA_INICIO.substring(0, 5) : '',
+                        horaFin: medico.HORA_FIN ? medico.HORA_FIN.substring(0, 5) : ''
+                    };
+                }));
 
                 renderMedicos();
             } catch (error) {
@@ -1317,6 +1304,22 @@
 
             listContainer.innerHTML = filtered.map(medico => {
                 const initials = `${medico.nombre.charAt(0)}${medico.apellido.charAt(0)}`.toUpperCase();
+
+                // Formatear días de atención
+                let diasTexto = '';
+                if (medico.diasAtencion && medico.diasAtencion.length > 0) {
+                    const diasMap = {
+                        'lunes': 'Lun',
+                        'martes': 'Mar',
+                        'miercoles': 'Mié',
+                        'jueves': 'Jue',
+                        'viernes': 'Vie',
+                        'sabado': 'Sáb',
+                        'domingo': 'Dom'
+                    };
+                    diasTexto = medico.diasAtencion.map(d => diasMap[d] || d).join(', ');
+                }
+
                 return `
                     <div class="medico-card">
                         <div class="medico-avatar">${initials}</div>
@@ -1328,16 +1331,20 @@
                                 <span>Mat. ${medico.matricula}</span>
                             </div>
                             <div class="medico-info-item">
+                                <i class="bi bi-clock"></i>
+                                <span>${medico.horario}</span>
+                            </div>
+                            ${diasTexto ? `<div class="medico-info-item">
+                                <i class="bi bi-calendar-week"></i>
+                                <span>${diasTexto}</span>
+                            </div>` : ''}
+                            <div class="medico-info-item">
                                 <i class="bi bi-envelope"></i>
                                 <span>${medico.email}</span>
                             </div>
                             <div class="medico-info-item">
                                 <i class="bi bi-telephone"></i>
                                 <span>${medico.telefono}</span>
-                            </div>
-                            <div class="medico-info-item">
-                                <i class="bi bi-clock"></i>
-                                <span>${medico.horario}</span>
                             </div>
                         </div>
                         <div class="medico-actions">
@@ -1359,7 +1366,50 @@
         function viewMedico(id) {
             const medico = medicosDB.find(m => m.id === id);
             if (medico) {
-                alert(`Detalles de Dr. ${medico.nombre} ${medico.apellido}\n\nEspecialidad: ${medico.especialidad}\nMatrícula: ${medico.matricula}\nEmail: ${medico.email}\nTeléfono: ${medico.telefono}`);
+                // Formatear días de atención
+                let diasTexto = 'No configurado';
+                if (medico.diasAtencion && medico.diasAtencion.length > 0) {
+                    const diasMap = {
+                        'lunes': 'Lunes',
+                        'martes': 'Martes',
+                        'miercoles': 'Miércoles',
+                        'jueves': 'Jueves',
+                        'viernes': 'Viernes',
+                        'sabado': 'Sábado',
+                        'domingo': 'Domingo'
+                    };
+                    diasTexto = medico.diasAtencion.map(d => diasMap[d] || d).join(', ');
+                }
+
+                const detalles = `
+Detalles de Dr. ${medico.nombre} ${medico.apellido}
+
+───────────────────────────────────
+📋 Información Personal
+───────────────────────────────────
+• Documento: ${medico.tipoDocumento.toUpperCase()} ${medico.dni}
+• Fecha de Nacimiento: ${medico.fechaNacimiento}
+${medico.edad ? '• Edad: ' + medico.edad : ''}
+
+───────────────────────────────────
+💼 Información Profesional
+───────────────────────────────────
+• Especialidad: ${medico.especialidadNombre}
+• Matrícula: ${medico.matricula}
+
+───────────────────────────────────
+🕐 Horario de Atención
+───────────────────────────────────
+• Horario: ${medico.horario}
+• Días: ${diasTexto}
+
+───────────────────────────────────
+📞 Contacto
+───────────────────────────────────
+• Email: ${medico.email}
+• Teléfono: ${medico.telefono}
+                `.trim();
+                alert(detalles);
             }
         }
 
@@ -1373,11 +1423,40 @@
                 // Fill form with data
                 document.getElementById('nombre').value = medico.nombre;
                 document.getElementById('apellido').value = medico.apellido;
+                document.getElementById('tipoDocumento').value = medico.tipoDocumento;
                 document.getElementById('dni').value = medico.dni;
+
+                // Convertir fecha al formato YYYY-MM-DD para el input type="date"
+                if (medico.fechaNacimiento && medico.fechaNacimiento !== 'No disponible') {
+                    const partes = medico.fechaNacimiento.split('/');
+                    if (partes.length === 3) {
+                        const fechaISO = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+                        document.getElementById('fechaNacimiento').value = fechaISO;
+                    }
+                }
+
                 document.getElementById('matricula').value = medico.matricula;
                 document.getElementById('especialidad').value = medico.especialidad;
                 document.getElementById('email').value = medico.email;
                 document.getElementById('telefono').value = medico.telefono;
+
+                // Cargar horarios
+                if (medico.horaInicio) {
+                    document.getElementById('horaInicio').value = medico.horaInicio;
+                }
+                if (medico.horaFin) {
+                    document.getElementById('horaFin').value = medico.horaFin;
+                }
+
+                // Cargar días de atención
+                if (medico.diasAtencion && medico.diasAtencion.length > 0) {
+                    medico.diasAtencion.forEach(dia => {
+                        const checkbox = document.getElementById(dia);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                }
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -1580,7 +1659,10 @@
                             idEspecialidad: parseInt(data.especialidad),
                             email: data.email,
                             telefono: data.telefono,
-                            idSucursal: null
+                            idSucursal: null,
+                            horaInicio: data.horaInicio,
+                            horaFin: data.horaFin,
+                            diasAtencion: data.dias ? data.dias.join(',') : null
                         };
 
                         console.log('Datos a enviar:', medicoData);

@@ -11,7 +11,10 @@ export class MedicoRepository {
     idEspecialidad,
     email,
     telefono,
-    idSucursal = null
+    idSucursal = null,
+    horaInicio = null,
+    horaFin = null,
+    diasAtencion = null
   }) {
     // Validar tipo de documento
     const tiposPermitidos = ['cedula', 'pasaporte', 'dni']
@@ -72,6 +75,15 @@ export class MedicoRepository {
       await query(sqlTelefono)
     }
 
+    // Insertar horario si se proporciona
+    if (horaInicio && horaFin) {
+      const sqlHorario = `
+        INSERT INTO HORARIOS (ID_MEDICO, HORA_INICIO, HORA_FIN, DIAS_ATENCION, ESTADO)
+        VALUES (${idMedico}, '${horaInicio}', '${horaFin}', ${diasAtencion ? `'${diasAtencion}'` : 'NULL'}, 'Act')
+      `
+      await query(sqlHorario)
+    }
+
     return idMedico
   }
 
@@ -89,11 +101,15 @@ export class MedicoRepository {
         m.ID_SUCURSAL,
         e.NOMBRE as ESPECIALIDAD_NOMBRE,
         c.CORREO as EMAIL,
-        t.TELEFONO
+        t.TELEFONO,
+        h.HORA_INICIO,
+        h.HORA_FIN,
+        h.DIAS_ATENCION
       FROM MEDICOS m
       LEFT JOIN ESPECIALIDADES e ON m.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD
       LEFT JOIN CORREOS c ON m.ID_MEDICO = c.ID_MEDICO
       LEFT JOIN TELEFONOS t ON m.ID_MEDICO = t.ID_MEDICO
+      LEFT JOIN HORARIOS h ON m.ID_MEDICO = h.ID_MEDICO AND h.ESTADO = 'Act'
       ORDER BY m.ID_MEDICO DESC
     `
     const result = await query(sql)
@@ -114,11 +130,15 @@ export class MedicoRepository {
         m.ID_SUCURSAL,
         e.NOMBRE as ESPECIALIDAD_NOMBRE,
         c.CORREO as EMAIL,
-        t.TELEFONO
+        t.TELEFONO,
+        h.HORA_INICIO,
+        h.HORA_FIN,
+        h.DIAS_ATENCION
       FROM MEDICOS m
       LEFT JOIN ESPECIALIDADES e ON m.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD
       LEFT JOIN CORREOS c ON m.ID_MEDICO = c.ID_MEDICO
       LEFT JOIN TELEFONOS t ON m.ID_MEDICO = t.ID_MEDICO
+      LEFT JOIN HORARIOS h ON m.ID_MEDICO = h.ID_MEDICO AND h.ESTADO = 'Act'
       WHERE m.ID_MEDICO = ${id}
     `
     const result = await query(sql)
@@ -139,11 +159,15 @@ export class MedicoRepository {
         m.ID_SUCURSAL,
         e.NOMBRE as ESPECIALIDAD_NOMBRE,
         c.CORREO as EMAIL,
-        t.TELEFONO
+        t.TELEFONO,
+        h.HORA_INICIO,
+        h.HORA_FIN,
+        h.DIAS_ATENCION
       FROM MEDICOS m
       LEFT JOIN ESPECIALIDADES e ON m.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD
       LEFT JOIN CORREOS c ON m.ID_MEDICO = c.ID_MEDICO
       LEFT JOIN TELEFONOS t ON m.ID_MEDICO = t.ID_MEDICO
+      LEFT JOIN HORARIOS h ON m.ID_MEDICO = h.ID_MEDICO AND h.ESTADO = 'Act'
       WHERE m.ID_ESPECIALIDAD = ${idEspecialidad}
       ORDER BY m.APELLIDO, m.NOMBRE
     `

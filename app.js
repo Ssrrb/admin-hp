@@ -190,7 +190,10 @@ app.post('/api/medicos', async (req, res) => {
       idEspecialidad,
       email,
       telefono,
-      idSucursal
+      idSucursal,
+      horaInicio,
+      horaFin,
+      diasAtencion
     } = req.body
 
     // Validaciones básicas
@@ -198,6 +201,18 @@ app.post('/api/medicos', async (req, res) => {
       return res.status(400).json({
         error: 'Los campos nombre, apellido, tipo de documento, número de documento, matrícula y especialidad son requeridos'
       })
+    }
+
+    // Validar que la fecha de nacimiento no sea mayor a la fecha actual
+    if (fechaNacimiento) {
+      const fechaNac = new Date(fechaNacimiento)
+      const hoy = new Date()
+      hoy.setHours(0, 0, 0, 0) // Resetear horas para comparar solo fechas
+      if (fechaNac > hoy) {
+        return res.status(400).json({
+          error: 'La fecha de nacimiento no puede ser mayor a la fecha actual'
+        })
+      }
     }
 
     const idMedico = await MedicoRepository.create({
@@ -210,7 +225,10 @@ app.post('/api/medicos', async (req, res) => {
       idEspecialidad,
       email,
       telefono,
-      idSucursal
+      idSucursal,
+      horaInicio,
+      horaFin,
+      diasAtencion
     })
 
     res.status(201).json({ success: true, idMedico })
@@ -241,6 +259,18 @@ app.put('/api/medicos/:id', async (req, res) => {
       return res.status(400).json({
         error: 'Los campos nombre, apellido, tipo de documento, número de documento, matrícula y especialidad son requeridos'
       })
+    }
+
+    // Validar que la fecha de nacimiento no sea mayor a la fecha actual
+    if (fechaNacimiento) {
+      const fechaNac = new Date(fechaNacimiento)
+      const hoy = new Date()
+      hoy.setHours(0, 0, 0, 0) // Resetear horas para comparar solo fechas
+      if (fechaNac > hoy) {
+        return res.status(400).json({
+          error: 'La fecha de nacimiento no puede ser mayor a la fecha actual'
+        })
+      }
     }
 
     await MedicoRepository.update({

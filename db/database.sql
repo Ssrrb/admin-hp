@@ -119,6 +119,11 @@ if exists(select 1 from sys.sysforeignkey where role='FK_USUARIOS_REFERENCE_CORR
        delete foreign key FK_USUARIOS_REFERENCE_CORREOS
 end if;
 
+if exists(select 1 from sys.sysforeignkey where role='FK_HORARIOS_REFERENCE_MEDICOS') then
+    alter table HORARIOS
+       delete foreign key FK_HORARIOS_REFERENCE_MEDICOS
+end if;
+
 if exists(
    select 1 from sys.systable 
    where table_name='AGENDAS'
@@ -419,21 +424,23 @@ create table HISTORIALES
 /*==============================================================*/
 /* Table: HORARIOS                                              */
 /*==============================================================*/
-create table HORARIOS 
+create table HORARIOS
 (
    ID_HORARIO           DOM_ID                         not null default autoincrement,
-   FECHA                DOM_FECHA                      not null,
+   ID_MEDICO            int                            null,
+   FECHA                DOM_FECHA                      null,
    HORA_INICIO          DOM_HORA                       not null,
    HORA_FIN             DOM_HORA                       not null,
+   DIAS_ATENCION        DOM_TEXTO_MEDIO                null,
    ESTADO               DOM_TEXTO_CORTO                not null default 'Dis'
-      constraint CKC_ESTADO_HORARIOS check (ESTADO in ('Dis','Res','Can')),
+      constraint CKC_ESTADO_HORARIOS check (ESTADO in ('Dis','Res','Can','Act','Ina')),
    constraint PK_HORARIOS primary key clustered (ID_HORARIO)
 );
 
 /*==============================================================*/
 /* Table: MEDICOS                                               */
 /*==============================================================*/
-create table MEDICOS 
+create table MEDICOS
 (
    ID_MEDICO            DOM_ID                         not null default autoincrement,
    ID_ESPECIALIDAD      int                            null,
@@ -441,7 +448,8 @@ create table MEDICOS
    NOMBRE               DOM_TEXTO_CORTO                not null,
    APELLIDO             DOM_TEXTO_CORTO                not null,
    MATRICULA            DOM_ENTERO                     not null,
-   FECHA_NACIMIENTO     DOM_FECHA                      not null,
+   FECHA_NACIMIENTO     DOM_FECHA                      not null
+      constraint CKC_FECHA_NACIMIENTO_MEDICOS check (FECHA_NACIMIENTO <= getdate()),
    TIPO_DOCUMENTO       DOM_TEXTO_CORTO                not null
       constraint CKC_TIPO_DOCUMENTO_MEDICOS check (TIPO_DOCUMENTO in ('cedula','pasaporte','dni')),
    NRO_DOCUMENTO        DOM_ENTERO                     not null,
@@ -694,4 +702,10 @@ alter table USUARIOS
       references CORREOS (ID_CORREO)
       on update restrict
       on delete restrict;
+
+alter table HORARIOS
+   add constraint FK_HORARIOS_REFERENCE_MEDICOS foreign key (ID_MEDICO)
+      references MEDICOS (ID_MEDICO)
+      on update restrict
+      on delete cascade;
 
