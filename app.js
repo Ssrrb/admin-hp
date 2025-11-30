@@ -22,7 +22,7 @@ app.use((req, res, next) => {
         try {
             data = jwt.verify(token, SECRET_JWT_KEY)
             req.session.user = data
-        } catch (error) { }
+        } catch () { }
     }
     next() // seguir a la siguiente ruta o middleware
 
@@ -64,7 +64,8 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/logout', (req, res) => {
-    res.send('Logout')
+    res.clearCookie('access_token')
+    res.json({ redirectTo: '/' })
 })
 
 app.get('/protected', (req, res) => {
