@@ -5,7 +5,7 @@ const VALID_SEX = ['H', 'M']
 
 const sanitizeString = value => `'${String(value).trim().replace(/'/g, "''")}'`
 
-function toNullableInt (value) {
+function toNullableInt(value) {
   if (value === undefined || value === null || value === '') return null
   const parsed = Number(value)
   if (!Number.isInteger(parsed)) {
@@ -14,7 +14,7 @@ function toNullableInt (value) {
   return parsed
 }
 
-function validatePaciente (payload = {}) {
+function validatePaciente(payload = {}) {
   const {
     idDocumento,
     idHistorial,
@@ -49,7 +49,7 @@ function validatePaciente (payload = {}) {
   }
 }
 
-function buildInsertSql (paciente) {
+function buildInsertSql(paciente) {
   const columns = [
     'ID_DOCUMENTO',
     'ID_HISTORIAL',
@@ -63,8 +63,8 @@ function buildInsertSql (paciente) {
   ]
 
   const values = [
-    paciente.idDocumento ?? 'NULL',
-    paciente.idHistorial ?? 'NULL',
+    'NULL', // Force NULL for ID_DOCUMENTO until DOCUMENTOS table is populated
+    'NULL', // Force NULL for ID_HISTORIAL until HISTORIALES table is populated
     sanitizeString(paciente.nombre),
     sanitizeString(paciente.apellido),
     sanitizeString(paciente.fechaNacimiento),
@@ -77,7 +77,7 @@ function buildInsertSql (paciente) {
   return `INSERT INTO ${PACIENTES_TABLE} (${columns.join(', ')}) VALUES (${values.join(', ')});`
 }
 
-async function createPaciente (payload) {
+async function createPaciente(payload) {
   const paciente = validatePaciente(payload)
   const insertSql = buildInsertSql(paciente)
   await query(insertSql)
@@ -85,7 +85,7 @@ async function createPaciente (payload) {
   return row?.ID_PACIENTE ?? null
 }
 
-async function listPacientes ({ limit = 20 } = {}) {
+async function listPacientes({ limit = 20 } = {}) {
   const safeLimit = Number.isInteger(limit) && limit > 0 ? Math.min(limit, 100) : 20
   const sql = `
     SELECT TOP ${safeLimit}
@@ -105,5 +105,14 @@ async function listPacientes ({ limit = 20 } = {}) {
 
 export const PacientesRepository = {
   createPaciente,
-  listPacientes
+  listPacientes,
+  deletePaciente
+}
+
+async function deletePaciente(id) {
+  const idPaciente = toNullableInt(id)
+  if (!idPaciente) throw new Error('ID de paciente inválido.')
+  const sql = `DELETE FROM ${PACIENTES_TABLE} WHERE ID_PACIENTE = ${idPaciente}`
+  await query(sql)
+  return true
 }

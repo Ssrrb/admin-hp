@@ -439,683 +439,718 @@
 </head>
 
 <body>
-    <% const usernameQuery = name ? `?username=${encodeURIComponent(name)}` : '' ; %>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/protected<%= usernameQuery %>">
-                HEKO <span class="brand-accent">PORA</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>" href="/protected<%= usernameQuery %>">
-                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>" href="/admin/pacientes<%= usernameQuery %>">
-                            <i class="bi bi-people me-1"></i> Pacientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>" href="/admin/medicos<%= usernameQuery %>">
-                            <i class="bi bi-person-badge me-1"></i> Médicos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'especialidades' ? 'active' : '' %>"
-                            href="/admin/especialidades<%= usernameQuery %>">
-                            <i class="bi bi-heart-pulse me-1"></i> Especialidades
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'consultorios' ? 'active' : '' %>"
-                            href="/admin/consultorios<%= usernameQuery %>">
-                            <i class="bi bi-building me-1"></i> Consultorios
-                        </a>
-                    </li>
-                </ul>
-                <form action="/logout" method="POST" class="d-flex">
-                    <button class="btn btn-logout" type="submit">
-                        <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
-                    </button>
-                </form>
+    <% const usernameQuery=name ? `?username=${encodeURIComponent(name)}` : '' ; %>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/protected<%= usernameQuery %>">
+                    HEKO <span class="brand-accent">PORA</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>"
+                                href="/protected<%= usernameQuery %>">
+                                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>"
+                                href="/admin/pacientes<%= usernameQuery %>">
+                                <i class="bi bi-people me-1"></i> Pacientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>"
+                                href="/admin/medicos<%= usernameQuery %>">
+                                <i class="bi bi-person-badge me-1"></i> Médicos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= section === 'especialidades' ? 'active' : '' %>"
+                                href="/admin/especialidades<%= usernameQuery %>">
+                                <i class="bi bi-heart-pulse me-1"></i> Especialidades
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= section === 'consultorios' ? 'active' : '' %>"
+                                href="/admin/consultorios<%= usernameQuery %>">
+                                <i class="bi bi-building me-1"></i> Consultorios
+                            </a>
+                        </li>
+                    </ul>
+                    <form action="/logout" method="POST" class="d-flex">
+                        <button class="btn btn-logout" type="submit">
+                            <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <% if (section==='dashboard' ) { %>
-                <!-- Dashboard View -->
-                <div class="welcome-card fade-in">
-                    <h1>Bienvenido, <%= name %>
-                    </h1>
-                    <p>Sistema Web de Gestión de Consultorio centralizado</p>
-                </div>
-
-                <div class="row g-4">
-                    <div class="col-md-6 col-lg-3">
-                        <a href="/admin/pacientes<%= usernameQuery %>" class="management-card fade-in">
-                            <div class="icon">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <h3>Pacientes</h3>
-                            <p>Gestiona el registro y datos de pacientes</p>
-                            <div class="arrow">
-                                <i class="bi bi-arrow-right"></i>
-                            </div>
-                        </a>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="container">
+                <% if (section==='dashboard' ) { %>
+                    <!-- Dashboard View -->
+                    <div class="welcome-card fade-in">
+                        <h1>Bienvenido, <%= name %>
+                        </h1>
+                        <p>Sistema Web de Gestión de Consultorio centralizado</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3">
-                        <a href="/admin/medicos<%= usernameQuery %>" class="management-card fade-in">
-                            <div class="icon">
-                                <i class="bi bi-person-badge"></i>
-                            </div>
-                            <h3>Médicos</h3>
-                            <p>Administra profesionales y especialistas</p>
-                            <div class="arrow">
-                                <i class="bi bi-arrow-right"></i>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-6 col-lg-3">
-                        <a href="/admin/especialidades<%= usernameQuery %>" class="management-card fade-in">
-                            <div class="icon">
-                                <i class="bi bi-heart-pulse"></i>
-                            </div>
-                            <h3>Especialidades</h3>
-                            <p>Configura especialidades médicas</p>
-                            <div class="arrow">
-                                <i class="bi bi-arrow-right"></i>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-6 col-lg-3">
-                        <a href="/admin/consultorios<%= usernameQuery %>" class="management-card fade-in">
-                            <div class="icon">
-                                <i class="bi bi-building"></i>
-                            </div>
-                            <h3>Consultorios</h3>
-                            <p>Gestiona salas y espacios médicos</p>
-                            <div class="arrow">
-                                <i class="bi bi-arrow-right"></i>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <% } else if (section==='pacientes' ) { %>
-                    <!-- Pacientes Section -->
-                    <div class="section-header fade-in">
-                        <h2><i class="bi bi-people me-2"></i> Gestión de Pacientes</h2>
-                        <p>Administra el registro y datos de pacientes del centro médico</p>
-                    </div>
-                    <div class="content-card fade-in pacientes-grid">
-                        <div class="paciente-form-panel">
-                            <div class="panel-header">
-                                <div class="header-icon-small">
-                                    <i class="bi bi-person-plus-fill"></i>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-3">
+                            <a href="/admin/pacientes<%= usernameQuery %>" class="management-card fade-in">
+                                <div class="icon">
+                                    <i class="bi bi-people"></i>
                                 </div>
-                                <div>
-                                    <h4>Registrar Paciente</h4>
-                                    <p class="panel-subtitle">Captura los datos básicos y da de alta al paciente</p>
+                                <h3>Pacientes</h3>
+                                <p>Gestiona el registro y datos de pacientes</p>
+                                <div class="arrow">
+                                    <i class="bi bi-arrow-right"></i>
                                 </div>
-                            </div>
-
-                            <form id="pacienteForm" class="paciente-form" novalidate>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteNombre">Nombre</label>
-                                        <input class="form-control-custom" id="pacienteNombre" name="nombre" required placeholder="Ej. Ana">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteApellido">Apellido</label>
-                                        <input class="form-control-custom" id="pacienteApellido" name="apellido" required placeholder="Ej. González">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteDocumento">Documento (opcional)</label>
-                                        <input class="form-control-custom" id="pacienteDocumento" name="idDocumento" inputmode="numeric" pattern="[0-9]*" placeholder="Solo números">
-                                        <small class="field-hint">ID_DOCUMENTO</small>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteHistorial">N° Historial (opcional)</label>
-                                        <input class="form-control-custom" id="pacienteHistorial" name="idHistorial" inputmode="numeric" pattern="[0-9]*" placeholder="ID_HISTORIAL">
-                                        <small class="field-hint">Se vincula con el historial clínico</small>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteNacimiento">Fecha de nacimiento</label>
-                                        <input class="form-control-custom" id="pacienteNacimiento" name="fechaNacimiento" type="date" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteSexo">Sexo</label>
-                                        <select class="form-control-custom" id="pacienteSexo" name="sexo" required>
-                                            <option value="H">Hombre</option>
-                                            <option value="M" selected>Mujer</option>
-                                        </select>
-                                        <small class="field-hint">Valores válidos en BD: H / M</small>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteLugar">Lugar de nacimiento</label>
-                                        <input class="form-control-custom" id="pacienteLugar" name="lugarNacimiento" required placeholder="Ciudad, País">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="pacienteProfesion">Profesión (opcional)</label>
-                                        <input class="form-control-custom" id="pacienteProfesion" name="profesion" placeholder="Ej. Abogada">
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label" for="pacienteDireccion">Dirección</label>
-                                        <textarea class="form-control-custom textarea-custom" id="pacienteDireccion" name="direccion" rows="2" required placeholder="Calle, número, barrio"></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-actions-inline mt-4">
-                                    <button type="reset" class="btn-secondary-custom">
-                                        <i class="bi bi-arrow-counterclockwise me-2"></i>
-                                        Limpiar
-                                    </button>
-                                    <button type="submit" class="btn-primary-custom">
-                                        <i class="bi bi-check-circle me-2"></i>
-                                        Guardar paciente
-                                    </button>
-                                </div>
-                                <div id="pacienteFormStatus" class="form-message" style="display: none;"></div>
-                            </form>
+                            </a>
                         </div>
 
-                        <div class="paciente-list-panel">
-                            <div class="list-header">
-                                <div>
-                                    <h5>Pacientes recientes</h5>
-                                    <p class="text-muted mb-0"><span id="pacientesCount">0</span> registrados</p>
+                        <div class="col-md-6 col-lg-3">
+                            <a href="/admin/medicos<%= usernameQuery %>" class="management-card fade-in">
+                                <div class="icon">
+                                    <i class="bi bi-person-badge"></i>
                                 </div>
-                                <div class="list-actions">
-                                    <button id="refreshPacientes" class="btn-secondary-custom" type="button">
-                                        <i class="bi bi-arrow-repeat me-1"></i>
-                                        Actualizar
-                                    </button>
+                                <h3>Médicos</h3>
+                                <p>Administra profesionales y especialistas</p>
+                                <div class="arrow">
+                                    <i class="bi bi-arrow-right"></i>
                                 </div>
-                            </div>
-                            <div class="paciente-table-wrapper">
-                                <table class="table paciente-table align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Nacimiento</th>
-                                            <th>Lugar</th>
-                                            <th>Dirección</th>
-                                            <th>Sexo</th>
-                                            <th>Profesión</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="pacientesTableBody">
-                                        <tr class="empty-row">
-                                            <td colspan="7">
-                                                <div class="empty-state">
-                                                    <div class="empty-icon"><i class="bi bi-inbox"></i></div>
-                                                    <p>Sin pacientes cargados</p>
-                                                    <small>Registra el primero para verlo aquí</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <a href="/admin/especialidades<%= usernameQuery %>" class="management-card fade-in">
+                                <div class="icon">
+                                    <i class="bi bi-heart-pulse"></i>
+                                </div>
+                                <h3>Especialidades</h3>
+                                <p>Configura especialidades médicas</p>
+                                <div class="arrow">
+                                    <i class="bi bi-arrow-right"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <a href="/admin/consultorios<%= usernameQuery %>" class="management-card fade-in">
+                                <div class="icon">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                                <h3>Consultorios</h3>
+                                <p>Gestiona salas y espacios médicos</p>
+                                <div class="arrow">
+                                    <i class="bi bi-arrow-right"></i>
+                                </div>
+                            </a>
                         </div>
                     </div>
 
-                    <% } else if (section==='medicos' ) { %>
-                        <!-- Médicos Section -->
+                    <% } else if (section==='pacientes' ) { %>
+                        <!-- Pacientes Section -->
                         <div class="section-header fade-in">
-                            <h2><i class="bi bi-person-badge me-2"></i> Gestión de Médicos</h2>
-                            <p>Administra profesionales médicos y especialistas</p>
+                            <h2><i class="bi bi-people me-2"></i> Gestión de Pacientes</h2>
+                            <p>Administra el registro y datos de pacientes del centro médico</p>
                         </div>
-
-                        <!-- Médicos List View -->
-                        <div id="medicosListView" class="content-card fade-in">
-                            <div class="medicos-header">
-                                <div>
-                                    <h4><i class="bi bi-people-fill me-2"></i>Médicos Registrados</h4>
-                                    <p class="text-muted mb-0"><span id="medicosCount">0</span> profesionales activos</p>
-                                </div>
-                                <button id="btnAgregarMedico" class="btn-primary-custom">
-                                    <i class="bi bi-person-plus-fill me-2"></i>
-                                    <span>Agregar Médico</span>
-                                </button>
-                            </div>
-
-                            <div class="search-filter-bar mt-4">
-                                <div class="search-box">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" id="searchMedico" placeholder="Buscar médico..." />
-                                </div>
-                                <div class="filter-specialty">
-                                    <select id="filterEspecialidad" class="form-control-custom">
-                                        <option value="">Todas las especialidades</option>
-                                        <option value="cardiologia">Cardiología</option>
-                                        <option value="pediatria">Pediatría</option>
-                                        <option value="traumatologia">Traumatología</option>
-                                        <option value="ginecologia">Ginecología</option>
-                                        <option value="oftalmologia">Oftalmología</option>
-                                        <option value="neurologia">Neurología</option>
-                                        <option value="dermatologia">Dermatología</option>
-                                        <option value="medicina-general">Medicina General</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id="medicosList" class="medicos-grid mt-4">
-                                <!-- Médicos cards will be inserted here -->
-                                <div class="empty-state">
-                                    <div class="empty-icon">
-                                        <i class="bi bi-person-x"></i>
-                                    </div>
-                                    <p>No hay médicos registrados</p>
-                                    <small>Comienza agregando un nuevo profesional médico</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Médicos Form View (hidden by default) -->
-                        <div id="medicosFormView" class="content-card fade-in registro-medico-container" style="display: none;">
-                            <!-- Back button -->
-                            <button id="btnVolverLista" class="btn-back mb-3">
-                                <i class="bi bi-arrow-left me-2"></i>
-                                <span>Volver a la lista</span>
-                            </button>
-
-                            <!-- Registration Form -->
-                            <div class="registro-medico-wrapper">
-                                <div class="form-header">
-                                    <div class="header-icon">
+                        <div class="content-card fade-in pacientes-grid">
+                            <div class="paciente-form-panel">
+                                <div class="panel-header">
+                                    <div class="header-icon-small">
                                         <i class="bi bi-person-plus-fill"></i>
                                     </div>
-                                    <h3>Registrar Nuevo Médico</h3>
-                                    <p class="header-subtitle">Completa los datos del profesional médico</p>
+                                    <div>
+                                        <h4>Registrar Paciente</h4>
+                                        <p class="panel-subtitle">Captura los datos básicos y da de alta al paciente</p>
+                                    </div>
                                 </div>
 
-                                <form id="registroMedicoForm" class="registro-medico-form">
-                                    <!-- Personal Information Section -->
-                                    <div class="form-section">
-                                        <div class="section-title">
-                                            <i class="bi bi-person-circle"></i>
-                                            <span>Información Personal</span>
+                                <form id="pacienteForm" class="paciente-form" novalidate>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteNombre">Nombre</label>
+                                            <input class="form-control-custom" id="pacienteNombre" name="nombre"
+                                                required placeholder="Ej. Ana">
                                         </div>
-
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="text" id="nombre" name="nombre" required
-                                                           class="form-control-custom" placeholder=" ">
-                                                    <label for="nombre">Nombre(s)</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="text" id="apellido" name="apellido" required
-                                                           class="form-control-custom" placeholder=" ">
-                                                    <label for="apellido">Apellido(s)</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteApellido">Apellido</label>
+                                            <input class="form-control-custom" id="pacienteApellido" name="apellido"
+                                                required placeholder="Ej. González">
                                         </div>
-
-                                        <div class="row g-3 mt-2">
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="text" id="dni" name="dni" required
-                                                           pattern="[0-9]{7,8}" class="form-control-custom" placeholder=" ">
-                                                    <label for="dni">DNI / Documento</label>
-                                                    <div class="input-border"></div>
-                                                    <small class="field-hint">7-8 dígitos numéricos</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="date" id="fechaNacimiento" name="fechaNacimiento"
-                                                           required class="form-control-custom" placeholder=" ">
-                                                    <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteDocumento">Documento
+                                                (opcional)</label>
+                                            <input class="form-control-custom" id="pacienteDocumento" name="idDocumento"
+                                                inputmode="numeric" pattern="[0-9]*"
+                                                placeholder="Temporalmente deshabilitado" disabled>
+                                            <small class="field-hint">⚠️ Deshabilitado hasta implementar gestión de
+                                                documentos</small>
                                         </div>
-                                    </div>
-
-                                    <!-- Professional Information Section -->
-                                    <div class="form-section">
-                                        <div class="section-title">
-                                            <i class="bi bi-briefcase-fill"></i>
-                                            <span>Información Profesional</span>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteHistorial">N° Historial
+                                                (opcional)</label>
+                                            <input class="form-control-custom" id="pacienteHistorial" name="idHistorial"
+                                                inputmode="numeric" pattern="[0-9]*"
+                                                placeholder="Temporalmente deshabilitado" disabled>
+                                            <small class="field-hint">⚠️ Deshabilitado hasta implementar gestión de
+                                                historiales</small>
                                         </div>
-
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="text" id="matricula" name="matricula" required
-                                                           class="form-control-custom" placeholder=" ">
-                                                    <label for="matricula">Matrícula Profesional</label>
-                                                    <div class="input-border"></div>
-                                                    <small class="field-hint">Número de matrícula vigente</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <select id="especialidad" name="especialidad" required
-                                                            class="form-control-custom">
-                                                        <option value="" disabled selected></option>
-                                                        <option value="cardiologia">Cardiología</option>
-                                                        <option value="pediatria">Pediatría</option>
-                                                        <option value="traumatologia">Traumatología</option>
-                                                        <option value="ginecologia">Ginecología</option>
-                                                        <option value="oftalmologia">Oftalmología</option>
-                                                        <option value="neurologia">Neurología</option>
-                                                        <option value="dermatologia">Dermatología</option>
-                                                        <option value="medicina-general">Medicina General</option>
-                                                    </select>
-                                                    <label for="especialidad">Especialidad Médica</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteNacimiento">Fecha de
+                                                nacimiento</label>
+                                            <input class="form-control-custom" id="pacienteNacimiento"
+                                                name="fechaNacimiento" type="date" required>
                                         </div>
-
-                                        <div class="row g-3 mt-2">
-                                            <div class="col-12">
-                                                <div class="form-floating-custom">
-                                                    <input type="text" id="tituloProfesional" name="tituloProfesional"
-                                                           required class="form-control-custom" placeholder=" ">
-                                                    <label for="tituloProfesional">Título Profesional</label>
-                                                    <div class="input-border"></div>
-                                                    <small class="field-hint">Ej: Médico Cirujano, Especialista en...</small>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteSexo">Sexo</label>
+                                            <select class="form-control-custom" id="pacienteSexo" name="sexo" required>
+                                                <option value="H">Hombre</option>
+                                                <option value="M" selected>Mujer</option>
+                                            </select>
+                                            <small class="field-hint">Valores válidos en BD: H / M</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteLugar">Lugar de nacimiento</label>
+                                            <input class="form-control-custom" id="pacienteLugar" name="lugarNacimiento"
+                                                required placeholder="Ciudad, País">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="pacienteProfesion">Profesión
+                                                (opcional)</label>
+                                            <input class="form-control-custom" id="pacienteProfesion" name="profesion"
+                                                placeholder="Ej. Abogada">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label" for="pacienteDireccion">Dirección</label>
+                                            <textarea class="form-control-custom textarea-custom" id="pacienteDireccion"
+                                                name="direccion" rows="2" required
+                                                placeholder="Calle, número, barrio"></textarea>
                                         </div>
                                     </div>
 
-                                    <!-- Contact Information Section -->
-                                    <div class="form-section">
-                                        <div class="section-title">
-                                            <i class="bi bi-envelope-at-fill"></i>
-                                            <span>Datos de Contacto</span>
-                                        </div>
-
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="email" id="email" name="email" required
-                                                           class="form-control-custom" placeholder=" ">
-                                                    <label for="email">Correo Electrónico</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="tel" id="telefono" name="telefono" required
-                                                           pattern="[0-9]{10}" class="form-control-custom" placeholder=" ">
-                                                    <label for="telefono">Teléfono / Celular</label>
-                                                    <div class="input-border"></div>
-                                                    <small class="field-hint">10 dígitos sin espacios</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row g-3 mt-2">
-                                            <div class="col-12">
-                                                <div class="form-floating-custom">
-                                                    <textarea id="direccion" name="direccion" required
-                                                              class="form-control-custom textarea-custom"
-                                                              placeholder=" " rows="3"></textarea>
-                                                    <label for="direccion">Dirección</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Schedule and Availability Section -->
-                                    <div class="form-section">
-                                        <div class="section-title">
-                                            <i class="bi bi-clock-fill"></i>
-                                            <span>Horarios de Atención</span>
-                                        </div>
-
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="time" id="horaInicio" name="horaInicio"
-                                                           required class="form-control-custom" placeholder=" ">
-                                                    <label for="horaInicio">Hora de Inicio</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating-custom">
-                                                    <input type="time" id="horaFin" name="horaFin"
-                                                           required class="form-control-custom" placeholder=" ">
-                                                    <label for="horaFin">Hora de Finalización</label>
-                                                    <div class="input-border"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="dias-atencion mt-3">
-                                            <label class="dias-label">Días de Atención</label>
-                                            <div class="dias-grid">
-                                                <div class="dia-checkbox">
-                                                    <input type="checkbox" id="lunes" name="dias[]" value="lunes">
-                                                    <label for="lunes">Lunes</label>
-                                                </div>
-                                                <div class="dia-checkbox">
-                                                    <input type="checkbox" id="martes" name="dias[]" value="martes">
-                                                    <label for="martes">Martes</label>
-                                                </div>
-                                                <div class="dia-checkbox">
-                                                    <input type="checkbox" id="miercoles" name="dias[]" value="miercoles">
-                                                    <label for="miercoles">Miércoles</label>
-                                                </div>
-                                                <div class="dia-checkbox">
-                                                    <input type="checkbox" id="jueves" name="dias[]" value="jueves">
-                                                    <label for="jueves">Jueves</label>
-                                                </div>
-                                                <div class="dia-checkbox">
-                                                    <input type="checkbox" id="viernes" name="dias[]" value="viernes">
-                                                    <label for="viernes">Viernes</label>
-                                                </div>
-                                                <div class="dia-checkbox">
-                                                    <input type="checkbox" id="sabado" name="dias[]" value="sabado">
-                                                    <label for="sabado">Sábado</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Form Actions -->
-                                    <div class="form-actions">
-                                        <button type="button" class="btn-secondary-custom">
-                                            <i class="bi bi-x-circle me-2"></i>
-                                            <span>Cancelar</span>
+                                    <div class="form-actions-inline mt-4">
+                                        <button type="reset" class="btn-secondary-custom">
+                                            <i class="bi bi-arrow-counterclockwise me-2"></i>
+                                            Limpiar
                                         </button>
                                         <button type="submit" class="btn-primary-custom">
                                             <i class="bi bi-check-circle me-2"></i>
-                                            <span>Registrar Médico</span>
+                                            Guardar paciente
                                         </button>
                                     </div>
+                                    <div id="pacienteFormStatus" class="form-message" style="display: none;"></div>
                                 </form>
+                            </div>
 
-                                <!-- Success/Error Message -->
-                                <div id="formMessage" class="form-message" style="display: none;"></div>
+                            <div class="paciente-list-panel">
+                                <div class="list-header">
+                                    <div>
+                                        <h5>Pacientes recientes</h5>
+                                        <p class="text-muted mb-0"><span id="pacientesCount">0</span> registrados</p>
+                                    </div>
+                                    <div class="list-actions">
+                                        <button id="refreshPacientes" class="btn-secondary-custom" type="button">
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+                                            Actualizar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="paciente-table-wrapper">
+                                    <table class="table paciente-table align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Nacimiento</th>
+                                                <th>Lugar</th>
+                                                <th>Dirección</th>
+                                                <th>Sexo</th>
+                                                <th>Profesión</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pacientesTableBody">
+                                            <tr class="empty-row">
+                                                <td colspan="7">
+                                                    <div class="empty-state">
+                                                        <div class="empty-icon"><i class="bi bi-inbox"></i></div>
+                                                        <p>Sin pacientes cargados</p>
+                                                        <small>Registra el primero para verlo aquí</small>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
-                        <% } else if (section==='especialidades' ) { %>
-                            <!-- Especialidades Section -->
+                        <% } else if (section==='medicos' ) { %>
+                            <!-- Médicos Section -->
                             <div class="section-header fade-in">
-                                <h2><i class="bi bi-heart-pulse me-2"></i> Gestión de Especialidades Médicas</h2>
-                                <p>Configura y administra las especialidades disponibles en el centro médico</p>
+                                <h2><i class="bi bi-person-badge me-2"></i> Gestión de Médicos</h2>
+                                <p>Administra profesionales médicos y especialistas</p>
                             </div>
 
-                            <div class="content-card fade-in especialidades-container">
-                                <!-- Dual Panel Layout -->
-                                <div class="especialidades-grid">
-                                    <!-- Left Panel: Add New Specialty -->
-                                    <div class="specialty-form-panel">
-                                        <div class="panel-header">
-                                            <div class="header-icon-small">
-                                                <i class="bi bi-plus-circle-fill"></i>
-                                            </div>
-                                            <h4>Nueva Especialidad</h4>
-                                            <p class="panel-subtitle">Registra una nueva especialidad médica</p>
+                            <!-- Médicos List View -->
+                            <div id="medicosListView" class="content-card fade-in">
+                                <div class="medicos-header">
+                                    <div>
+                                        <h4><i class="bi bi-people-fill me-2"></i>Médicos Registrados</h4>
+                                        <p class="text-muted mb-0"><span id="medicosCount">0</span> profesionales
+                                            activos</p>
+                                    </div>
+                                    <button id="btnAgregarMedico" class="btn-primary-custom">
+                                        <i class="bi bi-person-plus-fill me-2"></i>
+                                        <span>Agregar Médico</span>
+                                    </button>
+                                </div>
+
+                                <div class="search-filter-bar mt-4">
+                                    <div class="search-box">
+                                        <i class="bi bi-search"></i>
+                                        <input type="text" id="searchMedico" placeholder="Buscar médico..." />
+                                    </div>
+                                    <div class="filter-specialty">
+                                        <select id="filterEspecialidad" class="form-control-custom">
+                                            <option value="">Todas las especialidades</option>
+                                            <option value="cardiologia">Cardiología</option>
+                                            <option value="pediatria">Pediatría</option>
+                                            <option value="traumatologia">Traumatología</option>
+                                            <option value="ginecologia">Ginecología</option>
+                                            <option value="oftalmologia">Oftalmología</option>
+                                            <option value="neurologia">Neurología</option>
+                                            <option value="dermatologia">Dermatología</option>
+                                            <option value="medicina-general">Medicina General</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="medicosList" class="medicos-grid mt-4">
+                                    <!-- Médicos cards will be inserted here -->
+                                    <div class="empty-state">
+                                        <div class="empty-icon">
+                                            <i class="bi bi-person-x"></i>
                                         </div>
+                                        <p>No hay médicos registrados</p>
+                                        <small>Comienza agregando un nuevo profesional médico</small>
+                                    </div>
+                                </div>
+                            </div>
 
-                                        <form id="especialidadForm" class="specialty-form">
-                                            <div class="form-floating-custom">
-                                                <input type="text" id="nombreEspecialidad" name="nombre" required
-                                                       class="form-control-custom" placeholder=" " maxlength="100">
-                                                <label for="nombreEspecialidad">Nombre de la Especialidad</label>
-                                                <div class="input-border"></div>
-                                                <small class="field-hint">Ej: Cardiología, Pediatría, Neurología</small>
-                                            </div>
+                            <!-- Médicos Form View (hidden by default) -->
+                            <div id="medicosFormView" class="content-card fade-in registro-medico-container"
+                                style="display: none;">
+                                <!-- Back button -->
+                                <button id="btnVolverLista" class="btn-back mb-3">
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    <span>Volver a la lista</span>
+                                </button>
 
-                                            <div class="form-floating-custom mt-3">
-                                                <textarea id="descripcionEspecialidad" name="descripcion"
-                                                          class="form-control-custom textarea-custom"
-                                                          placeholder=" " rows="4" maxlength="500"></textarea>
-                                                <label for="descripcionEspecialidad">Descripción (opcional)</label>
-                                                <div class="input-border"></div>
-                                                <small class="field-hint">Descripción breve del área médica</small>
-                                            </div>
-
-                                            <div class="form-floating-custom mt-3">
-                                                <select id="iconoEspecialidad" name="icono" class="form-control-custom">
-                                                    <option value="" disabled selected></option>
-                                                    <option value="heart-pulse">💓 Cardiología / Corazón</option>
-                                                    <option value="bandaid">🩹 Medicina General</option>
-                                                    <option value="brain">🧠 Neurología</option>
-                                                    <option value="lungs">🫁 Neumología</option>
-                                                    <option value="eye">👁️ Oftalmología</option>
-                                                    <option value="ear">👂 Otorrinolaringología</option>
-                                                    <option value="bone">🦴 Traumatología</option>
-                                                    <option value="baby">👶 Pediatría</option>
-                                                    <option value="gender-female">🤰 Ginecología</option>
-                                                    <option value="tooth">🦷 Odontología</option>
-                                                    <option value="skin">🔬 Dermatología</option>
-                                                    <option value="kidney">🫘 Nefrología</option>
-                                                    <option value="stomach">🫃 Gastroenterología</option>
-                                                </select>
-                                                <label for="iconoEspecialidad">Icono Representativo</label>
-                                                <div class="input-border"></div>
-                                            </div>
-
-                                            <div class="form-actions-inline mt-4">
-                                                <button type="submit" class="btn-primary-custom">
-                                                    <i class="bi bi-check-circle me-2"></i>
-                                                    <span>Agregar Especialidad</span>
-                                                </button>
-                                                <button type="button" class="btn-secondary-custom" onclick="document.getElementById('especialidadForm').reset()">
-                                                    <i class="bi bi-arrow-clockwise me-2"></i>
-                                                    <span>Limpiar</span>
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                        <div id="specialtyFormMessage" class="form-message" style="display: none;"></div>
+                                <!-- Registration Form -->
+                                <div class="registro-medico-wrapper">
+                                    <div class="form-header">
+                                        <div class="header-icon">
+                                            <i class="bi bi-person-plus-fill"></i>
+                                        </div>
+                                        <h3>Registrar Nuevo Médico</h3>
+                                        <p class="header-subtitle">Completa los datos del profesional médico</p>
                                     </div>
 
-                                    <!-- Right Panel: Specialties List -->
-                                    <div class="specialty-list-panel">
-                                        <div class="panel-header">
-                                            <div class="header-flex">
-                                                <div>
-                                                    <div class="header-icon-small">
-                                                        <i class="bi bi-list-ul"></i>
+                                    <form id="registroMedicoForm" class="registro-medico-form">
+                                        <!-- Personal Information Section -->
+                                        <div class="form-section">
+                                            <div class="section-title">
+                                                <i class="bi bi-person-circle"></i>
+                                                <span>Información Personal</span>
+                                            </div>
+
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="text" id="nombre" name="nombre" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="nombre">Nombre(s)</label>
+                                                        <div class="input-border"></div>
                                                     </div>
-                                                    <h4>Especialidades Registradas</h4>
-                                                    <p class="panel-subtitle">
-                                                        <span id="specialtyCount">0</span> especialidades activas
-                                                    </p>
                                                 </div>
-                                                <div class="search-box">
-                                                    <i class="bi bi-search"></i>
-                                                    <input type="text" id="searchSpecialty" placeholder="Buscar..." />
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="text" id="apellido" name="apellido" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="apellido">Apellido(s)</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3 mt-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="text" id="dni" name="dni" required
+                                                            pattern="[0-9]{7,8}" class="form-control-custom"
+                                                            placeholder=" ">
+                                                        <label for="dni">DNI / Documento</label>
+                                                        <div class="input-border"></div>
+                                                        <small class="field-hint">7-8 dígitos numéricos</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="date" id="fechaNacimiento" name="fechaNacimiento"
+                                                            required class="form-control-custom" placeholder=" ">
+                                                        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div id="specialtiesList" class="specialties-list">
-                                            <!-- Specialty cards will be inserted here dynamically -->
-                                            <div class="empty-state">
-                                                <div class="empty-icon">
-                                                    <i class="bi bi-inbox"></i>
+                                        <!-- Professional Information Section -->
+                                        <div class="form-section">
+                                            <div class="section-title">
+                                                <i class="bi bi-briefcase-fill"></i>
+                                                <span>Información Profesional</span>
+                                            </div>
+
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="text" id="matricula" name="matricula" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="matricula">Matrícula Profesional</label>
+                                                        <div class="input-border"></div>
+                                                        <small class="field-hint">Número de matrícula vigente</small>
+                                                    </div>
                                                 </div>
-                                                <p>No hay especialidades registradas</p>
-                                                <small>Comienza agregando una nueva especialidad</small>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <select id="especialidad" name="especialidad" required
+                                                            class="form-control-custom">
+                                                            <option value="" disabled selected></option>
+                                                            <option value="cardiologia">Cardiología</option>
+                                                            <option value="pediatria">Pediatría</option>
+                                                            <option value="traumatologia">Traumatología</option>
+                                                            <option value="ginecologia">Ginecología</option>
+                                                            <option value="oftalmologia">Oftalmología</option>
+                                                            <option value="neurologia">Neurología</option>
+                                                            <option value="dermatologia">Dermatología</option>
+                                                            <option value="medicina-general">Medicina General</option>
+                                                        </select>
+                                                        <label for="especialidad">Especialidad Médica</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3 mt-2">
+                                                <div class="col-12">
+                                                    <div class="form-floating-custom">
+                                                        <input type="text" id="tituloProfesional"
+                                                            name="tituloProfesional" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="tituloProfesional">Título Profesional</label>
+                                                        <div class="input-border"></div>
+                                                        <small class="field-hint">Ej: Médico Cirujano, Especialista
+                                                            en...</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Contact Information Section -->
+                                        <div class="form-section">
+                                            <div class="section-title">
+                                                <i class="bi bi-envelope-at-fill"></i>
+                                                <span>Datos de Contacto</span>
+                                            </div>
+
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="email" id="email" name="email" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="email">Correo Electrónico</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="tel" id="telefono" name="telefono" required
+                                                            pattern="[0-9]{10}" class="form-control-custom"
+                                                            placeholder=" ">
+                                                        <label for="telefono">Teléfono / Celular</label>
+                                                        <div class="input-border"></div>
+                                                        <small class="field-hint">10 dígitos sin espacios</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3 mt-2">
+                                                <div class="col-12">
+                                                    <div class="form-floating-custom">
+                                                        <textarea id="direccion" name="direccion" required
+                                                            class="form-control-custom textarea-custom" placeholder=" "
+                                                            rows="3"></textarea>
+                                                        <label for="direccion">Dirección</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Schedule and Availability Section -->
+                                        <div class="form-section">
+                                            <div class="section-title">
+                                                <i class="bi bi-clock-fill"></i>
+                                                <span>Horarios de Atención</span>
+                                            </div>
+
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="time" id="horaInicio" name="horaInicio" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="horaInicio">Hora de Inicio</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating-custom">
+                                                        <input type="time" id="horaFin" name="horaFin" required
+                                                            class="form-control-custom" placeholder=" ">
+                                                        <label for="horaFin">Hora de Finalización</label>
+                                                        <div class="input-border"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dias-atencion mt-3">
+                                                <label class="dias-label">Días de Atención</label>
+                                                <div class="dias-grid">
+                                                    <div class="dia-checkbox">
+                                                        <input type="checkbox" id="lunes" name="dias[]" value="lunes">
+                                                        <label for="lunes">Lunes</label>
+                                                    </div>
+                                                    <div class="dia-checkbox">
+                                                        <input type="checkbox" id="martes" name="dias[]" value="martes">
+                                                        <label for="martes">Martes</label>
+                                                    </div>
+                                                    <div class="dia-checkbox">
+                                                        <input type="checkbox" id="miercoles" name="dias[]"
+                                                            value="miercoles">
+                                                        <label for="miercoles">Miércoles</label>
+                                                    </div>
+                                                    <div class="dia-checkbox">
+                                                        <input type="checkbox" id="jueves" name="dias[]" value="jueves">
+                                                        <label for="jueves">Jueves</label>
+                                                    </div>
+                                                    <div class="dia-checkbox">
+                                                        <input type="checkbox" id="viernes" name="dias[]"
+                                                            value="viernes">
+                                                        <label for="viernes">Viernes</label>
+                                                    </div>
+                                                    <div class="dia-checkbox">
+                                                        <input type="checkbox" id="sabado" name="dias[]" value="sabado">
+                                                        <label for="sabado">Sábado</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Form Actions -->
+                                        <div class="form-actions">
+                                            <button type="button" class="btn-secondary-custom">
+                                                <i class="bi bi-x-circle me-2"></i>
+                                                <span>Cancelar</span>
+                                            </button>
+                                            <button type="submit" class="btn-primary-custom">
+                                                <i class="bi bi-check-circle me-2"></i>
+                                                <span>Registrar Médico</span>
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <!-- Success/Error Message -->
+                                    <div id="formMessage" class="form-message" style="display: none;"></div>
+                                </div>
+                            </div>
+
+                            <% } else if (section==='especialidades' ) { %>
+                                <!-- Especialidades Section -->
+                                <div class="section-header fade-in">
+                                    <h2><i class="bi bi-heart-pulse me-2"></i> Gestión de Especialidades Médicas</h2>
+                                    <p>Configura y administra las especialidades disponibles en el centro médico</p>
+                                </div>
+
+                                <div class="content-card fade-in especialidades-container">
+                                    <!-- Dual Panel Layout -->
+                                    <div class="especialidades-grid">
+                                        <!-- Left Panel: Add New Specialty -->
+                                        <div class="specialty-form-panel">
+                                            <div class="panel-header">
+                                                <div class="header-icon-small">
+                                                    <i class="bi bi-plus-circle-fill"></i>
+                                                </div>
+                                                <h4>Nueva Especialidad</h4>
+                                                <p class="panel-subtitle">Registra una nueva especialidad médica</p>
+                                            </div>
+
+                                            <form id="especialidadForm" class="specialty-form">
+                                                <div class="form-floating-custom">
+                                                    <input type="text" id="nombreEspecialidad" name="nombre" required
+                                                        class="form-control-custom" placeholder=" " maxlength="100">
+                                                    <label for="nombreEspecialidad">Nombre de la Especialidad</label>
+                                                    <div class="input-border"></div>
+                                                    <small class="field-hint">Ej: Cardiología, Pediatría,
+                                                        Neurología</small>
+                                                </div>
+
+                                                <div class="form-floating-custom mt-3">
+                                                    <textarea id="descripcionEspecialidad" name="descripcion"
+                                                        class="form-control-custom textarea-custom" placeholder=" "
+                                                        rows="4" maxlength="500"></textarea>
+                                                    <label for="descripcionEspecialidad">Descripción (opcional)</label>
+                                                    <div class="input-border"></div>
+                                                    <small class="field-hint">Descripción breve del área médica</small>
+                                                </div>
+
+                                                <div class="form-floating-custom mt-3">
+                                                    <select id="iconoEspecialidad" name="icono"
+                                                        class="form-control-custom">
+                                                        <option value="" disabled selected></option>
+                                                        <option value="heart-pulse">💓 Cardiología / Corazón</option>
+                                                        <option value="bandaid">🩹 Medicina General</option>
+                                                        <option value="brain">🧠 Neurología</option>
+                                                        <option value="lungs">🫁 Neumología</option>
+                                                        <option value="eye">👁️ Oftalmología</option>
+                                                        <option value="ear">👂 Otorrinolaringología</option>
+                                                        <option value="bone">🦴 Traumatología</option>
+                                                        <option value="baby">👶 Pediatría</option>
+                                                        <option value="gender-female">🤰 Ginecología</option>
+                                                        <option value="tooth">🦷 Odontología</option>
+                                                        <option value="skin">🔬 Dermatología</option>
+                                                        <option value="kidney">🫘 Nefrología</option>
+                                                        <option value="stomach">🫃 Gastroenterología</option>
+                                                    </select>
+                                                    <label for="iconoEspecialidad">Icono Representativo</label>
+                                                    <div class="input-border"></div>
+                                                </div>
+
+                                                <div class="form-actions-inline mt-4">
+                                                    <button type="submit" class="btn-primary-custom">
+                                                        <i class="bi bi-check-circle me-2"></i>
+                                                        <span>Agregar Especialidad</span>
+                                                    </button>
+                                                    <button type="button" class="btn-secondary-custom"
+                                                        onclick="document.getElementById('especialidadForm').reset()">
+                                                        <i class="bi bi-arrow-clockwise me-2"></i>
+                                                        <span>Limpiar</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                            <div id="specialtyFormMessage" class="form-message" style="display: none;">
+                                            </div>
+                                        </div>
+
+                                        <!-- Right Panel: Specialties List -->
+                                        <div class="specialty-list-panel">
+                                            <div class="panel-header">
+                                                <div class="header-flex">
+                                                    <div>
+                                                        <div class="header-icon-small">
+                                                            <i class="bi bi-list-ul"></i>
+                                                        </div>
+                                                        <h4>Especialidades Registradas</h4>
+                                                        <p class="panel-subtitle">
+                                                            <span id="specialtyCount">0</span> especialidades activas
+                                                        </p>
+                                                    </div>
+                                                    <div class="search-box">
+                                                        <i class="bi bi-search"></i>
+                                                        <input type="text" id="searchSpecialty"
+                                                            placeholder="Buscar..." />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="specialtiesList" class="specialties-list">
+                                                <!-- Specialty cards will be inserted here dynamically -->
+                                                <div class="empty-state">
+                                                    <div class="empty-icon">
+                                                        <i class="bi bi-inbox"></i>
+                                                    </div>
+                                                    <p>No hay especialidades registradas</p>
+                                                    <small>Comienza agregando una nueva especialidad</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <% } else if (section==='consultorios' ) { %>
-                                <!-- Consultorios Section -->
-                                <div class="section-header fade-in">
-                                    <h2><i class="bi bi-building me-2"></i> Gestión de Consultorios</h2>
-                                    <p>Administra salas y espacios de consulta médica</p>
-                                </div>
-                                <div class="content-card fade-in">
-                                    <p class="text-muted">Aquí podrás gestionar los consultorios y salas disponibles.
-                                    </p>
-                                    <!-- TODO: Add consultation room management table/forms here -->
-                                </div>
+                                <% } else if (section==='consultorios' ) { %>
+                                    <!-- Consultorios Section -->
+                                    <div class="section-header fade-in">
+                                        <h2><i class="bi bi-building me-2"></i> Gestión de Consultorios</h2>
+                                        <p>Administra salas y espacios de consulta médica</p>
+                                    </div>
+                                    <div class="content-card fade-in">
+                                        <p class="text-muted">Aquí podrás gestionar los consultorios y salas
+                                            disponibles.
+                                        </p>
+                                        <!-- TODO: Add consultation room management table/forms here -->
+                                    </div>
 
-                                <% } %>
+                                    <% } %>
+            </div>
         </div>
-    </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap 5 JS Bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Pacientes Management Script -->
-    <script>
-        const pacientesState = {
-            rows: []
-        }
+        <!-- Pacientes Management Script -->
+        <script>
+            const pacientesState = {
+                rows: []
+            }
 
-        function formatDateEs (value) {
-            if (!value) return '-'
-            const date = new Date(value)
-            if (Number.isNaN(date.getTime())) return value
-            return new Intl.DateTimeFormat('es-AR', { year: 'numeric', month: 'short', day: 'numeric' }).format(date)
-        }
+            function formatDateEs(value) {
+                if (!value) return '-'
+                const date = new Date(value)
+                if (Number.isNaN(date.getTime())) return value
+                return new Intl.DateTimeFormat('es-AR', { year: 'numeric', month: 'short', day: 'numeric' }).format(date)
+            }
 
-        function showPacienteStatus (message, type = 'info') {
-            const statusEl = document.getElementById('pacienteFormStatus')
-            if (!statusEl) return
-            statusEl.textContent = message
-            statusEl.className = `form-message ${type}`
-            statusEl.style.display = message ? 'block' : 'none'
-        }
+            function showPacienteStatus(message, type = 'info') {
+                const statusEl = document.getElementById('pacienteFormStatus')
+                if (!statusEl) return
+                statusEl.textContent = message
+                statusEl.className = `form-message ${type}`
+                statusEl.style.display = message ? 'block' : 'none'
+            }
 
-        function renderPacientes () {
-            const tableBody = document.getElementById('pacientesTableBody')
-            const countEl = document.getElementById('pacientesCount')
-            if (!tableBody) return
+            function renderPacientes() {
+                const tableBody = document.getElementById('pacientesTableBody')
+                const countEl = document.getElementById('pacientesCount')
+                if (!tableBody) return
 
-            const rows = pacientesState.rows ?? []
-            if (countEl) countEl.textContent = rows.length
+                const rows = pacientesState.rows ?? []
+                if (countEl) countEl.textContent = rows.length
 
-            if (rows.length === 0) {
-                tableBody.innerHTML = `
+                if (rows.length === 0) {
+                    tableBody.innerHTML = `
                     <tr class="empty-row">
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="empty-state">
                                 <div class="empty-icon"><i class="bi bi-inbox"></i></div>
                                 <p>Sin pacientes cargados</p>
@@ -1124,202 +1159,235 @@
                         </td>
                     </tr>
                 `
-                return
+                    return
+                }
+
+                tableBody.innerHTML = rows.map(paciente => {
+                    const sexo = paciente.SEXO ?? paciente.sexo ?? 'M'
+
+                    return `
+                    <tr>
+                        <td class="id-cell">${paciente.ID_PACIENTE ?? paciente.id_paciente ?? paciente.id ?? '—'}</td>
+                        <td>
+                            <div class="stacked">
+                                <strong>${paciente.NOMBRE ?? paciente.nombre ?? ''} ${paciente.APELLIDO ?? paciente.apellido ?? ''}</strong>
+                                <small class="muted">${paciente.LUGAR_NACIMIENTO ?? paciente.lugar_nacimiento ?? ''}</small>
+                            </div>
+                        </td>
+                        <td>${formatDateEs(paciente.FECHA_NACIMIENTO ?? paciente.fecha_nacimiento)}</td>
+                        <td>${paciente.LUGAR_NACIMIENTO ?? paciente.lugar_nacimiento ?? '—'}</td>
+                        <td><span class="badge-soft">${paciente.DIRECCION ?? paciente.direccion ?? '—'}</span></td>
+                        <td><span class="chip ${sexo === 'H' ? 'chip-info' : 'chip-primary'}">${sexo}</span></td>
+                        <td>${paciente.PROFESION ?? paciente.profesion ?? '—'}</td>
+                        <td>
+                            <button class="btn-icon-action danger" onclick="deletePaciente(${paciente.ID_PACIENTE ?? paciente.id_paciente ?? paciente.id})" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `
+                }).join('')
             }
 
-            tableBody.innerHTML = rows.map(paciente => `
-                <tr>
-                    <td class="id-cell">${paciente.ID_PACIENTE ?? paciente.id_paciente ?? paciente.id ?? '—'}</td>
-                    <td>
-                        <div class="stacked">
-                            <strong>${paciente.NOMBRE ?? paciente.nombre ?? ''} ${paciente.APELLIDO ?? paciente.apellido ?? ''}</strong>
-                            <small class="muted">${paciente.LUGAR_NACIMIENTO ?? paciente.lugar_nacimiento ?? ''}</small>
-                        </div>
-                    </td>
-                    <td>${formatDateEs(paciente.FECHA_NACIMIENTO ?? paciente.fecha_nacimiento)}</td>
-                    <td>${paciente.LUGAR_NACIMIENTO ?? paciente.lugar_nacimiento ?? '—'}</td>
-                    <td><span class="badge-soft">${paciente.DIRECCION ?? paciente.direccion ?? '—'}</span></td>
-                    <td><span class="chip ${(paciente.SEXO ?? paciente.sexo) === 'H' ? 'chip-info' : 'chip-primary'}">${paciente.SEXO ?? paciente.sexo || 'M'}</span></td>
-                    <td>${paciente.PROFESION ?? paciente.profesion ?? '—'}</td>
-                </tr>
-            `).join('')
-        }
-
-        async function fetchPacientes () {
-            const tableBody = document.getElementById('pacientesTableBody')
-            if (tableBody) {
-                tableBody.innerHTML = `
+            async function fetchPacientes() {
+                const tableBody = document.getElementById('pacientesTableBody')
+                if (tableBody) {
+                    tableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="loading-row">
+                        <td colspan="8" class="loading-row">
                             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                             Cargando pacientes...
                         </td>
                     </tr>
                 `
-            }
-
-            try {
-                const response = await fetch('/api/pacientes')
-                const payload = await response.json()
-                if (!response.ok) {
-                    throw new Error(payload.error || 'No se pudieron obtener los pacientes.')
                 }
-                pacientesState.rows = payload.data || []
-                renderPacientes()
-            } catch (error) {
-                showPacienteStatus(error.message, 'error')
-            }
-        }
-
-        function initPacientes () {
-            const form = document.getElementById('pacienteForm')
-            if (!form) return
-
-            const submitBtn = form.querySelector('button[type="submit"]')
-            const refreshBtn = document.getElementById('refreshPacientes')
-            const docInput = document.getElementById('pacienteDocumento')
-            const histInput = document.getElementById('pacienteHistorial')
-            const sexoSelect = document.getElementById('pacienteSexo')
-
-            ;[docInput, histInput].forEach(input => {
-                input?.addEventListener('input', function () {
-                    this.value = this.value.replace(/\D/g, '').slice(0, 10)
-                })
-            })
-
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault()
-                showPacienteStatus('', 'info')
-
-                const payload = {
-                    nombre: form.nombre.value.trim(),
-                    apellido: form.apellido.value.trim(),
-                    fechaNacimiento: form.fechaNacimiento.value,
-                    lugarNacimiento: form.lugarNacimiento.value.trim(),
-                    direccion: form.direccion.value.trim(),
-                    sexo: sexoSelect?.value || 'M',
-                    profesion: form.profesion.value.trim() || undefined,
-                    idDocumento: form.idDocumento.value ? Number(form.idDocumento.value) : undefined,
-                    idHistorial: form.idHistorial.value ? Number(form.idHistorial.value) : undefined
-                }
-
-                const originalText = submitBtn.innerHTML
-                submitBtn.disabled = true
-                submitBtn.innerHTML = '<span style="opacity:0.7;">Guardando...</span>'
 
                 try {
-                    const response = await fetch('/api/pacientes', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    })
-                    const data = await response.json()
+                    console.log('Fetching pacientes...')
+                    const response = await fetch('/api/pacientes')
+                    console.log('Response status:', response.status)
+                    const payload = await response.json()
+                    console.log('Payload:', payload)
                     if (!response.ok) {
-                        throw new Error(data.error || 'No se pudo registrar el paciente.')
+                        throw new Error(payload.error || 'No se pudieron obtener los pacientes.')
                     }
-
-                    showPacienteStatus(`Paciente registrado (ID ${data.id ?? 'pendiente'})`, 'success')
-                    form.reset()
-                    if (sexoSelect) sexoSelect.value = 'M'
-                    await fetchPacientes()
+                    pacientesState.rows = payload.data || []
+                    renderPacientes()
                 } catch (error) {
                     showPacienteStatus(error.message, 'error')
-                } finally {
-                    submitBtn.disabled = false
-                    submitBtn.innerHTML = originalText
                 }
-            })
-
-            refreshBtn?.addEventListener('click', fetchPacientes)
-            fetchPacientes()
-        }
-    </script>
-
-    <!-- Especialidades Interactive Script -->
-    <script>
-        // Especialidades Management
-        const especialidadesDB = [];
-
-        function initEspecialidades() {
-            const especialidadForm = document.getElementById('especialidadForm');
-            const searchInput = document.getElementById('searchSpecialty');
-            const specialtyFormMessage = document.getElementById('specialtyFormMessage');
-
-            if (especialidadForm) {
-                // Form submission
-                especialidadForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    const nombre = document.getElementById('nombreEspecialidad').value.trim();
-                    const descripcion = document.getElementById('descripcionEspecialidad').value.trim();
-                    const icono = document.getElementById('iconoEspecialidad').value;
-
-                    // Add loading state
-                    const submitBtn = especialidadForm.querySelector('.btn-primary-custom');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<span style="opacity: 0.6;">Agregando...</span>';
-                    submitBtn.disabled = true;
-
-                    // Simulate API call
-                    setTimeout(() => {
-                        const newSpecialty = {
-                            id: Date.now(),
-                            nombre: nombre,
-                            descripcion: descripcion || 'Sin descripción',
-                            icono: icono || 'heart-pulse',
-                            fechaCreacion: new Date().toLocaleDateString('es-AR')
-                        };
-
-                        especialidadesDB.push(newSpecialty);
-                        renderEspecialidades();
-                        especialidadForm.reset();
-
-                        showSpecialtyMessage('✓ Especialidad agregada exitosamente', 'success');
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }, 800);
-                });
             }
 
-            // Search functionality
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    renderEspecialidades(this.value.toLowerCase());
-                });
+            function initPacientes() {
+                const form = document.getElementById('pacienteForm')
+                if (!form) return
+
+                const submitBtn = form.querySelector('button[type="submit"]')
+                const refreshBtn = document.getElementById('refreshPacientes')
+                const docInput = document.getElementById('pacienteDocumento')
+                const histInput = document.getElementById('pacienteHistorial')
+                const sexoSelect = document.getElementById('pacienteSexo')
+
+                    ;[docInput, histInput].forEach(input => {
+                        input?.addEventListener('input', function () {
+                            this.value = this.value.replace(/\D/g, '').slice(0, 10)
+                        })
+                    })
+
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault()
+                    showPacienteStatus('', 'info')
+
+                    const payload = {
+                        nombre: form.nombre.value.trim(),
+                        apellido: form.apellido.value.trim(),
+                        fechaNacimiento: form.fechaNacimiento.value,
+                        lugarNacimiento: form.lugarNacimiento.value.trim(),
+                        direccion: form.direccion.value.trim(),
+                        sexo: sexoSelect?.value || 'M',
+                        profesion: form.profesion.value.trim() || undefined,
+                        idDocumento: form.idDocumento.value ? Number(form.idDocumento.value) : undefined,
+                        idHistorial: form.idHistorial.value ? Number(form.idHistorial.value) : undefined
+                    }
+
+                    const originalText = submitBtn.innerHTML
+                    submitBtn.disabled = true
+                    submitBtn.innerHTML = '<span style="opacity:0.7;">Guardando...</span>'
+
+                    try {
+                        const response = await fetch('/api/pacientes', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        })
+                        const data = await response.json()
+                        if (!response.ok) {
+                            throw new Error(data.error || 'No se pudo registrar el paciente.')
+                        }
+
+                        showPacienteStatus(`Paciente registrado (ID ${data.id ?? 'pendiente'})`, 'success')
+                        form.reset()
+                        if (sexoSelect) sexoSelect.value = 'M'
+                        await fetchPacientes()
+                    } catch (error) {
+                        showPacienteStatus(error.message, 'error')
+                    } finally {
+                        submitBtn.disabled = false
+                        submitBtn.innerHTML = originalText
+                    }
+                })
+
+                refreshBtn?.addEventListener('click', fetchPacientes)
+                fetchPacientes()
             }
 
-            // Load demo data
-            loadDemoEspecialidades();
-        }
+            async function deletePaciente(id) {
+                if (!confirm('¿Estás seguro de que deseas eliminar este paciente?')) return
 
-        function loadDemoEspecialidades() {
-            const demoData = [
-                { id: 1, nombre: 'Cardiología', descripcion: 'Especialidad médica dedicada al estudio del corazón y sistema circulatorio', icono: 'heart-pulse', fechaCreacion: '15/11/2025' },
-                { id: 2, nombre: 'Pediatría', descripcion: 'Atención médica especializada para bebés, niños y adolescentes', icono: 'baby', fechaCreacion: '15/11/2025' },
-                { id: 3, nombre: 'Traumatología', descripcion: 'Tratamiento de lesiones del sistema músculo-esquelético', icono: 'bone', fechaCreacion: '16/11/2025' },
-                { id: 4, nombre: 'Neurología', descripcion: 'Diagnóstico y tratamiento de trastornos del sistema nervioso', icono: 'brain', fechaCreacion: '17/11/2025' }
-            ];
-            especialidadesDB.push(...demoData);
-            renderEspecialidades();
-        }
+                try {
+                    const response = await fetch(`/api/pacientes/${id}`, {
+                        method: 'DELETE'
+                    })
+                    const data = await response.json()
 
-        function renderEspecialidades(searchTerm = '') {
-            const listContainer = document.getElementById('specialtiesList');
-            const countElement = document.getElementById('specialtyCount');
+                    if (!response.ok) {
+                        throw new Error(data.error || 'No se pudo eliminar el paciente')
+                    }
 
-            if (!listContainer) return;
+                    showPacienteStatus('Paciente eliminado correctamente', 'success')
+                    await fetchPacientes()
+                } catch (error) {
+                    console.error('Error deleting paciente:', error)
+                    showPacienteStatus(error.message, 'error')
+                }
+            }
+        </script>
 
-            const filtered = especialidadesDB.filter(esp =>
-                esp.nombre.toLowerCase().includes(searchTerm) ||
-                esp.descripcion.toLowerCase().includes(searchTerm)
-            );
+        <!-- Especialidades Interactive Script -->
+        <script>
+            // Especialidades Management
+            const especialidadesDB = [];
 
-            if (countElement) {
-                countElement.textContent = filtered.length;
+            function initEspecialidades() {
+                const especialidadForm = document.getElementById('especialidadForm');
+                const searchInput = document.getElementById('searchSpecialty');
+                const specialtyFormMessage = document.getElementById('specialtyFormMessage');
+
+                if (especialidadForm) {
+                    // Form submission
+                    especialidadForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+
+                        const nombre = document.getElementById('nombreEspecialidad').value.trim();
+                        const descripcion = document.getElementById('descripcionEspecialidad').value.trim();
+                        const icono = document.getElementById('iconoEspecialidad').value;
+
+                        // Add loading state
+                        const submitBtn = especialidadForm.querySelector('.btn-primary-custom');
+                        const originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<span style="opacity: 0.6;">Agregando...</span>';
+                        submitBtn.disabled = true;
+
+                        // Simulate API call
+                        setTimeout(() => {
+                            const newSpecialty = {
+                                id: Date.now(),
+                                nombre: nombre,
+                                descripcion: descripcion || 'Sin descripción',
+                                icono: icono || 'heart-pulse',
+                                fechaCreacion: new Date().toLocaleDateString('es-AR')
+                            };
+
+                            especialidadesDB.push(newSpecialty);
+                            renderEspecialidades();
+                            especialidadForm.reset();
+
+                            showSpecialtyMessage('✓ Especialidad agregada exitosamente', 'success');
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        }, 800);
+                    });
+                }
+
+                // Search functionality
+                if (searchInput) {
+                    searchInput.addEventListener('input', function () {
+                        renderEspecialidades(this.value.toLowerCase());
+                    });
+                }
+
+                // Load demo data
+                loadDemoEspecialidades();
             }
 
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `
+            function loadDemoEspecialidades() {
+                const demoData = [
+                    { id: 1, nombre: 'Cardiología', descripcion: 'Especialidad médica dedicada al estudio del corazón y sistema circulatorio', icono: 'heart-pulse', fechaCreacion: '15/11/2025' },
+                    { id: 2, nombre: 'Pediatría', descripcion: 'Atención médica especializada para bebés, niños y adolescentes', icono: 'baby', fechaCreacion: '15/11/2025' },
+                    { id: 3, nombre: 'Traumatología', descripcion: 'Tratamiento de lesiones del sistema músculo-esquelético', icono: 'bone', fechaCreacion: '16/11/2025' },
+                    { id: 4, nombre: 'Neurología', descripcion: 'Diagnóstico y tratamiento de trastornos del sistema nervioso', icono: 'brain', fechaCreacion: '17/11/2025' }
+                ];
+                especialidadesDB.push(...demoData);
+                renderEspecialidades();
+            }
+
+            function renderEspecialidades(searchTerm = '') {
+                const listContainer = document.getElementById('specialtiesList');
+                const countElement = document.getElementById('specialtyCount');
+
+                if (!listContainer) return;
+
+                const filtered = especialidadesDB.filter(esp =>
+                    esp.nombre.toLowerCase().includes(searchTerm) ||
+                    esp.descripcion.toLowerCase().includes(searchTerm)
+                );
+
+                if (countElement) {
+                    countElement.textContent = filtered.length;
+                }
+
+                if (filtered.length === 0) {
+                    listContainer.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">
                             <i class="bi bi-inbox"></i>
@@ -1328,26 +1396,26 @@
                         <small>${searchTerm ? 'Intenta con otros términos de búsqueda' : 'Comienza agregando una nueva especialidad'}</small>
                     </div>
                 `;
-                return;
-            }
+                    return;
+                }
 
-            const iconMap = {
-                'heart-pulse': '💓',
-                'bandaid': '🩹',
-                'brain': '🧠',
-                'lungs': '🫁',
-                'eye': '👁️',
-                'ear': '👂',
-                'bone': '🦴',
-                'baby': '👶',
-                'gender-female': '🤰',
-                'tooth': '🦷',
-                'skin': '🔬',
-                'kidney': '🫘',
-                'stomach': '🫃'
-            };
+                const iconMap = {
+                    'heart-pulse': '💓',
+                    'bandaid': '🩹',
+                    'brain': '🧠',
+                    'lungs': '🫁',
+                    'eye': '👁️',
+                    'ear': '👂',
+                    'bone': '🦴',
+                    'baby': '👶',
+                    'gender-female': '🤰',
+                    'tooth': '🦷',
+                    'skin': '🔬',
+                    'kidney': '🫘',
+                    'stomach': '🫃'
+                };
 
-            listContainer.innerHTML = filtered.map((esp, index) => `
+                listContainer.innerHTML = filtered.map((esp, index) => `
                 <div class="specialty-card" style="animation-delay: ${index * 0.05}s">
                     <div class="specialty-icon-badge">
                         ${iconMap[esp.icono] || '💓'}
@@ -1369,157 +1437,157 @@
                     </div>
                 </div>
             `).join('');
-        }
-
-        function editSpecialty(id) {
-            const specialty = especialidadesDB.find(e => e.id === id);
-            if (specialty) {
-                document.getElementById('nombreEspecialidad').value = specialty.nombre;
-                document.getElementById('descripcionEspecialidad').value = specialty.descripcion;
-                document.getElementById('iconoEspecialidad').value = specialty.icono;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-        }
 
-        function deleteSpecialty(id) {
-            if (confirm('¿Estás seguro de eliminar esta especialidad?')) {
-                const index = especialidadesDB.findIndex(e => e.id === id);
-                if (index > -1) {
-                    especialidadesDB.splice(index, 1);
-                    renderEspecialidades();
-                    showSpecialtyMessage('Especialidad eliminada', 'success');
+            function editSpecialty(id) {
+                const specialty = especialidadesDB.find(e => e.id === id);
+                if (specialty) {
+                    document.getElementById('nombreEspecialidad').value = specialty.nombre;
+                    document.getElementById('descripcionEspecialidad').value = specialty.descripcion;
+                    document.getElementById('iconoEspecialidad').value = specialty.icono;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             }
-        }
 
-        function showSpecialtyMessage(message, type) {
-            const messageEl = document.getElementById('specialtyFormMessage');
-            if (messageEl) {
-                messageEl.textContent = message;
-                messageEl.className = 'form-message ' + type;
-                messageEl.style.display = 'block';
+            function deleteSpecialty(id) {
+                if (confirm('¿Estás seguro de eliminar esta especialidad?')) {
+                    const index = especialidadesDB.findIndex(e => e.id === id);
+                    if (index > -1) {
+                        especialidadesDB.splice(index, 1);
+                        renderEspecialidades();
+                        showSpecialtyMessage('Especialidad eliminada', 'success');
+                    }
+                }
+            }
 
-                setTimeout(() => {
-                    messageEl.style.opacity = '0';
+            function showSpecialtyMessage(message, type) {
+                const messageEl = document.getElementById('specialtyFormMessage');
+                if (messageEl) {
+                    messageEl.textContent = message;
+                    messageEl.className = 'form-message ' + type;
+                    messageEl.style.display = 'block';
+
                     setTimeout(() => {
-                        messageEl.style.display = 'none';
-                        messageEl.style.opacity = '1';
-                    }, 300);
-                }, 3000);
-            }
-        }
-    </script>
-
-    <!-- Médicos Management Script -->
-    <script>
-        // Médicos database
-        const medicosDB = [];
-
-        function initMedicos() {
-            const btnAgregarMedico = document.getElementById('btnAgregarMedico');
-            const btnVolverLista = document.getElementById('btnVolverLista');
-            const searchInput = document.getElementById('searchMedico');
-            const filterEspecialidad = document.getElementById('filterEspecialidad');
-            const medicosListView = document.getElementById('medicosListView');
-            const medicosFormView = document.getElementById('medicosFormView');
-
-            if (btnAgregarMedico) {
-                btnAgregarMedico.addEventListener('click', function() {
-                    medicosListView.style.display = 'none';
-                    medicosFormView.style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-
-            if (btnVolverLista) {
-                btnVolverLista.addEventListener('click', function() {
-                    medicosFormView.style.display = 'none';
-                    medicosListView.style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-
-            // Search functionality
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const specialty = filterEspecialidad ? filterEspecialidad.value : '';
-                    renderMedicos(this.value.toLowerCase(), specialty);
-                });
-            }
-
-            // Filter functionality
-            if (filterEspecialidad) {
-                filterEspecialidad.addEventListener('change', function() {
-                    const search = searchInput ? searchInput.value.toLowerCase() : '';
-                    renderMedicos(search, this.value);
-                });
-            }
-
-            // Load demo data
-            loadDemoMedicos();
-        }
-
-        function loadDemoMedicos() {
-            const demoData = [
-                {
-                    id: 1,
-                    nombre: 'María',
-                    apellido: 'González',
-                    dni: '35123456',
-                    especialidad: 'cardiologia',
-                    matricula: 'MP-12345',
-                    email: 'maria.gonzalez@hekopo.com',
-                    telefono: '3794123456',
-                    horario: 'Lun-Vie 9:00-17:00'
-                },
-                {
-                    id: 2,
-                    nombre: 'Juan',
-                    apellido: 'Pérez',
-                    dni: '32987654',
-                    especialidad: 'pediatria',
-                    matricula: 'MP-54321',
-                    email: 'juan.perez@hekopo.com',
-                    telefono: '3794654321',
-                    horario: 'Lun-Sáb 8:00-14:00'
-                },
-                {
-                    id: 3,
-                    nombre: 'Ana',
-                    apellido: 'Rodríguez',
-                    dni: '40111222',
-                    especialidad: 'traumatologia',
-                    matricula: 'MP-67890',
-                    email: 'ana.rodriguez@hekopo.com',
-                    telefono: '3794999888',
-                    horario: 'Lun-Vie 10:00-18:00'
+                        messageEl.style.opacity = '0';
+                        setTimeout(() => {
+                            messageEl.style.display = 'none';
+                            messageEl.style.opacity = '1';
+                        }, 300);
+                    }, 3000);
                 }
-            ];
-            medicosDB.push(...demoData);
-            renderMedicos();
-        }
+            }
+        </script>
 
-        function renderMedicos(searchTerm = '', specialtyFilter = '') {
-            const listContainer = document.getElementById('medicosList');
-            const countElement = document.getElementById('medicosCount');
+        <!-- Médicos Management Script -->
+        <script>
+            // Médicos database
+            const medicosDB = [];
 
-            if (!listContainer) return;
+            function initMedicos() {
+                const btnAgregarMedico = document.getElementById('btnAgregarMedico');
+                const btnVolverLista = document.getElementById('btnVolverLista');
+                const searchInput = document.getElementById('searchMedico');
+                const filterEspecialidad = document.getElementById('filterEspecialidad');
+                const medicosListView = document.getElementById('medicosListView');
+                const medicosFormView = document.getElementById('medicosFormView');
 
-            const filtered = medicosDB.filter(medico => {
-                const matchesSearch =
-                    medico.nombre.toLowerCase().includes(searchTerm) ||
-                    medico.apellido.toLowerCase().includes(searchTerm) ||
-                    medico.matricula.toLowerCase().includes(searchTerm);
-                const matchesSpecialty = !specialtyFilter || medico.especialidad === specialtyFilter;
-                return matchesSearch && matchesSpecialty;
-            });
+                if (btnAgregarMedico) {
+                    btnAgregarMedico.addEventListener('click', function () {
+                        medicosListView.style.display = 'none';
+                        medicosFormView.style.display = 'block';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                }
 
-            if (countElement) {
-                countElement.textContent = filtered.length;
+                if (btnVolverLista) {
+                    btnVolverLista.addEventListener('click', function () {
+                        medicosFormView.style.display = 'none';
+                        medicosListView.style.display = 'block';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                }
+
+                // Search functionality
+                if (searchInput) {
+                    searchInput.addEventListener('input', function () {
+                        const specialty = filterEspecialidad ? filterEspecialidad.value : '';
+                        renderMedicos(this.value.toLowerCase(), specialty);
+                    });
+                }
+
+                // Filter functionality
+                if (filterEspecialidad) {
+                    filterEspecialidad.addEventListener('change', function () {
+                        const search = searchInput ? searchInput.value.toLowerCase() : '';
+                        renderMedicos(search, this.value);
+                    });
+                }
+
+                // Load demo data
+                loadDemoMedicos();
             }
 
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `
+            function loadDemoMedicos() {
+                const demoData = [
+                    {
+                        id: 1,
+                        nombre: 'María',
+                        apellido: 'González',
+                        dni: '35123456',
+                        especialidad: 'cardiologia',
+                        matricula: 'MP-12345',
+                        email: 'maria.gonzalez@hekopo.com',
+                        telefono: '3794123456',
+                        horario: 'Lun-Vie 9:00-17:00'
+                    },
+                    {
+                        id: 2,
+                        nombre: 'Juan',
+                        apellido: 'Pérez',
+                        dni: '32987654',
+                        especialidad: 'pediatria',
+                        matricula: 'MP-54321',
+                        email: 'juan.perez@hekopo.com',
+                        telefono: '3794654321',
+                        horario: 'Lun-Sáb 8:00-14:00'
+                    },
+                    {
+                        id: 3,
+                        nombre: 'Ana',
+                        apellido: 'Rodríguez',
+                        dni: '40111222',
+                        especialidad: 'traumatologia',
+                        matricula: 'MP-67890',
+                        email: 'ana.rodriguez@hekopo.com',
+                        telefono: '3794999888',
+                        horario: 'Lun-Vie 10:00-18:00'
+                    }
+                ];
+                medicosDB.push(...demoData);
+                renderMedicos();
+            }
+
+            function renderMedicos(searchTerm = '', specialtyFilter = '') {
+                const listContainer = document.getElementById('medicosList');
+                const countElement = document.getElementById('medicosCount');
+
+                if (!listContainer) return;
+
+                const filtered = medicosDB.filter(medico => {
+                    const matchesSearch =
+                        medico.nombre.toLowerCase().includes(searchTerm) ||
+                        medico.apellido.toLowerCase().includes(searchTerm) ||
+                        medico.matricula.toLowerCase().includes(searchTerm);
+                    const matchesSpecialty = !specialtyFilter || medico.especialidad === specialtyFilter;
+                    return matchesSearch && matchesSpecialty;
+                });
+
+                if (countElement) {
+                    countElement.textContent = filtered.length;
+                }
+
+                if (filtered.length === 0) {
+                    listContainer.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
                         <div class="empty-icon">
                             <i class="bi bi-person-x"></i>
@@ -1528,23 +1596,23 @@
                         <small>${searchTerm || specialtyFilter ? 'Intenta con otros criterios de búsqueda' : 'Comienza agregando un nuevo profesional médico'}</small>
                     </div>
                 `;
-                return;
-            }
+                    return;
+                }
 
-            const especialidadLabels = {
-                'cardiologia': 'Cardiología',
-                'pediatria': 'Pediatría',
-                'traumatologia': 'Traumatología',
-                'ginecologia': 'Ginecología',
-                'oftalmologia': 'Oftalmología',
-                'neurologia': 'Neurología',
-                'dermatologia': 'Dermatología',
-                'medicina-general': 'Medicina General'
-            };
+                const especialidadLabels = {
+                    'cardiologia': 'Cardiología',
+                    'pediatria': 'Pediatría',
+                    'traumatologia': 'Traumatología',
+                    'ginecologia': 'Ginecología',
+                    'oftalmologia': 'Oftalmología',
+                    'neurologia': 'Neurología',
+                    'dermatologia': 'Dermatología',
+                    'medicina-general': 'Medicina General'
+                };
 
-            listContainer.innerHTML = filtered.map(medico => {
-                const initials = `${medico.nombre.charAt(0)}${medico.apellido.charAt(0)}`.toUpperCase();
-                return `
+                listContainer.innerHTML = filtered.map(medico => {
+                    const initials = `${medico.nombre.charAt(0)}${medico.apellido.charAt(0)}`.toUpperCase();
+                    return `
                     <div class="medico-card">
                         <div class="medico-avatar">${initials}</div>
                         <div class="medico-name">Dr. ${medico.nombre} ${medico.apellido}</div>
@@ -1580,259 +1648,259 @@
                         </div>
                     </div>
                 `;
-            }).join('');
-        }
-
-        function viewMedico(id) {
-            const medico = medicosDB.find(m => m.id === id);
-            if (medico) {
-                alert(`Detalles de Dr. ${medico.nombre} ${medico.apellido}\n\nEspecialidad: ${medico.especialidad}\nMatrícula: ${medico.matricula}\nEmail: ${medico.email}\nTeléfono: ${medico.telefono}`);
+                }).join('');
             }
-        }
 
-        function editMedico(id) {
-            const medico = medicosDB.find(m => m.id === id);
-            if (medico) {
-                // Show form view
-                document.getElementById('medicosListView').style.display = 'none';
-                document.getElementById('medicosFormView').style.display = 'block';
-
-                // Fill form with data
-                document.getElementById('nombre').value = medico.nombre;
-                document.getElementById('apellido').value = medico.apellido;
-                document.getElementById('dni').value = medico.dni;
-                document.getElementById('matricula').value = medico.matricula;
-                document.getElementById('especialidad').value = medico.especialidad;
-                document.getElementById('email').value = medico.email;
-                document.getElementById('telefono').value = medico.telefono;
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function deleteMedico(id) {
-            if (confirm('¿Estás seguro de eliminar este médico?')) {
-                const index = medicosDB.findIndex(m => m.id === id);
-                if (index > -1) {
-                    medicosDB.splice(index, 1);
-                    renderMedicos();
+            function viewMedico(id) {
+                const medico = medicosDB.find(m => m.id === id);
+                if (medico) {
+                    alert(`Detalles de Dr. ${medico.nombre} ${medico.apellido}\n\nEspecialidad: ${medico.especialidad}\nMatrícula: ${medico.matricula}\nEmail: ${medico.email}\nTeléfono: ${medico.telefono}`);
                 }
             }
-        }
-    </script>
 
-    <!-- Registro Médico Interactive Script -->
-    <script>
-        // Form validation and interactivity
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize pacientes if on that section
-            if (document.getElementById('pacienteForm')) {
-                initPacientes();
+            function editMedico(id) {
+                const medico = medicosDB.find(m => m.id === id);
+                if (medico) {
+                    // Show form view
+                    document.getElementById('medicosListView').style.display = 'none';
+                    document.getElementById('medicosFormView').style.display = 'block';
+
+                    // Fill form with data
+                    document.getElementById('nombre').value = medico.nombre;
+                    document.getElementById('apellido').value = medico.apellido;
+                    document.getElementById('dni').value = medico.dni;
+                    document.getElementById('matricula').value = medico.matricula;
+                    document.getElementById('especialidad').value = medico.especialidad;
+                    document.getElementById('email').value = medico.email;
+                    document.getElementById('telefono').value = medico.telefono;
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             }
 
-            // Initialize medicos if on that section
-            if (document.getElementById('medicosListView')) {
-                initMedicos();
+            function deleteMedico(id) {
+                if (confirm('¿Estás seguro de eliminar este médico?')) {
+                    const index = medicosDB.findIndex(m => m.id === id);
+                    if (index > -1) {
+                        medicosDB.splice(index, 1);
+                        renderMedicos();
+                    }
+                }
             }
+        </script>
 
-            // Initialize especialidades if on that section
-            if (document.getElementById('especialidadForm')) {
-                initEspecialidades();
-            }
-            const registroForm = document.getElementById('registroMedicoForm');
-            const formMessage = document.getElementById('formMessage');
+        <!-- Registro Médico Interactive Script -->
+        <script>
+            // Form validation and interactivity
+            document.addEventListener('DOMContentLoaded', function () {
+                // Initialize pacientes if on that section
+                if (document.getElementById('pacienteForm')) {
+                    initPacientes();
+                }
 
-            if (registroForm) {
-                // Add smooth focus animations to inputs
-                const inputs = registroForm.querySelectorAll('.form-control-custom');
-                inputs.forEach(input => {
-                    // Auto-format DNI input
-                    if (input.id === 'dni') {
-                        input.addEventListener('input', function(e) {
-                            this.value = this.value.replace(/\D/g, '').slice(0, 8);
-                        });
-                    }
+                // Initialize medicos if on that section
+                if (document.getElementById('medicosListView')) {
+                    initMedicos();
+                }
 
-                    // Auto-format phone input
-                    if (input.id === 'telefono') {
-                        input.addEventListener('input', function(e) {
-                            this.value = this.value.replace(/\D/g, '').slice(0, 10);
-                        });
-                    }
+                // Initialize especialidades if on that section
+                if (document.getElementById('especialidadForm')) {
+                    initEspecialidades();
+                }
+                const registroForm = document.getElementById('registroMedicoForm');
+                const formMessage = document.getElementById('formMessage');
 
-                    // Add ripple effect on focus
-                    input.addEventListener('focus', function() {
-                        this.parentElement.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                        this.parentElement.style.transform = 'scale(1.01)';
-                    });
-
-                    input.addEventListener('blur', function() {
-                        this.parentElement.style.transform = 'scale(1)';
-                    });
-                });
-
-                // Checkbox interactions
-                const checkboxes = registroForm.querySelectorAll('.dia-checkbox input[type="checkbox"]');
-                checkboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', function() {
-                        const label = this.nextElementSibling;
-                        if (this.checked) {
-                            // Stagger animation for visual feedback
-                            label.style.animation = 'none';
-                            setTimeout(() => {
-                                label.style.animation = 'pulse 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-                            }, 10);
-                        }
-                    });
-                });
-
-                // Form submission handler
-                registroForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    // Add loading state
-                    registroForm.classList.add('form-loading');
-                    const submitBtn = registroForm.querySelector('.btn-primary-custom');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<span style="opacity: 0.6;">Registrando...</span>';
-
-                    // Validate at least one day is selected
-                    const diasSeleccionados = registroForm.querySelectorAll('input[name="dias[]"]:checked');
-                    if (diasSeleccionados.length === 0) {
-                        showMessage('Por favor selecciona al menos un día de atención', 'error');
-                        registroForm.classList.remove('form-loading');
-                        submitBtn.innerHTML = originalText;
-                        return;
-                    }
-
-                    // Collect form data
-                    const formData = new FormData(registroForm);
-                    const data = {};
-
-                    // Convert FormData to object
-                    for (let [key, value] of formData.entries()) {
-                        if (key === 'dias[]') {
-                            if (!data.dias) data.dias = [];
-                            data.dias.push(value);
-                        } else {
-                            data[key] = value;
-                        }
-                    }
-
-                    // Simulate API call (replace with actual endpoint)
-                    setTimeout(() => {
-                        console.log('Datos del médico:', data);
-
-                        // Add medico to database
-                        const newMedico = {
-                            id: Date.now(),
-                            nombre: data.nombre,
-                            apellido: data.apellido,
-                            dni: data.dni,
-                            especialidad: data.especialidad,
-                            matricula: data.matricula,
-                            email: data.email,
-                            telefono: data.telefono,
-                            horario: `${data.horaInicio}-${data.horaFin}`
-                        };
-                        medicosDB.push(newMedico);
-
-                        // Show success message
-                        showMessage('¡Médico registrado exitosamente!', 'success');
-
-                        // Reset form and go back to list after success
-                        setTimeout(() => {
-                            registroForm.reset();
-                            checkboxes.forEach(cb => cb.checked = false);
-
-                            // Go back to list view
-                            document.getElementById('medicosFormView').style.display = 'none';
-                            document.getElementById('medicosListView').style.display = 'block';
-                            renderMedicos();
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }, 1500);
-
-                        registroForm.classList.remove('form-loading');
-                        submitBtn.innerHTML = originalText;
-                    }, 2000);
-                });
-
-                // Cancel button handler
-                const cancelBtn = registroForm.querySelector('.btn-secondary-custom');
-                if (cancelBtn) {
-                    cancelBtn.addEventListener('click', function() {
-                        if (confirm('¿Estás seguro de cancelar el registro? Se perderán los datos ingresados.')) {
-                            registroForm.reset();
-                            checkboxes.forEach(cb => cb.checked = false);
-                            formMessage.style.display = 'none';
-
-                            // Go back to list view if exists
-                            const medicosFormView = document.getElementById('medicosFormView');
-                            const medicosListView = document.getElementById('medicosListView');
-                            if (medicosFormView && medicosListView) {
-                                medicosFormView.style.display = 'none';
-                                medicosListView.style.display = 'block';
-                            }
-
-                            // Scroll to top smoothly
-                            window.scrollTo({
-                                top: 0,
-                                behavior: 'smooth'
+                if (registroForm) {
+                    // Add smooth focus animations to inputs
+                    const inputs = registroForm.querySelectorAll('.form-control-custom');
+                    inputs.forEach(input => {
+                        // Auto-format DNI input
+                        if (input.id === 'dni') {
+                            input.addEventListener('input', function (e) {
+                                this.value = this.value.replace(/\D/g, '').slice(0, 8);
                             });
                         }
+
+                        // Auto-format phone input
+                        if (input.id === 'telefono') {
+                            input.addEventListener('input', function (e) {
+                                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                            });
+                        }
+
+                        // Add ripple effect on focus
+                        input.addEventListener('focus', function () {
+                            this.parentElement.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                            this.parentElement.style.transform = 'scale(1.01)';
+                        });
+
+                        input.addEventListener('blur', function () {
+                            this.parentElement.style.transform = 'scale(1)';
+                        });
                     });
-                }
 
-                // Show message helper
-                function showMessage(message, type) {
-                    formMessage.textContent = message;
-                    formMessage.className = 'form-message ' + type;
-                    formMessage.style.display = 'block';
+                    // Checkbox interactions
+                    const checkboxes = registroForm.querySelectorAll('.dia-checkbox input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function () {
+                            const label = this.nextElementSibling;
+                            if (this.checked) {
+                                // Stagger animation for visual feedback
+                                label.style.animation = 'none';
+                                setTimeout(() => {
+                                    label.style.animation = 'pulse 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                                }, 10);
+                            }
+                        });
+                    });
 
-                    // Scroll to message
-                    formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    // Form submission handler
+                    registroForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
 
-                    // Auto-hide success messages
-                    if (type === 'success') {
+                        // Add loading state
+                        registroForm.classList.add('form-loading');
+                        const submitBtn = registroForm.querySelector('.btn-primary-custom');
+                        const originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<span style="opacity: 0.6;">Registrando...</span>';
+
+                        // Validate at least one day is selected
+                        const diasSeleccionados = registroForm.querySelectorAll('input[name="dias[]"]:checked');
+                        if (diasSeleccionados.length === 0) {
+                            showMessage('Por favor selecciona al menos un día de atención', 'error');
+                            registroForm.classList.remove('form-loading');
+                            submitBtn.innerHTML = originalText;
+                            return;
+                        }
+
+                        // Collect form data
+                        const formData = new FormData(registroForm);
+                        const data = {};
+
+                        // Convert FormData to object
+                        for (let [key, value] of formData.entries()) {
+                            if (key === 'dias[]') {
+                                if (!data.dias) data.dias = [];
+                                data.dias.push(value);
+                            } else {
+                                data[key] = value;
+                            }
+                        }
+
+                        // Simulate API call (replace with actual endpoint)
                         setTimeout(() => {
-                            formMessage.style.opacity = '0';
-                            setTimeout(() => {
-                                formMessage.style.display = 'none';
-                                formMessage.style.opacity = '1';
-                            }, 300);
-                        }, 5000);
-                    }
-                }
+                            console.log('Datos del médico:', data);
 
-                // Add pulse animation for checkboxes
-                const style = document.createElement('style');
-                style.textContent = `
+                            // Add medico to database
+                            const newMedico = {
+                                id: Date.now(),
+                                nombre: data.nombre,
+                                apellido: data.apellido,
+                                dni: data.dni,
+                                especialidad: data.especialidad,
+                                matricula: data.matricula,
+                                email: data.email,
+                                telefono: data.telefono,
+                                horario: `${data.horaInicio}-${data.horaFin}`
+                            };
+                            medicosDB.push(newMedico);
+
+                            // Show success message
+                            showMessage('¡Médico registrado exitosamente!', 'success');
+
+                            // Reset form and go back to list after success
+                            setTimeout(() => {
+                                registroForm.reset();
+                                checkboxes.forEach(cb => cb.checked = false);
+
+                                // Go back to list view
+                                document.getElementById('medicosFormView').style.display = 'none';
+                                document.getElementById('medicosListView').style.display = 'block';
+                                renderMedicos();
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }, 1500);
+
+                            registroForm.classList.remove('form-loading');
+                            submitBtn.innerHTML = originalText;
+                        }, 2000);
+                    });
+
+                    // Cancel button handler
+                    const cancelBtn = registroForm.querySelector('.btn-secondary-custom');
+                    if (cancelBtn) {
+                        cancelBtn.addEventListener('click', function () {
+                            if (confirm('¿Estás seguro de cancelar el registro? Se perderán los datos ingresados.')) {
+                                registroForm.reset();
+                                checkboxes.forEach(cb => cb.checked = false);
+                                formMessage.style.display = 'none';
+
+                                // Go back to list view if exists
+                                const medicosFormView = document.getElementById('medicosFormView');
+                                const medicosListView = document.getElementById('medicosListView');
+                                if (medicosFormView && medicosListView) {
+                                    medicosFormView.style.display = 'none';
+                                    medicosListView.style.display = 'block';
+                                }
+
+                                // Scroll to top smoothly
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        });
+                    }
+
+                    // Show message helper
+                    function showMessage(message, type) {
+                        formMessage.textContent = message;
+                        formMessage.className = 'form-message ' + type;
+                        formMessage.style.display = 'block';
+
+                        // Scroll to message
+                        formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                        // Auto-hide success messages
+                        if (type === 'success') {
+                            setTimeout(() => {
+                                formMessage.style.opacity = '0';
+                                setTimeout(() => {
+                                    formMessage.style.display = 'none';
+                                    formMessage.style.opacity = '1';
+                                }, 300);
+                            }, 5000);
+                        }
+                    }
+
+                    // Add pulse animation for checkboxes
+                    const style = document.createElement('style');
+                    style.textContent = `
                     @keyframes pulse {
                         0% { transform: scale(1); }
                         50% { transform: scale(1.08); }
                         100% { transform: scale(1.05); }
                     }
                 `;
-                document.head.appendChild(style);
-            }
+                    document.head.appendChild(style);
+                }
 
-            // Add parallax effect to ambient glows (optional enhancement)
-            const container = document.querySelector('.registro-medico-container');
-            if (container && window.innerWidth > 768) {
-                document.addEventListener('mousemove', function(e) {
-                    const mouseX = e.clientX / window.innerWidth;
-                    const mouseY = e.clientY / window.innerHeight;
+                // Add parallax effect to ambient glows (optional enhancement)
+                const container = document.querySelector('.registro-medico-container');
+                if (container && window.innerWidth > 768) {
+                    document.addEventListener('mousemove', function (e) {
+                        const mouseX = e.clientX / window.innerWidth;
+                        const mouseY = e.clientY / window.innerHeight;
 
-                    const glowBefore = container.querySelector('::before');
-                    const glowAfter = container.querySelector('::after');
+                        const glowBefore = container.querySelector('::before');
+                        const glowAfter = container.querySelector('::after');
 
-                    // Subtle parallax movement
-                    container.style.setProperty('--mouse-x', mouseX);
-                    container.style.setProperty('--mouse-y', mouseY);
-                });
-            }
-        });
-    </script>
+                        // Subtle parallax movement
+                        container.style.setProperty('--mouse-x', mouseX);
+                        container.style.setProperty('--mouse-y', mouseY);
+                    });
+                }
+            });
+        </script>
 </body>
 
 </html>

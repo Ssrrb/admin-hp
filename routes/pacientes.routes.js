@@ -23,4 +23,13 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.delete('/:id', async (req, res) => {
+  try {
+    await PacientesRepository.deletePaciente(req.params.id)
+    res.json({ message: 'Paciente eliminado correctamente' })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 export default router
