@@ -650,3 +650,54 @@ select.form-control-custom:focus {
         transform: rotate(360deg);
     }
 }
+
+/* Tipo de Documento Select - Enhanced Styling */
+.tipo-documento-select {
+    background-color: rgba(255, 249, 230, 0.5);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: all 0.3s var(--ease-smooth);
+}
+
+.tipo-documento-select:hover {
+    background-color: rgba(255, 249, 230, 0.8);
+    border-color: var(--primary);
+}
+
+.tipo-documento-select:focus {
+    background-color: var(--surface);
+    box-shadow:
+        0 0 0 4px rgba(245, 158, 11, 0.12),
+        0 4px 12px rgba(251, 191, 36, 0.2);
+}
+
+.tipo-documento-select option {
+    font-size: 1rem;
+    padding: 0.75rem;
+    background-color: var(--surface);
+    color: var(--ink);
+}
+
+/* Visual feedback when tipo documento is selected */
+.tipo-documento-select:not([value=""]) {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(255, 249, 230, 0.6));
+    border-color: var(--primary-strong);
+}
+
+.tipo-documento-select:not([value=""]) + label {
+    color: var(--primary-strong);
+}
+
+/* Animation for documento field when tipo changes */
+@keyframes highlightField {
+    0%, 100% {
+        background-color: var(--surface);
+    }
+    50% {
+        background-color: rgba(251, 191, 36, 0.1);
+    }
+}
+
+.documento-field-highlight {
+    animation: highlightField 0.6s var(--ease-smooth);
+}

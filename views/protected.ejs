@@ -589,14 +589,6 @@
                                 <div class="filter-specialty">
                                     <select id="filterEspecialidad" class="form-control-custom">
                                         <option value="">Todas las especialidades</option>
-                                        <option value="cardiologia">Cardiología</option>
-                                        <option value="pediatria">Pediatría</option>
-                                        <option value="traumatologia">Traumatología</option>
-                                        <option value="ginecologia">Ginecología</option>
-                                        <option value="oftalmologia">Oftalmología</option>
-                                        <option value="neurologia">Neurología</option>
-                                        <option value="dermatologia">Dermatología</option>
-                                        <option value="medicina-general">Medicina General</option>
                                     </select>
                                 </div>
                             </div>
@@ -659,16 +651,30 @@
                                         </div>
 
                                         <div class="row g-3 mt-2">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-floating-custom">
-                                                    <input type="text" id="dni" name="dni" required
-                                                           pattern="[0-9]{7,8}" class="form-control-custom" placeholder=" ">
-                                                    <label for="dni">DNI / Documento</label>
+                                                    <select id="tipoDocumento" name="tipoDocumento" required
+                                                            class="form-control-custom tipo-documento-select">
+                                                        <option value="" disabled selected></option>
+                                                        <option value="cedula">🪪 Cédula</option>
+                                                        <option value="dni">🆔 DNI</option>
+                                                        <option value="pasaporte">🛂 Pasaporte</option>
+                                                    </select>
+                                                    <label for="tipoDocumento">Tipo de Documento</label>
                                                     <div class="input-border"></div>
-                                                    <small class="field-hint">7-8 dígitos numéricos</small>
+                                                    <small class="field-hint">Selecciona el tipo</small>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-floating-custom">
+                                                    <input type="text" id="dni" name="dni" required
+                                                           pattern="[0-9]{7,12}" class="form-control-custom" placeholder=" ">
+                                                    <label for="dni">Número de Documento</label>
+                                                    <div class="input-border"></div>
+                                                    <small class="field-hint">Solo números</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-floating-custom">
                                                     <input type="date" id="fechaNacimiento" name="fechaNacimiento"
                                                            required class="form-control-custom" placeholder=" ">
@@ -701,14 +707,6 @@
                                                     <select id="especialidad" name="especialidad" required
                                                             class="form-control-custom">
                                                         <option value="" disabled selected></option>
-                                                        <option value="cardiologia">Cardiología</option>
-                                                        <option value="pediatria">Pediatría</option>
-                                                        <option value="traumatologia">Traumatología</option>
-                                                        <option value="ginecologia">Ginecología</option>
-                                                        <option value="oftalmologia">Oftalmología</option>
-                                                        <option value="neurologia">Neurología</option>
-                                                        <option value="dermatologia">Dermatología</option>
-                                                        <option value="medicina-general">Medicina General</option>
                                                     </select>
                                                     <label for="especialidad">Especialidad Médica</label>
                                                     <div class="input-border"></div>
@@ -983,7 +981,7 @@
 
             if (especialidadForm) {
                 // Form submission
-                especialidadForm.addEventListener('submit', function(e) {
+                especialidadForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
 
                     const nombre = document.getElementById('nombreEspecialidad').value.trim();
@@ -996,24 +994,30 @@
                     submitBtn.innerHTML = '<span style="opacity: 0.6;">Agregando...</span>';
                     submitBtn.disabled = true;
 
-                    // Simulate API call
-                    setTimeout(() => {
-                        const newSpecialty = {
-                            id: Date.now(),
-                            nombre: nombre,
-                            descripcion: descripcion || 'Sin descripción',
-                            icono: icono || 'heart-pulse',
-                            fechaCreacion: new Date().toLocaleDateString('es-AR')
-                        };
+                    try {
+                        const response = await fetch('/api/especialidades', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ nombre, descripcion, icono })
+                        });
 
-                        especialidadesDB.push(newSpecialty);
-                        renderEspecialidades();
-                        especialidadForm.reset();
+                        const data = await response.json();
 
-                        showSpecialtyMessage('✓ Especialidad agregada exitosamente', 'success');
+                        if (response.ok) {
+                            await loadEspecialidades();
+                            especialidadForm.reset();
+                            showSpecialtyMessage('✓ Especialidad agregada exitosamente', 'success');
+                        } else {
+                            showSpecialtyMessage('Error: ' + data.error, 'error');
+                        }
+                    } catch (error) {
+                        showSpecialtyMessage('Error al agregar especialidad: ' + error.message, 'error');
+                    } finally {
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
-                    }, 800);
+                    }
                 });
             }
 
@@ -1024,19 +1028,28 @@
                 });
             }
 
-            // Load demo data
-            loadDemoEspecialidades();
+            // Load data from API
+            loadEspecialidades();
         }
 
-        function loadDemoEspecialidades() {
-            const demoData = [
-                { id: 1, nombre: 'Cardiología', descripcion: 'Especialidad médica dedicada al estudio del corazón y sistema circulatorio', icono: 'heart-pulse', fechaCreacion: '15/11/2025' },
-                { id: 2, nombre: 'Pediatría', descripcion: 'Atención médica especializada para bebés, niños y adolescentes', icono: 'baby', fechaCreacion: '15/11/2025' },
-                { id: 3, nombre: 'Traumatología', descripcion: 'Tratamiento de lesiones del sistema músculo-esquelético', icono: 'bone', fechaCreacion: '16/11/2025' },
-                { id: 4, nombre: 'Neurología', descripcion: 'Diagnóstico y tratamiento de trastornos del sistema nervioso', icono: 'brain', fechaCreacion: '17/11/2025' }
-            ];
-            especialidadesDB.push(...demoData);
-            renderEspecialidades();
+        async function loadEspecialidades() {
+            try {
+                const response = await fetch('/api/especialidades');
+                const data = await response.json();
+
+                especialidadesDB.length = 0;
+                especialidadesDB.push(...data.map(esp => ({
+                    id: esp.ID_ESPECIALIDAD,
+                    nombre: esp.NOMBRE,
+                    descripcion: esp.DESCRIPCION || 'Sin descripción',
+                    icono: esp.ICONO || 'heart-pulse',
+                    fechaCreacion: new Date().toLocaleDateString('es-AR')
+                })));
+
+                renderEspecialidades();
+            } catch (error) {
+                console.error('Error al cargar especialidades:', error);
+            }
         }
 
         function renderEspecialidades(searchTerm = '') {
@@ -1117,13 +1130,23 @@
             }
         }
 
-        function deleteSpecialty(id) {
+        async function deleteSpecialty(id) {
             if (confirm('¿Estás seguro de eliminar esta especialidad?')) {
-                const index = especialidadesDB.findIndex(e => e.id === id);
-                if (index > -1) {
-                    especialidadesDB.splice(index, 1);
-                    renderEspecialidades();
-                    showSpecialtyMessage('Especialidad eliminada', 'success');
+                try {
+                    const response = await fetch(`/api/especialidades/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        await loadEspecialidades();
+                        showSpecialtyMessage('Especialidad eliminada', 'success');
+                    } else {
+                        showSpecialtyMessage('Error: ' + data.error, 'error');
+                    }
+                } catch (error) {
+                    showSpecialtyMessage('Error al eliminar especialidad: ' + error.message, 'error');
                 }
             }
         }
@@ -1151,6 +1174,43 @@
         // Médicos database
         const medicosDB = [];
 
+        async function loadEspecialidadesForMedicos() {
+            try {
+                const response = await fetch('/api/especialidades');
+                const especialidades = await response.json();
+
+                // Cargar en el filtro de especialidades
+                const filterSelect = document.getElementById('filterEspecialidad');
+                if (filterSelect) {
+                    const currentValue = filterSelect.value;
+                    filterSelect.innerHTML = '<option value="">Todas las especialidades</option>';
+                    especialidades.forEach(esp => {
+                        const option = document.createElement('option');
+                        option.value = esp.ID_ESPECIALIDAD;
+                        option.textContent = esp.NOMBRE;
+                        filterSelect.appendChild(option);
+                    });
+                    filterSelect.value = currentValue;
+                }
+
+                // Cargar en el formulario de registro
+                const formSelect = document.getElementById('especialidad');
+                if (formSelect) {
+                    const currentValue = formSelect.value;
+                    formSelect.innerHTML = '<option value="" disabled selected></option>';
+                    especialidades.forEach(esp => {
+                        const option = document.createElement('option');
+                        option.value = esp.ID_ESPECIALIDAD;
+                        option.textContent = esp.NOMBRE;
+                        formSelect.appendChild(option);
+                    });
+                    if (currentValue) formSelect.value = currentValue;
+                }
+            } catch (error) {
+                console.error('Error al cargar especialidades:', error);
+            }
+        }
+
         function initMedicos() {
             const btnAgregarMedico = document.getElementById('btnAgregarMedico');
             const btnVolverLista = document.getElementById('btnVolverLista');
@@ -1158,6 +1218,9 @@
             const filterEspecialidad = document.getElementById('filterEspecialidad');
             const medicosListView = document.getElementById('medicosListView');
             const medicosFormView = document.getElementById('medicosFormView');
+
+            // Cargar especialidades primero
+            loadEspecialidadesForMedicos();
 
             if (btnAgregarMedico) {
                 btnAgregarMedico.addEventListener('click', function() {
@@ -1191,48 +1254,33 @@
                 });
             }
 
-            // Load demo data
-            loadDemoMedicos();
+            // Load data from API
+            loadMedicos();
         }
 
-        function loadDemoMedicos() {
-            const demoData = [
-                {
-                    id: 1,
-                    nombre: 'María',
-                    apellido: 'González',
-                    dni: '35123456',
-                    especialidad: 'cardiologia',
-                    matricula: 'MP-12345',
-                    email: 'maria.gonzalez@hekopo.com',
-                    telefono: '3794123456',
-                    horario: 'Lun-Vie 9:00-17:00'
-                },
-                {
-                    id: 2,
-                    nombre: 'Juan',
-                    apellido: 'Pérez',
-                    dni: '32987654',
-                    especialidad: 'pediatria',
-                    matricula: 'MP-54321',
-                    email: 'juan.perez@hekopo.com',
-                    telefono: '3794654321',
-                    horario: 'Lun-Sáb 8:00-14:00'
-                },
-                {
-                    id: 3,
-                    nombre: 'Ana',
-                    apellido: 'Rodríguez',
-                    dni: '40111222',
-                    especialidad: 'traumatologia',
-                    matricula: 'MP-67890',
-                    email: 'ana.rodriguez@hekopo.com',
-                    telefono: '3794999888',
-                    horario: 'Lun-Vie 10:00-18:00'
-                }
-            ];
-            medicosDB.push(...demoData);
-            renderMedicos();
+        async function loadMedicos() {
+            try {
+                const response = await fetch('/api/medicos');
+                const data = await response.json();
+
+                medicosDB.length = 0;
+                medicosDB.push(...data.map(medico => ({
+                    id: medico.ID_MEDICO,
+                    nombre: medico.NOMBRE,
+                    apellido: medico.APELLIDO,
+                    dni: medico.DOCUMENTO,
+                    especialidad: medico.ID_ESPECIALIDAD,
+                    especialidadNombre: medico.ESPECIALIDAD_NOMBRE || 'Sin especialidad',
+                    matricula: medico.MATRICULA,
+                    email: medico.EMAIL || 'Sin email',
+                    telefono: medico.TELEFONO || 'Sin teléfono',
+                    horario: 'Por definir'
+                })));
+
+                renderMedicos();
+            } catch (error) {
+                console.error('Error al cargar médicos:', error);
+            }
         }
 
         function renderMedicos(searchTerm = '', specialtyFilter = '') {
@@ -1267,24 +1315,13 @@
                 return;
             }
 
-            const especialidadLabels = {
-                'cardiologia': 'Cardiología',
-                'pediatria': 'Pediatría',
-                'traumatologia': 'Traumatología',
-                'ginecologia': 'Ginecología',
-                'oftalmologia': 'Oftalmología',
-                'neurologia': 'Neurología',
-                'dermatologia': 'Dermatología',
-                'medicina-general': 'Medicina General'
-            };
-
             listContainer.innerHTML = filtered.map(medico => {
                 const initials = `${medico.nombre.charAt(0)}${medico.apellido.charAt(0)}`.toUpperCase();
                 return `
                     <div class="medico-card">
                         <div class="medico-avatar">${initials}</div>
                         <div class="medico-name">Dr. ${medico.nombre} ${medico.apellido}</div>
-                        <div class="medico-specialty">${especialidadLabels[medico.especialidad] || medico.especialidad}</div>
+                        <div class="medico-specialty">${medico.especialidadNombre || 'Sin especialidad'}</div>
                         <div class="medico-info">
                             <div class="medico-info-item">
                                 <i class="bi bi-card-text"></i>
@@ -1346,12 +1383,22 @@
             }
         }
 
-        function deleteMedico(id) {
+        async function deleteMedico(id) {
             if (confirm('¿Estás seguro de eliminar este médico?')) {
-                const index = medicosDB.findIndex(m => m.id === id);
-                if (index > -1) {
-                    medicosDB.splice(index, 1);
-                    renderMedicos();
+                try {
+                    const response = await fetch(`/api/medicos/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        await loadMedicos();
+                    } else {
+                        alert('Error al eliminar médico: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Error al eliminar médico: ' + error.message);
                 }
             }
         }
@@ -1374,13 +1421,55 @@
             const formMessage = document.getElementById('formMessage');
 
             if (registroForm) {
+                // Tipo de documento interactivity
+                const tipoDocSelect = document.getElementById('tipoDocumento');
+                const dniInput = document.getElementById('dni');
+                const dniHint = dniInput?.parentElement.querySelector('.field-hint');
+
+                if (tipoDocSelect && dniInput) {
+                    tipoDocSelect.addEventListener('change', function() {
+                        const tipo = this.value;
+
+                        // Add highlight animation
+                        dniInput.classList.add('documento-field-highlight');
+                        setTimeout(() => {
+                            dniInput.classList.remove('documento-field-highlight');
+                        }, 600);
+
+                        switch(tipo) {
+                            case 'cedula':
+                                dniInput.setAttribute('pattern', '[0-9]{7,8}');
+                                dniInput.setAttribute('maxlength', '8');
+                                if (dniHint) dniHint.textContent = '7-8 dígitos';
+                                break;
+                            case 'dni':
+                                dniInput.setAttribute('pattern', '[0-9]{7,8}');
+                                dniInput.setAttribute('maxlength', '8');
+                                if (dniHint) dniHint.textContent = '7-8 dígitos';
+                                break;
+                            case 'pasaporte':
+                                dniInput.setAttribute('pattern', '[A-Z0-9]{6,12}');
+                                dniInput.removeAttribute('maxlength');
+                                if (dniHint) dniHint.textContent = 'Letras y números';
+                                break;
+                        }
+                        dniInput.value = '';
+                        dniInput.focus();
+                    });
+                }
+
                 // Add smooth focus animations to inputs
                 const inputs = registroForm.querySelectorAll('.form-control-custom');
                 inputs.forEach(input => {
-                    // Auto-format DNI input
+                    // Auto-format DNI input based on document type
                     if (input.id === 'dni') {
                         input.addEventListener('input', function(e) {
-                            this.value = this.value.replace(/\D/g, '').slice(0, 8);
+                            const tipoDoc = tipoDocSelect?.value;
+                            if (tipoDoc === 'pasaporte') {
+                                this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+                            } else {
+                                this.value = this.value.replace(/\D/g, '').slice(0, 8);
+                            }
                         });
                     }
 
@@ -1388,6 +1477,13 @@
                     if (input.id === 'telefono') {
                         input.addEventListener('input', function(e) {
                             this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                        });
+                    }
+
+                    // Auto-format matricula input (only numbers)
+                    if (input.id === 'matricula') {
+                        input.addEventListener('input', function(e) {
+                            this.value = this.value.replace(/\D/g, '');
                         });
                     }
 
@@ -1418,7 +1514,7 @@
                 });
 
                 // Form submission handler
-                registroForm.addEventListener('submit', function(e) {
+                registroForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
 
                     // Add loading state
@@ -1450,42 +1546,79 @@
                         }
                     }
 
-                    // Simulate API call (replace with actual endpoint)
-                    setTimeout(() => {
-                        console.log('Datos del médico:', data);
-
-                        // Add medico to database
-                        const newMedico = {
-                            id: Date.now(),
-                            nombre: data.nombre,
-                            apellido: data.apellido,
-                            dni: data.dni,
-                            especialidad: data.especialidad,
-                            matricula: data.matricula,
-                            email: data.email,
-                            telefono: data.telefono,
-                            horario: `${data.horaInicio}-${data.horaFin}`
-                        };
-                        medicosDB.push(newMedico);
-
-                        // Show success message
-                        showMessage('¡Médico registrado exitosamente!', 'success');
-
-                        // Reset form and go back to list after success
-                        setTimeout(() => {
-                            registroForm.reset();
-                            checkboxes.forEach(cb => cb.checked = false);
-
-                            // Go back to list view
-                            document.getElementById('medicosFormView').style.display = 'none';
-                            document.getElementById('medicosListView').style.display = 'block';
-                            renderMedicos();
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }, 1500);
-
+                    // Validate required numeric fields
+                    if (!data.dni || data.dni.trim() === '') {
+                        showMessage('El número de documento es requerido', 'error');
                         registroForm.classList.remove('form-loading');
                         submitBtn.innerHTML = originalText;
-                    }, 2000);
+                        return;
+                    }
+
+                    if (!data.matricula || data.matricula.trim() === '') {
+                        showMessage('La matrícula profesional es requerida', 'error');
+                        registroForm.classList.remove('form-loading');
+                        submitBtn.innerHTML = originalText;
+                        return;
+                    }
+
+                    if (!data.especialidad || data.especialidad === '') {
+                        showMessage('Debes seleccionar una especialidad', 'error');
+                        registroForm.classList.remove('form-loading');
+                        submitBtn.innerHTML = originalText;
+                        return;
+                    }
+
+                    try {
+                        // Prepare data for API
+                        const medicoData = {
+                            nombre: data.nombre,
+                            apellido: data.apellido,
+                            tipoDocumento: data.tipoDocumento,
+                            nroDocumento: parseInt(data.dni),
+                            fechaNacimiento: data.fechaNacimiento,
+                            matricula: parseInt(data.matricula),
+                            idEspecialidad: parseInt(data.especialidad),
+                            email: data.email,
+                            telefono: data.telefono,
+                            idSucursal: null
+                        };
+
+                        console.log('Datos a enviar:', medicoData);
+
+                        const response = await fetch('/api/medicos', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(medicoData)
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            // Show success message
+                            showMessage('¡Médico registrado exitosamente!', 'success');
+
+                            // Reset form and go back to list after success
+                            setTimeout(() => {
+                                registroForm.reset();
+                                checkboxes.forEach(cb => cb.checked = false);
+
+                                // Go back to list view and reload data
+                                document.getElementById('medicosFormView').style.display = 'none';
+                                document.getElementById('medicosListView').style.display = 'block';
+                                loadMedicos();
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }, 1500);
+                        } else {
+                            showMessage('Error: ' + result.error, 'error');
+                        }
+                    } catch (error) {
+                        showMessage('Error al registrar médico: ' + error.message, 'error');
+                    } finally {
+                        registroForm.classList.remove('form-loading');
+                        submitBtn.innerHTML = originalText;
+                    }
                 });
 
                 // Cancel button handler

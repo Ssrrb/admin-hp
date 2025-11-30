@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Sybase SQL Anywhere 11                       */
-/* Created on:     29/11/2025 19:04:53                          */
+/* Created on:     30/11/2025 02:04:05                          */
 /*==============================================================*/
 
 
@@ -39,19 +39,9 @@ if exists(select 1 from sys.sysforeignkey where role='FK_CORREOS_REFERENCE_PACIE
        delete foreign key FK_CORREOS_REFERENCE_PACIENTE
 end if;
 
-if exists(select 1 from sys.sysforeignkey where role='FK_ESPECIAL_REFERENCE_HOSPITAL') then
-    alter table ESPECIALIDADES
-       delete foreign key FK_ESPECIAL_REFERENCE_HOSPITAL
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_HOSPITAL_REFERENCE_SUCURSAL') then
-    alter table HOSPITALES
-       delete foreign key FK_HOSPITAL_REFERENCE_SUCURSAL
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_DOCUMENT') then
+if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_SUCURSAL') then
     alter table MEDICOS
-       delete foreign key FK_MEDICOS_REFERENCE_DOCUMENT
+       delete foreign key FK_MEDICOS_REFERENCE_SUCURSAL
 end if;
 
 if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_ESPECIAL') then
@@ -59,19 +49,9 @@ if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_ESPEC
        delete foreign key FK_MEDICOS_REFERENCE_ESPECIAL
 end if;
 
-if exists(select 1 from sys.sysforeignkey where role='FK_MEDICOS_REFERENCE_HOSPITAL') then
-    alter table MEDICOS
-       delete foreign key FK_MEDICOS_REFERENCE_HOSPITAL
-end if;
-
 if exists(select 1 from sys.sysforeignkey where role='FK_PACIENTE_REFERENCE_HISTORIA') then
     alter table PACIENTES
        delete foreign key FK_PACIENTE_REFERENCE_HISTORIA
-end if;
-
-if exists(select 1 from sys.sysforeignkey where role='FK_PACIENTE_REFERENCE_DOCUMENT') then
-    alter table PACIENTES
-       delete foreign key FK_PACIENTE_REFERENCE_DOCUMENT
 end if;
 
 if exists(select 1 from sys.sysforeignkey where role='FK_SUCURSAL_REFERENCE_CIUDADES') then
@@ -181,14 +161,6 @@ end if;
 
 if exists(
    select 1 from sys.systable 
-   where table_name='DOCUMENTOS'
-     and table_type in ('BASE', 'GBL TEMP')
-) then
-    drop table DOCUMENTOS
-end if;
-
-if exists(
-   select 1 from sys.systable 
    where table_name='ESPECIALIDADES'
      and table_type in ('BASE', 'GBL TEMP')
 ) then
@@ -209,14 +181,6 @@ if exists(
      and table_type in ('BASE', 'GBL TEMP')
 ) then
     drop table HORARIOS
-end if;
-
-if exists(
-   select 1 from sys.systable 
-   where table_name='HOSPITALES'
-     and table_type in ('BASE', 'GBL TEMP')
-) then
-    drop table HOSPITALES
 end if;
 
 if exists(
@@ -406,8 +370,8 @@ create table CANCELACIONES
 create table CIUDADES 
 (
    ID_CIUDAD            DOM_ID                         not null default autoincrement,
-   PAIS                 DOM_TEXTO_MEDIO                not null,
-   NOMBRE               DOM_TEXTO_MEDIO                not null,
+   NOMBRE               DOM_TEXTO_MEDIO                not null default 'Asuncion'
+      constraint CKC_NOMBRE_CIUDADES check (NOMBRE in ('Asuncion','Luque','Fernando de la Mora','San Lorenzo','Mariano Roque Alonso')),
    constraint PK_CIUDADES primary key clustered (ID_CIUDAD)
 );
 
@@ -424,22 +388,11 @@ create table CORREOS
 );
 
 /*==============================================================*/
-/* Table: DOCUMENTOS                                            */
-/*==============================================================*/
-create table DOCUMENTOS 
-(
-   ID_DOCUMENTO         DOM_ID                         not null default autoincrement,
-   TIPO                 DOM_TEXTO_CORTO                not null,
-   constraint PK_DOCUMENTOS primary key clustered (ID_DOCUMENTO)
-);
-
-/*==============================================================*/
 /* Table: ESPECIALIDADES                                        */
 /*==============================================================*/
 create table ESPECIALIDADES 
 (
    ID_ESPECIALIDAD      DOM_ID                         not null default autoincrement,
-   ID_HOSPITAL          int                            null,
    NOMBRE               DOM_TEXTO_MEDIO                not null,
    constraint PK_ESPECIALIDADES primary key clustered (ID_ESPECIALIDAD)
 );
@@ -478,31 +431,20 @@ create table HORARIOS
 );
 
 /*==============================================================*/
-/* Table: HOSPITALES                                            */
-/*==============================================================*/
-create table HOSPITALES 
-(
-   ID_HOSPITAL          DOM_ID                         not null default autoincrement,
-   ID_SUCURSAL          int                            null,
-   NOMBRE               DOM_TEXTO_MEDIO                not null,
-   PAIS                 DOM_TEXTO_MEDIO                not null,
-   constraint PK_HOSPITALES primary key clustered (ID_HOSPITAL)
-);
-
-/*==============================================================*/
 /* Table: MEDICOS                                               */
 /*==============================================================*/
 create table MEDICOS 
 (
    ID_MEDICO            DOM_ID                         not null default autoincrement,
-   ID_HOSPITAL          int                            null,
-   ID_DOCUMENTO         int                            null,
    ID_ESPECIALIDAD      int                            null,
+   ID_SUCURSAL          int                            null,
    NOMBRE               DOM_TEXTO_CORTO                not null,
    APELLIDO             DOM_TEXTO_CORTO                not null,
    MATRICULA            DOM_ENTERO                     not null,
-   DOCUMENTO            DOM_ENTERO                     not null,
    FECHA_NACIMIENTO     DOM_FECHA                      not null,
+   TIPO_DOCUMENTO       DOM_TEXTO_CORTO                not null
+      constraint CKC_TIPO_DOCUMENTO_MEDICOS check (TIPO_DOCUMENTO in ('cedula','pasaporte','dni')),
+   NRO_DOCUMENTO        DOM_ENTERO                     not null,
    constraint PK_MEDICOS primary key clustered (ID_MEDICO)
 );
 
@@ -512,7 +454,6 @@ create table MEDICOS
 create table PACIENTES 
 (
    ID_PACIENTE          DOM_ID                         not null default autoincrement,
-   ID_DOCUMENTO         int                            null,
    ID_HISTORIAL         int                            null,
    NOMBRE               DOM_TEXTO_CORTO                not null,
    APELLIDO             DOM_TEXTO_CORTO                not null,
@@ -522,6 +463,9 @@ create table PACIENTES
    SEXO                 DOM_TEXTO_CORTO                not null default 'M'
       constraint CKC_SEXO_PACIENTE check (SEXO in ('H','M')),
    PROFESION            DOM_TEXTO_MEDIO                null,
+   TIPO_DOCUMENTO       DOM_TEXTO_CORTO                not null
+      constraint CKC_TIPO_DOCUMENTO_PACIENTE check (TIPO_DOCUMENTO in ('cedula','pasaporte','dni')),
+   NRO_DOCUMENTO        DOM_ENTERO                     not null,
    constraint PK_PACIENTES primary key clustered (ID_PACIENTE)
 );
 
@@ -655,21 +599,9 @@ alter table CORREOS
       on update restrict
       on delete restrict;
 
-alter table ESPECIALIDADES
-   add constraint FK_ESPECIAL_REFERENCE_HOSPITAL foreign key (ID_HOSPITAL)
-      references HOSPITALES (ID_HOSPITAL)
-      on update restrict
-      on delete restrict;
-
-alter table HOSPITALES
-   add constraint FK_HOSPITAL_REFERENCE_SUCURSAL foreign key (ID_SUCURSAL)
-      references SUCURSALES (ID_SUCURSAL)
-      on update restrict
-      on delete restrict;
-
 alter table MEDICOS
-   add constraint FK_MEDICOS_REFERENCE_DOCUMENT foreign key (ID_DOCUMENTO)
-      references DOCUMENTOS (ID_DOCUMENTO)
+   add constraint FK_MEDICOS_REFERENCE_SUCURSAL foreign key (ID_SUCURSAL)
+      references SUCURSALES (ID_SUCURSAL)
       on update restrict
       on delete restrict;
 
@@ -679,21 +611,9 @@ alter table MEDICOS
       on update restrict
       on delete restrict;
 
-alter table MEDICOS
-   add constraint FK_MEDICOS_REFERENCE_HOSPITAL foreign key (ID_HOSPITAL)
-      references HOSPITALES (ID_HOSPITAL)
-      on update restrict
-      on delete restrict;
-
 alter table PACIENTES
    add constraint FK_PACIENTE_REFERENCE_HISTORIA foreign key (ID_HISTORIAL)
       references HISTORIALES (ID_HISTORIAL)
-      on update restrict
-      on delete restrict;
-
-alter table PACIENTES
-   add constraint FK_PACIENTE_REFERENCE_DOCUMENT foreign key (ID_DOCUMENTO)
-      references DOCUMENTOS (ID_DOCUMENTO)
       on update restrict
       on delete restrict;
 
