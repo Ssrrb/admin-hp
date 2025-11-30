@@ -23,7 +23,7 @@ app.use((req, res, next) => {
         try {
             data = jwt.verify(token, SECRET_JWT_KEY)
             req.session.user = data
-        } catch () { }
+        } catch (error) { }
     }
     next() // seguir a la siguiente ruta o middleware
 
