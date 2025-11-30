@@ -1,8 +1,10 @@
-const path = require('path')
-const Sybase = require('sybase')
-const dotenv = require('dotenv')
+import path from 'path'
+import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
 
 dotenv.config()
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const sybaseHost = process.env.SYBASE_HOST
 const sybasePort = Number(process.env.SYBASE_PORT)
@@ -15,38 +17,47 @@ if (dbDisabled) {
   console.warn('Sybase connection disabled (SKIP_DB/SYBASE_DISABLED=true); DB calls will throw until enabled.')
 }
 
-// Allow overriding the Java bridge location; falls back to the one bundled with the npm package.
-const javaBridgeJar =
-  process.env.SYBASE_JAVA_BRIDGE ||
-  path.join(__dirname, '..', 'node_modules', 'sybase', 'JavaSybaseLink', 'dist', 'JavaSybaseLink.jar')
-
-const db = new Sybase(sybaseHost, sybasePort, sybaseDb, sybaseUser, sybasePassword, false, javaBridgeJar, {
-  extraLogs: process.env.SYBASE_DEBUG === 'true'
-})
-
+let SybaseDriver = null
+let db = null
 let connectPromise = null
 
-function ensureConnection () {
-  if (dbDisabled) {
-    return Promise.resolve(null)
-  }
+function resolveJavaBridge () {
+  return (
+    process.env.SYBASE_JAVA_BRIDGE ||
+    path.join(__dirname, '..', 'node_modules', 'sybase', 'JavaSybaseLink', 'dist', 'JavaSybaseLink.jar')
+  )
+}
 
-  if (db.isConnected()) {
-    return Promise.resolve(db)
-  }
+async function loadDriver () {
+  if (SybaseDriver) return SybaseDriver
 
-  if (connectPromise) {
-    return connectPromise
+  try {
+    const module = await import('sybase')
+    SybaseDriver = module.default ?? module
+    return SybaseDriver
+  } catch (error) {
+    throw new Error(
+      `Sybase driver is not installed. Install the "sybase" package or set SKIP_DB=true to bypass DB calls. ${error.message}`
+    )
   }
+}
+
+async function ensureConnection () {
+  if (dbDisabled) return null
+  if (db?.isConnected?.()) return db
+  if (connectPromise) return connectPromise
+
+  const Sybase = await loadDriver()
+  const javaBridgeJar = resolveJavaBridge()
+
+  db = new Sybase(sybaseHost, sybasePort, sybaseDb, sybaseUser, sybasePassword, false, javaBridgeJar, {
+    extraLogs: process.env.SYBASE_DEBUG === 'true'
+  })
 
   connectPromise = new Promise((resolve, reject) => {
     db.connect(err => {
       connectPromise = null
-
-      if (err) {
-        return reject(err)
-      }
-
+      if (err) return reject(err)
       return resolve(db)
     })
   })
@@ -55,31 +66,26 @@ function ensureConnection () {
 }
 
 async function query (sql) {
-  if (dbDisabled) {
-    throw new Error('Database is disabled via SKIP_DB/SYBASE_DISABLED.')
-  }
+  if (dbDisabled) throw new Error('Database is disabled via SKIP_DB/SYBASE_DISABLED.')
+  if (!sql) throw new Error('SQL is required')
 
   const connection = await ensureConnection()
 
   return new Promise((resolve, reject) => {
     connection.query(sql, (err, data) => {
-      if (err) {
-        return reject(err)
-      }
-
+      if (err) return reject(err)
       return resolve(data)
     })
   })
 }
 
 async function disconnect () {
-  if (db.isConnected()) {
+  if (db?.isConnected?.()) {
     db.disconnect()
   }
 }
 
-module.exports = {
-  db,
+export {
   ensureConnection,
   query,
   disconnect

@@ -1,0 +1,173 @@
+/* ==============================
+   HEKO PORA - Gestión de Pacientes
+   ============================== */
+
+:root {
+  --paciente-panel: rgba(255, 255, 255, 0.94);
+  --paciente-border: rgba(15, 11, 5, 0.12);
+  --paciente-shadow: 0 10px 30px rgba(15, 11, 5, 0.12);
+  --paciente-shadow-strong: 0 16px 48px rgba(15, 11, 5, 0.16);
+}
+
+.pacientes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 24px;
+}
+
+@media (max-width: 992px) {
+  .pacientes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.paciente-form-panel,
+.paciente-list-panel {
+  background: var(--paciente-panel);
+  border: 1px solid var(--paciente-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--paciente-shadow);
+}
+
+.paciente-list-panel {
+  box-shadow: var(--paciente-shadow-strong);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.paciente-form .form-label {
+  font-weight: 600;
+  color: var(--panel);
+}
+
+.paciente-form .form-control-custom,
+.paciente-form .textarea-custom,
+.paciente-form select.form-control-custom {
+  width: 100%;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--paciente-border);
+  box-shadow: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.paciente-form .form-control-custom:focus,
+.paciente-form .textarea-custom:focus,
+.paciente-form select.form-control-custom:focus {
+  border-color: var(--primary-strong);
+  box-shadow: 0 0 0 4px rgba(255, 199, 0, 0.18);
+  outline: none;
+}
+
+.paciente-form .textarea-custom {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.list-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.paciente-table-wrapper {
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--paciente-border);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.paciente-table {
+  margin: 0;
+}
+
+.paciente-table thead {
+  background: linear-gradient(120deg, rgba(255, 208, 46, 0.18), rgba(255, 199, 0, 0.12));
+}
+
+.paciente-table th {
+  font-size: 0.85rem;
+  color: var(--panel);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--paciente-border);
+}
+
+.paciente-table td {
+  vertical-align: middle;
+  border-color: var(--paciente-border);
+}
+
+.id-cell {
+  font-weight: 700;
+  color: var(--panel);
+}
+
+.stacked {
+  display: flex;
+  flex-direction: column;
+}
+
+.stacked .muted {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.badge-soft {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(43, 36, 26, 0.05);
+  color: var(--panel);
+  font-size: 0.9rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.chip-primary {
+  background: rgba(255, 199, 0, 0.16);
+  color: var(--panel);
+  border: 1px solid rgba(255, 199, 0, 0.4);
+}
+
+.chip-info {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+  border: 1px solid rgba(37, 99, 235, 0.32);
+}
+
+.empty-row td {
+  text-align: center;
+}
+
+.loading-row {
+  color: var(--muted);
+  text-align: center;
+}

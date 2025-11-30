@@ -1,6 +1,7 @@
 import express from 'express'
 import { PORT, SECRET_JWT_KEY } from './config.js'
 import { UserRepository } from './user-repository.js'
+import pacientesRouter from './routes/pacientes.routes.js'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
 
@@ -29,6 +30,15 @@ app.use((req, res, next) => {
 
 })
 
+const requireAuth = (req, res, next) => {
+    if (!req.session?.user) {
+        const expectsJson = req.path.startsWith('/api') || req.headers.accept?.includes('application/json')
+        if (expectsJson) return res.status(401).json({ error: 'Unauthorized' })
+        return res.redirect('/')
+    }
+    next()
+}
+
 app.get('/', (req, res) => {
     const { user } = req.session
     res.render('index', { user })
@@ -42,7 +52,7 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ id: user.id, username: user.username }, SECRET_JWT_KEY, { expiresIn: '1h' })
         res.cookie('access_token', token, {
             httpOnly: true, // la cookie solo se puede leer desde el servidor
-            secure: true, // solo se envia por https
+            secure: process.env.NODE_ENV === 'production', // solo se envia por https en producción
             sameSite: 'strict', // evita ataques de phishing
             maxAge: 60 * 60 * 1000 // 1 hora
         })
@@ -68,47 +78,31 @@ app.post('/logout', (req, res) => {
     res.json({ redirectTo: '/' })
 })
 
-app.get('/protected', (req, res) => {
-    // TODO: if sesion del usuario
-    const token = req.cookies.access_token
-    if (!token) {
-        return res.status(401).json({ error: 'Unauthorized' })
-    }
-    try {
-        const data = jwt.verify(token, SECRET_JWT_KEY)
-        res.render('protected', data) // _id, username
-    } catch (error) {
-        return res.status(401).json({ error: 'Unauthorized' })
-    }
-    // TODO: else 401
+app.use('/api/pacientes', requireAuth, pacientesRouter)
+
+app.get('/protected', requireAuth, (req, res) => {
+    const name = req.session.user?.username ?? 'Usuario'
+    res.render('protected', { section: 'dashboard', name })
 })
 
-app.get('/admin/pacientes', (req, res) => {
-    // TODO: if sesion del usuario
-    const name = req.query.username ?? 'Admin'
+app.get('/admin/pacientes', requireAuth, (req, res) => {
+    const name = req.session.user?.username ?? 'Admin'
     res.render('protected', { section: 'pacientes', name })
-    // TODO: else 401
 })
 
-app.get('/admin/medicos', (req, res) => {
-    // TODO: if sesion del usuario
-    const name = req.query.username ?? 'Admin'
+app.get('/admin/medicos', requireAuth, (req, res) => {
+    const name = req.session.user?.username ?? 'Admin'
     res.render('protected', { section: 'medicos', name })
-    // TODO: else 401
 })
 
-app.get('/admin/especialidades', (req, res) => {
-    // TODO: if sesion del usuario
-    const name = req.query.username ?? 'Admin'
+app.get('/admin/especialidades', requireAuth, (req, res) => {
+    const name = req.session.user?.username ?? 'Admin'
     res.render('protected', { section: 'especialidades', name })
-    // TODO: else 401
 })
 
-app.get('/admin/consultorios', (req, res) => {
-    // TODO: if sesion del usuario
-    const name = req.query.username ?? 'Admin'
+app.get('/admin/consultorios', requireAuth, (req, res) => {
+    const name = req.session.user?.username ?? 'Admin'
     res.render('protected', { section: 'consultorios', name })
-    // TODO: else 401
 })
 
 app.listen(PORT, () => {
