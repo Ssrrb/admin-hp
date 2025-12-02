@@ -2,6 +2,7 @@ import { query } from './db/connect.js'
 
 const PACIENTES_TABLE = 'PACIENTES'
 const VALID_SEX = ['H', 'M']
+const VALID_DOCUMENT_TYPES = ['cedula', 'pasaporte', 'dni']
 
 const sanitizeString = value => `'${String(value).trim().replace(/'/g, "''")}'`
 
@@ -16,15 +17,16 @@ function toNullableInt(value) {
 
 function validatePaciente(payload = {}) {
   const {
-    idDocumento,
     idHistorial,
     nombre,
     apellido,
     fechaNacimiento,
     lugarNacimiento,
     direccion,
-    sexo = 'M',
-    profesion
+    sexo = 'H',
+    profesion,
+    tipoDocumento,
+    nroDocumento
   } = payload
 
   if (!nombre || typeof nombre !== 'string') throw new Error('El nombre es obligatorio.')
@@ -35,9 +37,14 @@ function validatePaciente(payload = {}) {
   if (!lugarNacimiento || typeof lugarNacimiento !== 'string') throw new Error('El lugar de nacimiento es obligatorio.')
   if (!direccion || typeof direccion !== 'string') throw new Error('La dirección es obligatoria.')
   if (!VALID_SEX.includes(sexo)) throw new Error('El sexo debe ser H o M.')
+  if (!VALID_DOCUMENT_TYPES.includes(tipoDocumento)) {
+    throw new Error(`El tipo de documento debe ser uno de: ${VALID_DOCUMENT_TYPES.join(', ')}.`)
+  }
+
+  const parsedNroDocumento = toNullableInt(nroDocumento)
+  if (parsedNroDocumento === null) throw new Error('El número de documento es obligatorio y debe ser numérico.')
 
   return {
-    idDocumento: toNullableInt(idDocumento),
     idHistorial: toNullableInt(idHistorial),
     nombre: nombre.trim(),
     apellido: apellido.trim(),
@@ -45,13 +52,14 @@ function validatePaciente(payload = {}) {
     lugarNacimiento: lugarNacimiento.trim(),
     direccion: direccion.trim(),
     sexo,
-    profesion: profesion ? profesion.trim() : null
+    profesion: profesion ? profesion.trim() : null,
+    tipoDocumento,
+    nroDocumento: parsedNroDocumento
   }
 }
 
 function buildInsertSql(paciente) {
   const columns = [
-    'ID_DOCUMENTO',
     'ID_HISTORIAL',
     'NOMBRE',
     'APELLIDO',
@@ -59,19 +67,22 @@ function buildInsertSql(paciente) {
     'LUGAR_NACIMIENTO',
     'DIRECCION',
     'SEXO',
-    'PROFESION'
+    'PROFESION',
+    'TIPO_DOCUMENTO',
+    'NRO_DOCUMENTO'
   ]
 
   const values = [
-    'NULL', // Force NULL for ID_DOCUMENTO until DOCUMENTOS table is populated
-    'NULL', // Force NULL for ID_HISTORIAL until HISTORIALES table is populated
+    paciente.idHistorial ?? 'NULL',
     sanitizeString(paciente.nombre),
     sanitizeString(paciente.apellido),
     sanitizeString(paciente.fechaNacimiento),
     sanitizeString(paciente.lugarNacimiento),
     sanitizeString(paciente.direccion),
     sanitizeString(paciente.sexo),
-    paciente.profesion ? sanitizeString(paciente.profesion) : 'NULL'
+    paciente.profesion ? sanitizeString(paciente.profesion) : 'NULL',
+    sanitizeString(paciente.tipoDocumento),
+    paciente.nroDocumento
   ]
 
   return `INSERT INTO ${PACIENTES_TABLE} (${columns.join(', ')}) VALUES (${values.join(', ')});`
@@ -96,7 +107,9 @@ async function listPacientes({ limit = 20 } = {}) {
       LUGAR_NACIMIENTO,
       DIRECCION,
       SEXO,
-      PROFESION
+      PROFESION,
+      TIPO_DOCUMENTO,
+      NRO_DOCUMENTO
     FROM ${PACIENTES_TABLE}
     ORDER BY ID_PACIENTE DESC;
   `

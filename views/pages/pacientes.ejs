@@ -1,0 +1,150 @@
+<div class="section-header fade-in">
+    <h2><i class="bi bi-people me-2"></i> Gestión de Pacientes</h2>
+    <p>Administra el registro y datos de pacientes del centro médico</p>
+</div>
+
+<div class="pacientes-grid fade-in" style="animation-delay: 0.1s;">
+    <!-- Form Panel -->
+    <div class="paciente-form-panel">
+        <div class="panel-header">
+            <div class="header-icon-small">
+                <i class="bi bi-person-plus"></i>
+            </div>
+            <div>
+                <h4>Nuevo Paciente</h4>
+                <p class="panel-subtitle">Ingresa los datos del paciente</p>
+            </div>
+        </div>
+
+        <form id="pacienteForm" class="paciente-form">
+            <div id="pacienteFormStatus" class="form-message" style="display: none;"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteNombre" name="nombre" placeholder=" "
+                            required>
+                        <label for="pacienteNombre">Nombre</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteApellido" name="apellido"
+                            placeholder=" " required>
+                        <label for="pacienteApellido">Apellido</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="date" class="form-control-custom" id="pacienteFechaNacimiento"
+                            name="fechaNacimiento" required>
+                        <label for="pacienteFechaNacimiento">Fecha de Nacimiento</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteLugarNacimiento"
+                            name="lugarNacimiento" placeholder=" " required>
+                        <label for="pacienteLugarNacimiento">Lugar de Nacimiento</label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteDireccion" name="direccion"
+                            placeholder=" " required>
+                        <label for="pacienteDireccion">Dirección</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <select class="form-control-custom" id="pacienteSexo" name="sexo">
+                            <option value="H">Masculino</option>
+                            <option value="M">Femenino</option>
+                        </select>
+                        <label for="pacienteSexo">Sexo</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteProfesion" name="profesion"
+                            placeholder=" ">
+                        <label for="pacienteProfesion">Profesión</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <select class="form-control-custom" id="pacienteTipoDocumento" name="tipoDocumento">
+                            <option value="cedula">Cédula</option>
+                            <option value="pasaporte">Pasaporte</option>
+                            <option value="dni">DNI</option>
+                        </select>
+                        <label for="pacienteTipoDocumento">Tipo de documento</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteDocumento" name="nroDocumento"
+                            placeholder=" " required>
+                        <label for="pacienteDocumento">Nro. de Documento</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating-custom">
+                        <input type="text" class="form-control-custom" id="pacienteHistorial" name="idHistorial"
+                            placeholder=" ">
+                        <label for="pacienteHistorial">ID Historial (Opcional)</label>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn-primary-custom w-100">
+                        <i class="bi bi-save"></i>
+                        <span>Guardar Paciente</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- List Panel -->
+    <div class="paciente-list-panel">
+        <div class="list-header">
+            <div>
+                <h4>Pacientes Registrados</h4>
+                <p class="panel-subtitle"><span id="pacientesCount">0</span> pacientes en total</p>
+            </div>
+            <div class="list-actions">
+                <button class="btn-icon-action" id="refreshPacientes" title="Actualizar lista">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="paciente-table-wrapper">
+            <div class="table-responsive">
+                <table class="table paciente-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Paciente</th>
+                            <th>Documento</th>
+                            <th>Nacimiento</th>
+                            <th>Lugar</th>
+                            <th>Dirección</th>
+                            <th>Sexo</th>
+                            <th>Profesión</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pacientesTableBody">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

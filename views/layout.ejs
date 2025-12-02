@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<%- include('partials/head') %>
+
+    <body>
+        <%- include('partials/navbar') %>
+
+            <div class="main-content">
+                <div class="container">
+                    <%- include('pages/' + section) %>
+                </div>
+            </div>
+
+            <%- include('partials/modals') %>
+                <%- include('partials/scripts') %>
+    </body>
+
+</html>

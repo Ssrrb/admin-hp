@@ -20,6 +20,7 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "odbc": "^2.4.9",
     "sybase": "^1.2.3"
   },
   "devDependencies": {

@@ -21,14 +21,14 @@ let SybaseDriver = null
 let db = null
 let connectPromise = null
 
-function resolveJavaBridge () {
+function resolveJavaBridge() {
   return (
     process.env.SYBASE_JAVA_BRIDGE ||
     path.join(__dirname, '..', 'node_modules', 'sybase', 'JavaSybaseLink', 'dist', 'JavaSybaseLink.jar')
   )
 }
 
-async function loadDriver () {
+async function loadDriver() {
   if (SybaseDriver) return SybaseDriver
 
   try {
@@ -42,7 +42,7 @@ async function loadDriver () {
   }
 }
 
-async function ensureConnection () {
+async function ensureConnection() {
   if (dbDisabled) return null
   if (db?.isConnected?.()) return db
   if (connectPromise) return connectPromise
@@ -65,7 +65,7 @@ async function ensureConnection () {
   return connectPromise
 }
 
-async function query (sql) {
+async function query(sql) {
   if (dbDisabled) throw new Error('Database is disabled via SKIP_DB/SYBASE_DISABLED.')
   if (!sql) throw new Error('SQL is required')
 
@@ -79,7 +79,7 @@ async function query (sql) {
   })
 }
 
-async function disconnect () {
+async function disconnect() {
   if (db?.isConnected?.()) {
     db.disconnect()
   }
