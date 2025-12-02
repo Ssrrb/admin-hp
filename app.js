@@ -1,9 +1,9 @@
 import express from 'express'
 import { PORT, SECRET_JWT_KEY } from './config.js'
 import { UserRepository } from './user-repository.js'
-import { EspecialidadRepository } from './especialidad-repository.js'
-import { MedicoRepository } from './medico-repository.js'
 import pacientesRouter from './routes/pacientes.routes.js'
+import especialidadesRouter from './routes/especialidades.routes.js'
+import medicosRouter from './routes/medicos.routes.js'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
 
@@ -77,10 +77,17 @@ app.post('/register', async (req, res) => {
 
 app.post('/logout', (req, res) => {
   res.clearCookie('access_token')
-  res.json({ redirectTo: '/' })
+  req.session.user = null
+
+  const expectsJson = req.headers.accept?.includes('application/json') || req.xhr
+  if (expectsJson) return res.json({ redirectTo: '/' })
+
+  res.redirect('/')
 })
 
 app.use('/api/pacientes', requireAuth, pacientesRouter)
+app.use('/api/especialidades', requireAuth, especialidadesRouter)
+app.use('/api/medicos', requireAuth, medicosRouter)
 
 app.get('/protected', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Usuario'

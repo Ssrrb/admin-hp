@@ -20,7 +20,17 @@ export class EspecialidadRepository {
   }
 
   static async findAll () {
-    const sql = 'SELECT * FROM ESPECIALIDADES ORDER BY ID_ESPECIALIDAD DESC'
+    const sql = `
+      SELECT
+        e.ID_ESPECIALIDAD,
+        e.NOMBRE,
+        '' AS DESCRIPCION,
+        COUNT(m.ID_MEDICO) AS CANTIDAD_MEDICOS
+      FROM ESPECIALIDADES e
+      LEFT JOIN MEDICOS m ON m.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD
+      GROUP BY e.ID_ESPECIALIDAD, e.NOMBRE
+      ORDER BY e.ID_ESPECIALIDAD DESC
+    `
     const result = await query(sql)
     return result
   }
