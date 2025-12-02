@@ -84,27 +84,27 @@ app.use('/api/pacientes', requireAuth, pacientesRouter)
 
 app.get('/protected', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Usuario'
-  res.render('protected', { section: 'dashboard', name })
+  res.render('layout', { section: 'dashboard', name })
 })
 
 app.get('/admin/pacientes', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Admin'
-  res.render('protected', { section: 'pacientes', name })
+  res.render('layout', { section: 'pacientes', name })
 })
 
 app.get('/admin/medicos', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Admin'
-  res.render('protected', { section: 'medicos', name })
+  res.render('layout', { section: 'medicos', name })
 })
 
 app.get('/admin/especialidades', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Admin'
-  res.render('protected', { section: 'especialidades', name })
+  res.render('layout', { section: 'especialidades', name })
 })
 
 app.get('/admin/consultorios', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Admin'
-  res.render('protected', { section: 'consultorios', name })
+  res.render('layout', { section: 'consultorios', name })
 })
 
 app.listen(PORT, () => {

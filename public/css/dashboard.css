@@ -1,0 +1,78 @@
+.welcome-card {
+    background: linear-gradient(160deg, rgba(244, 232, 197, 0.92), rgba(255, 249, 230, 0.94));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba(15, 11, 5, 0.12);
+}
+
+.welcome-card h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: 2rem;
+    color: var(--panel);
+    margin-bottom: 0.5rem;
+}
+
+.welcome-card p {
+    color: var(--muted);
+    margin-bottom: 0;
+}
+
+/* Management cards */
+.management-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.management-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(255, 208, 46, 0.25);
+    border-color: var(--primary-strong);
+}
+
+.management-card .icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: var(--ink);
+    margin-bottom: 1rem;
+}
+
+.management-card h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--panel);
+    margin-bottom: 0.5rem;
+}
+
+.management-card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.management-card .arrow {
+    margin-top: 1rem;
+    color: var(--primary-strong);
+    font-size: 1.25rem;
+    transition: transform 0.2s ease;
+}
+
+.management-card:hover .arrow {
+    transform: translateX(4px);
+}

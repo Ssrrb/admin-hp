@@ -1,0 +1,65 @@
+<div class="especialidades-container">
+    <div class="panel-header">
+        <div>
+            <h4><i class="bi bi-award me-2"></i>Gestión de Especialidades</h4>
+            <p class="panel-subtitle">Administra el catálogo de servicios médicos</p>
+        </div>
+    </div>
+
+    <div class="especialidades-grid">
+        <!-- Form Panel -->
+        <div class="specialty-form-panel">
+            <div class="panel-header">
+                <div class="header-icon-small">
+                    <i class="bi bi-plus-lg"></i>
+                </div>
+                <div>
+                    <h4 id="formTitle"><i class="bi bi-plus-circle me-2"></i>Nueva Especialidad</h4>
+                    <p class="panel-subtitle">Añadir o editar especialidad</p>
+                </div>
+            </div>
+
+            <form id="especialidadForm" class="specialty-form">
+                <input type="hidden" id="especialidadId">
+
+                <div class="form-floating-custom mb-3">
+                    <input type="text" class="form-control-custom" id="nombreEspecialidad" required placeholder=" ">
+                    <label for="nombreEspecialidad">Nombre de la Especialidad</label>
+                </div>
+
+                <div class="form-floating-custom mb-4">
+                    <textarea class="form-control-custom textarea-custom" id="descripcionEspecialidad" placeholder=" "
+                        style="height: 120px"></textarea>
+                    <label for="descripcionEspecialidad">Descripción (Opcional)</label>
+                </div>
+
+                <div class="form-actions-inline">
+                    <button type="button" id="cancelEdit" class="btn-secondary-custom" style="display: none;">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    <button type="submit" id="submitBtn" class="btn-primary-custom w-100">
+                        <i class="bi bi-save me-2"></i> Guardar Especialidad
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- List Panel -->
+        <div class="specialty-list-panel">
+            <div class="panel-header header-flex">
+                <div>
+                    <h4>Especialidades Activas</h4>
+                    <p class="panel-subtitle">Catálogo actual del sistema</p>
+                </div>
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchEspecialidad" placeholder="Buscar especialidad...">
+                </div>
+            </div>
+
+            <div id="especialidadesList" class="specialties-list">
+                <!-- List items injected via JS -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,218 @@
+<!-- List View -->
+<div id="medicosListView" class="fade-in">
+    <div class="medicos-header">
+        <div>
+            <h4><i class="bi bi-hospital me-2"></i>Staff Médico</h4>
+            <p class="text-muted mb-0">Gestión de profesionales y especialidades</p>
+        </div>
+        <button id="btnAgregarMedico" class="btn-primary-custom">
+            <i class="bi bi-plus-lg"></i>
+            <span>Nuevo Médico</span>
+        </button>
+    </div>
+
+    <div class="search-filter-bar mt-4 mb-4">
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" id="searchMedico" placeholder="Buscar por nombre, apellido o matrícula...">
+        </div>
+        <div class="filter-specialty">
+            <select id="filterEspecialidad">
+                <option value="">Todas las especialidades</option>
+                <!-- Options loaded via JS -->
+            </select>
+        </div>
+        <div class="ms-auto text-muted">
+            <small><strong id="medicosCount">0</strong> médicos encontrados</small>
+        </div>
+    </div>
+
+    <div id="medicosList" class="medicos-grid">
+        <!-- Cards injected via JS -->
+    </div>
+</div>
+
+<!-- Form View (Hidden by default) -->
+<div id="medicosFormView" style="display: none;" class="fade-in">
+    <div class="registro-medico-container">
+        <div class="registro-medico-wrapper">
+            <div class="mb-4">
+                <button id="btnVolverLista" class="btn-back">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </button>
+            </div>
+
+            <div class="form-header">
+                <div class="header-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3>Registrar Nuevo Médico</h3>
+                <p class="header-subtitle">Complete la información profesional y personal</p>
+            </div>
+
+            <form id="registroMedicoForm" class="needs-validation" novalidate>
+                <input type="hidden" id="medicoId" name="medicoId">
+                <div id="formMessage" class="form-message" style="display: none;"></div>
+
+                <!-- Datos Personales -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="bi bi-person-vcard"></i>
+                        <span>Datos Personales</span>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="text" class="form-control-custom" id="nombre" name="nombre" placeholder=" "
+                                    required>
+                                <label for="nombre">Nombre(s)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="text" class="form-control-custom" id="apellido" name="apellido"
+                                    placeholder=" " required>
+                                <label for="apellido">Apellido(s)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating-custom">
+                                <select class="form-control-custom tipo-documento-select" id="tipoDocumento"
+                                    name="tipoDocumento" required>
+                                    <option value="dni" selected>DNI</option>
+                                    <option value="cedula">Cédula</option>
+                                    <option value="pasaporte">Pasaporte</option>
+                                </select>
+                                <label for="tipoDocumento">Tipo Doc.</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating-custom">
+                                <input type="text" class="form-control-custom" id="dni" name="dni" placeholder=" "
+                                    required maxlength="8" pattern="[0-9]{7,8}">
+                                <label for="dni">Número de Documento</label>
+                                <span class="field-hint">7-8 dígitos sin puntos</span>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating-custom">
+                                <input type="date" class="form-control-custom" id="fechaNacimiento"
+                                    name="fechaNacimiento" required>
+                                <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos Profesionales -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="bi bi-briefcase-medical"></i>
+                        <span>Información Profesional</span>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="text" class="form-control-custom" id="matricula" name="matricula"
+                                    placeholder=" " required>
+                                <label for="matricula">Matrícula Profesional</label>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <select class="form-control-custom" id="especialidad" name="especialidad" required>
+                                    <option value="" disabled selected>Seleccione una especialidad</option>
+                                    <!-- Options loaded via JS -->
+                                </select>
+                                <label for="especialidad">Especialidad</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="email" class="form-control-custom" id="email" name="email" placeholder=" "
+                                    required>
+                                <label for="email">Correo Electrónico</label>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="tel" class="form-control-custom" id="telefono" name="telefono"
+                                    placeholder=" " required>
+                                <label for="telefono">Teléfono de Contacto</label>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horarios y Disponibilidad -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="bi bi-calendar-week"></i>
+                        <span>Horarios y Disponibilidad</span>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="time" class="form-control-custom" id="horaInicio" name="horaInicio"
+                                    required>
+                                <label for="horaInicio">Hora Inicio Jornada</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating-custom">
+                                <input type="time" class="form-control-custom" id="horaFin" name="horaFin" required>
+                                <label for="horaFin">Hora Fin Jornada</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="dias-atencion">
+                                <span class="dias-label">Días de Atención Semanal</span>
+                                <div class="dias-grid">
+                                    <div class="dia-checkbox">
+                                        <input type="checkbox" id="lunes" name="dias[]" value="lunes">
+                                        <label for="lunes">Lunes</label>
+                                    </div>
+                                    <div class="dia-checkbox">
+                                        <input type="checkbox" id="martes" name="dias[]" value="martes">
+                                        <label for="martes">Martes</label>
+                                    </div>
+                                    <div class="dia-checkbox">
+                                        <input type="checkbox" id="miercoles" name="dias[]" value="miercoles">
+                                        <label for="miercoles">Miércoles</label>
+                                    </div>
+                                    <div class="dia-checkbox">
+                                        <input type="checkbox" id="jueves" name="dias[]" value="jueves">
+                                        <label for="jueves">Jueves</label>
+                                    </div>
+                                    <div class="dia-checkbox">
+                                        <input type="checkbox" id="viernes" name="dias[]" value="viernes">
+                                        <label for="viernes">Viernes</label>
+                                    </div>
+                                    <div class="dia-checkbox">
+                                        <input type="checkbox" id="sabado" name="dias[]" value="sabado">
+                                        <label for="sabado">Sábado</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary-custom">
+                        <i class="bi bi-x-lg"></i>
+                        <span>Cancelar</span>
+                    </button>
+                    <button type="submit" class="btn-primary-custom">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <span>Registrar Médico</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
