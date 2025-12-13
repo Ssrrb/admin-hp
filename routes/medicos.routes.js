@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { MedicoRepository } from '../medico-repository.js'
+import { MedicoRepository } from '../repositories/medico-repository.js'
 
 const router = Router()
 

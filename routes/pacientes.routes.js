@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { PacientesRepository } from '../pacientes-repository.js'
+import { PacientesRepository } from '../repositories/pacientes-repository.js'
 
 const router = Router()
 

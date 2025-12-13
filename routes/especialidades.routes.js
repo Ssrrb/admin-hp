@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { EspecialidadRepository } from '../especialidad-repository.js'
+import { EspecialidadRepository } from '../repositories/especialidad-repository.js'
 
 const router = Router()
 

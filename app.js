@@ -1,6 +1,6 @@
 import express from 'express'
 import { PORT, SECRET_JWT_KEY } from './config.js'
-import { UserRepository } from './user-repository.js'
+import { UserRepository } from './repositories/user-repository.js'
 import pacientesRouter from './routes/pacientes.routes.js'
 import especialidadesRouter from './routes/especialidades.routes.js'
 import medicosRouter from './routes/medicos.routes.js'
