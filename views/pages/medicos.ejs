@@ -2,7 +2,7 @@
 <div id="medicosListView" class="fade-in">
     <div class="medicos-header">
         <div>
-            <h4><i class="bi bi-hospital me-2"></i>Staff Médico</h4>
+            <h4><i class="bi bi-hospital me-2"></i>Médicos</h4>
             <p class="text-muted mb-0">Gestión de profesionales y especialidades</p>
         </div>
         <button id="btnAgregarMedico" class="btn-primary-custom">
@@ -12,7 +12,7 @@
     </div>
 
     <div class="search-filter-bar mt-4 mb-4">
-        <div class="search-box">
+        <div class="search-box-enhanced">
             <i class="bi bi-search"></i>
             <input type="text" id="searchMedico" placeholder="Buscar por nombre, apellido o matrícula...">
         </div>
@@ -22,8 +22,9 @@
                 <!-- Options loaded via JS -->
             </select>
         </div>
-        <div class="ms-auto text-muted">
-            <small><strong id="medicosCount">0</strong> médicos encontrados</small>
+        <div class="medicos-count-badge">
+            <i class="bi bi-people-fill"></i>
+            <span><strong id="medicosCount">0</strong> médicos</span>
         </div>
     </div>
 
