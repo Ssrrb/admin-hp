@@ -1,46 +1,52 @@
 <% const usernameQuery=typeof name !=='undefined' ? `?username=${encodeURIComponent(name)}` : '' ; %>
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/protected<%= usernameQuery %>">
-                HEKO <span class="brand-accent">PORA</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center gap-2">
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>"
-                            href="/protected<%= usernameQuery %>">
-                            <i class="bi bi-grid me-1"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>"
-                            href="/admin/pacientes<%= usernameQuery %>">
-                            <i class="bi bi-people me-1"></i> Pacientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>"
-                            href="/admin/medicos<%= usernameQuery %>">
-                            <i class="bi bi-hospital me-1"></i> Médicos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%= section === 'especialidades' ? 'active' : '' %>"
-                            href="/admin/especialidades<%= usernameQuery %>">
-                            <i class="bi bi-award me-1"></i> Especialidades
-                        </a>
-                    </li>
-                    <li class="nav-item ms-lg-3">
-                        <form action="/logout" method="POST" class="m-0">
-                            <button type="submit" class="btn-logout">
-                                <i class="bi bi-box-arrow-right me-1"></i> Salir
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/protected<%= usernameQuery %>">
+            HEKO <span class="brand-accent">PORA</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-2">
+                <li class="nav-item">
+                    <a class="nav-link <%= section === 'dashboard' ? 'active' : '' %>"
+                        href="/protected<%= usernameQuery %>">
+                        <i class="bi bi-grid me-1"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= section === 'pacientes' ? 'active' : '' %>"
+                        href="/admin/pacientes<%= usernameQuery %>">
+                        <i class="bi bi-people me-1"></i> Pacientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= section === 'medicos' ? 'active' : '' %>"
+                        href="/admin/medicos<%= usernameQuery %>">
+                        <i class="bi bi-hospital me-1"></i> Medicos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= section === 'especialidades' ? 'active' : '' %>"
+                        href="/admin/especialidades<%= usernameQuery %>">
+                        <i class="bi bi-award me-1"></i> Especialidades
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= section === 'turnos' ? 'active' : '' %>"
+                        href="/admin/turnos<%= usernameQuery %>">
+                        <i class="bi bi-calendar-week me-1"></i> Turnos
+                    </a>
+                </li>
+                <li class="nav-item ms-lg-3">
+                    <form action="/logout" method="POST" class="m-0">
+                        <button type="submit" class="btn-logout">
+                            <i class="bi bi-box-arrow-right me-1"></i> Salir
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>

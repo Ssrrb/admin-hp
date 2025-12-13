@@ -28,8 +28,6 @@ app.use((req, res, next) => {
     } catch (error) { }
   }
   next() // seguir a la siguiente ruta o middleware
-
-
 })
 
 const requireAuth = (req, res, next) => {
@@ -44,7 +42,6 @@ const requireAuth = (req, res, next) => {
 app.get('/', (req, res) => {
   const { user } = req.session
   res.render('index', { user })
-
 })
 
 app.post('/login', async (req, res) => {
@@ -54,7 +51,7 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign({ id: user.id, username: user.username }, SECRET_JWT_KEY, { expiresIn: '1h' })
     res.cookie('access_token', token, {
       httpOnly: true, // la cookie solo se puede leer desde el servidor
-      secure: process.env.NODE_ENV === 'production', // solo se envia por https en producción
+      secure: process.env.NODE_ENV === 'production', // solo se envia por https en produccion
       sameSite: 'strict', // evita ataques de phishing
       maxAge: 60 * 60 * 1000 // 1 hora
     })
@@ -112,6 +109,11 @@ app.get('/admin/especialidades', requireAuth, (req, res) => {
 app.get('/admin/consultorios', requireAuth, (req, res) => {
   const name = req.session.user?.username ?? 'Admin'
   res.render('layout', { section: 'consultorios', name })
+})
+
+app.get('/admin/turnos', requireAuth, (req, res) => {
+  const name = req.session.user?.username ?? 'Admin'
+  res.render('layout', { section: 'turnos', name })
 })
 
 app.listen(PORT, () => {

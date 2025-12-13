@@ -1,0 +1,219 @@
+<div class="turnos-page fade-in">
+  <div class="section-header turnos-hero">
+    <div class="eyebrow">Agenda Viva</div>
+    <div class="hero-headline">
+      <h2><i class="bi bi-calendar-week"></i> Turnos y Agenda</h2>
+      <div class="hero-badge">
+        <i class="bi bi-shield-check"></i>
+        <span>Validaciones criticas activas</span>
+      </div>
+    </div>
+    <p>Coordina turnos, controla solapes por medico y protege el ciclo de vida: Pendiente -> Confirmado -> {Atendido, Cancelado}.</p>
+    <div class="hero-metrics">
+      <div class="metric-chip">
+        <span class="label">Pendientes</span>
+        <strong id="metricPendientes">0</strong>
+      </div>
+      <div class="metric-chip">
+        <span class="label">Confirmados</span>
+        <strong id="metricConfirmados">0</strong>
+      </div>
+      <div class="metric-chip">
+        <span class="label">Cancelados</span>
+        <strong id="metricCancelados">0</strong>
+      </div>
+      <div class="metric-chip">
+        <span class="label">Atendidos</span>
+        <strong id="metricAtendidos">0</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="turnos-grid">
+    <div class="content-card filters-card">
+      <div class="card-title">
+        <div>
+          <p class="eyebrow muted">Filtros en vivo</p>
+          <h4><i class="bi bi-funnel"></i> Filtrar agenda</h4>
+        </div>
+        <button class="btn-secondary-custom" id="btnLimpiarFiltros">
+          <i class="bi bi-eraser"></i>
+          <span>Limpiar</span>
+        </button>
+      </div>
+      <div class="filter-grid">
+        <div class="form-floating-custom">
+          <input type="date" id="filtroFecha" class="form-control-custom" placeholder=" ">
+          <label for="filtroFecha">Fecha</label>
+        </div>
+        <div class="form-floating-custom">
+          <select id="filtroMedico" class="form-control-custom">
+            <option value="">Todos los medicos</option>
+          </select>
+          <label for="filtroMedico">Medico</label>
+        </div>
+        <div class="form-floating-custom">
+          <select id="filtroEspecialidad" class="form-control-custom">
+            <option value="">Todas las especialidades</option>
+          </select>
+          <label for="filtroEspecialidad">Especialidad</label>
+        </div>
+        <div class="form-floating-custom">
+          <select id="filtroEstado" class="form-control-custom">
+            <option value="">Todos los estados</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="Confirmado">Confirmado</option>
+            <option value="Atendido">Atendido</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+          <label for="filtroEstado">Estado</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card form-card">
+      <div class="card-title">
+        <div>
+          <p class="eyebrow muted" id="formModeLabel">Nuevo turno</p>
+          <h4><i class="bi bi-plus-square"></i> Alta rapida</h4>
+        </div>
+        <button class="btn-secondary-custom" id="btnResetForm" type="button">
+          <i class="bi bi-arrow-clockwise"></i>
+          <span>Reset</span>
+        </button>
+      </div>
+      <div id="turnoFormStatus" class="form-message" style="display:none;"></div>
+      <form id="turnoForm" class="turno-form" novalidate>
+        <input type="hidden" id="turnoId">
+        <div class="form-row">
+          <div class="form-floating-custom">
+            <input type="date" id="turnoFecha" name="fecha" class="form-control-custom" required placeholder=" ">
+            <label for="turnoFecha">Fecha</label>
+          </div>
+          <div class="form-floating-custom">
+            <input type="time" id="turnoHora" name="hora" class="form-control-custom" required placeholder=" ">
+            <label for="turnoHora">Hora</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-floating-custom">
+            <select id="turnoMedico" name="medico" class="form-control-custom" required>
+              <option value="" disabled selected>Seleccione un medico</option>
+            </select>
+            <label for="turnoMedico">Medico</label>
+          </div>
+          <div class="form-floating-custom">
+            <select id="turnoEspecialidad" name="especialidad" class="form-control-custom" required>
+              <option value="" disabled selected>Seleccione especialidad</option>
+            </select>
+            <label for="turnoEspecialidad">Especialidad</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-floating-custom">
+            <select id="turnoPaciente" name="paciente" class="form-control-custom" required>
+              <option value="" disabled selected>Seleccione paciente</option>
+            </select>
+            <label for="turnoPaciente">Paciente</label>
+          </div>
+          <div class="form-floating-custom">
+            <select id="turnoModalidad" name="modalidad" class="form-control-custom" required>
+              <option value="P" selected>Presencial</option>
+              <option value="V">Virtual</option>
+            </select>
+            <label for="turnoModalidad">Modalidad</label>
+          </div>
+        </div>
+        <div class="form-row compact">
+          <div class="pill-hint">
+            <i class="bi bi-shield-lock"></i>
+            Sin edicion en estados no Pendiente.
+          </div>
+          <div class="actions">
+            <button type="button" class="btn-secondary-custom" id="btnCancelarForm">
+              <i class="bi bi-x-lg"></i>
+              <span>Cancelar</span>
+            </button>
+            <button type="submit" class="btn-primary-custom">
+              <i class="bi bi-check2-circle"></i>
+              <span id="submitLabel">Crear turno</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="content-card table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow muted">Agenda</p>
+        <h4><i class="bi bi-list-check"></i> Turnos</h4>
+      </div>
+      <div class="table-actions">
+        <button class="btn-secondary-custom" id="btnRefrescarTurnos">
+          <i class="bi bi-arrow-repeat"></i>
+          <span>Refrescar</span>
+        </button>
+        <div class="tiny-legend">
+          <span><span class="dot pend"></span> Pendiente</span>
+          <span><span class="dot conf"></span> Confirmado</span>
+          <span><span class="dot aten"></span> Atendido</span>
+          <span><span class="dot canc"></span> Cancelado</span>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table turnos-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Paciente</th>
+            <th>Medico</th>
+            <th>Especialidad</th>
+            <th>Modalidad</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="turnosTableBody">
+          <tr class="loading-row">
+            <td colspan="8">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Cargando turnos...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Cancelacion sheet -->
+<div id="cancelSheet" class="cancel-sheet">
+  <div class="cancel-card">
+    <div class="cancel-header">
+      <div>
+        <p class="eyebrow muted">Cancelar turno</p>
+        <h4><i class="bi bi-slash-circle"></i> Motivo y trazabilidad</h4>
+      </div>
+      <button class="btn-icon-action" id="closeCancelSheet" aria-label="Cerrar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <p class="muted">La cancelacion registra motivo, usuario y fecha. El turno quedara solo lectura.</p>
+    <div id="cancelError" class="form-message" style="display:none;"></div>
+    <textarea id="cancelMotivo" class="form-control-custom textarea-custom" placeholder="Detalle del motivo" rows="4"></textarea>
+    <div class="cancel-actions">
+      <button class="btn-secondary-custom" id="cancelSheetClose">
+        <i class="bi bi-arrow-left"></i>
+        <span>Volver</span>
+      </button>
+      <button class="btn-primary-custom" id="cancelSheetConfirm">
+        <i class="bi bi-check-lg"></i>
+        <span>Confirmar cancelacion</span>
+      </button>
+    </div>
+  </div>
+</div>
