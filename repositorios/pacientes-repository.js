@@ -1,4 +1,4 @@
-import { query } from './db/connect.js'
+import { query } from '../db/connect.js'
 
 const PACIENTES_TABLE = 'PACIENTES'
 const VALID_SEX = ['H', 'M']

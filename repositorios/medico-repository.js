@@ -1,4 +1,4 @@
-import { query } from './db/connect.js'
+import { query } from '../db/connect.js'
 
 export class MedicoRepository {
   static async create ({
